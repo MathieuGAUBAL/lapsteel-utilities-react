@@ -1,8 +1,8 @@
 const request = require('supertest');
 const app = require('../app');
-const uri = '/api/lapsteelator';
+const uri = '/api/admin';
 
-describe('CRUD route user', () => {
+describe('CRUD route admin', () => {
    
     const obj = {
         id:""
@@ -11,16 +11,20 @@ describe('CRUD route user', () => {
     test('devrait retourner status code : 200 (POST) et la propriete url correcte', (done) => {
         request(app)
             .post(uri)
-            .send({liste_mode:"mode2:1t 1t 1t,mode3:1.5t 1.5t 1.5t"})
+            .send({
+                email:"test@test.com",
+                password:"password1!",
+            })
             .end((err, res) => {
                 if(err){
                     return done (err);
                 }else{
-                    expect(res.body[0].liste_mode).toBe("mode2:1t 1t 1t,mode3:1.5t 1.5t 1.5t");
+                    expect(res.body[0].email).toBe("test@test.com");
+                    expect(res.body[0].password).toBe("password1!");
                     expect(res.status).toBe(200);
                     done();
                 }
-        });
+            });
     });
 
     test('devrait retourner le status code 200 pour la méthode (GET)', (done) => {
@@ -45,7 +49,8 @@ describe('CRUD route user', () => {
                     return done (err);
                 }else{
                     expect(res.body[0].id).toBe(obj.id);
-                    expect(res.body[0].liste_mode).toBe("mode2:1t 1t 1t,mode3:1.5t 1.5t 1.5t");
+                    expect(res.body[0].email).toBe("test@test.com");
+                    expect(res.body[0].password).toBe("password1!");
                     expect(res.status).toBe(200);
                     done();
                 }
@@ -56,13 +61,14 @@ describe('CRUD route user', () => {
 
         request(app)
             .put(uri + `/${obj.id}`)
-            .send({liste_mode:"mode3:1t 1t 1t,mode4:1.5t 1.5t 1.5t"})
+            .send({email:"email_modifie@test.fr", password: "MDPmodifie"})
             .set('Accept', 'application/json')
             .end((err,res) => {
                 if(err){
                     return done (err);
                 }else{
-                    expect(res.request._data.liste_mode).toBe("mode3:1t 1t 1t,mode4:1.5t 1.5t 1.5t");
+                    expect(res.request._data.email).toBe("email_modifie@test.fr");
+                    expect(res.request._data.password).toBe("MDPmodifie");
                     expect(res.status).toBe(200);
                     done();
                 }
