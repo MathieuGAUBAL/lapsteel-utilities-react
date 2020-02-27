@@ -2,13 +2,14 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../config.js');
 const bodyParser = require('body-parser');
+const url = "/videos"
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({
   extended: true
 }));
 
-router.get('/videos', (req, res) => {
+router.get(url, (req, res) => {
     pool.getConnection(function (err, connection){
         connection.query(`SELECT * FROM video`, (err, results, fields) => {
             connection.release();
@@ -23,7 +24,7 @@ router.get('/videos', (req, res) => {
 
 });
 
-router.get('/videos/:id', (req, res) => {
+router.get(url + '/:id', (req, res) => {
     const id = req.params.id;
     pool.getConnection(function (err, connection){
         connection.query(`SELECT * FROM video WHERE id=?`,[id], (err, results, fields) => {
@@ -39,7 +40,7 @@ router.get('/videos/:id', (req, res) => {
 
 });
 
-router.post('/videos', (req, res) => {
+router.post(url, (req, res) => {
     pool.getConnection(function (err, connection){
 
         const formData = req.body;
@@ -64,7 +65,7 @@ router.post('/videos', (req, res) => {
 
 });
 
-router.put('/videos/:id', (req, res) => {
+router.put(url + '/:id', (req, res) => {
     const id = req.params.id;
 
     pool.getConnection(function (err, connection){
@@ -87,7 +88,7 @@ router.put('/videos/:id', (req, res) => {
     });
 });
 
-router.delete('/videos/:id', (req, res) => {
+router.delete(url + '/:id', (req, res) => {
     const id = req.params.id;
     pool.getConnection(function (err, connection){
         connection.query(`SELECT * FROM video WHERE id=?`,[id], (err, results, fields) => {
@@ -111,7 +112,7 @@ router.delete('/videos/:id', (req, res) => {
 });
 
 //BBOOOOMMMM
-router.delete('/videos', (req, res) => {
+router.delete(url, (req, res) => {
         pool.getConnection(function (err, connection){
             connection.query('TRUNCATE TABLE video',(err, results, fields) => {
                 connection.release();
