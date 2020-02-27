@@ -2,13 +2,14 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../config.js');
 const bodyParser = require('body-parser');
+const url = "/user";
 
 
  
 
-router.get('/image', (req, res) => {
+router.get(url, (req, res) => {
     pool.getConnection(function (err, connection){
-        connection.query(`SELECT * FROM image`, (err, results, fields) => {
+        connection.query(`SELECT * FROM user`, (err, results, fields) => {
             connection.release();
             if(err){
                 res.status(200).send(err.message);
@@ -22,33 +23,35 @@ router.get('/image', (req, res) => {
 });
 
 
-router.get('/image/:id', (req, res) => {
+router.get(url + "/:id", (req, res) => {
     const id = req.params.id;
     pool.getConnection(function (err, connection){
-        connection.query(`SELECT * FROM image WHERE id=?`,[id], (err, results, fields) => {
+        connection.query(`SELECT * FROM user WHERE id=?`,[id], (err, results, fields) => {
             connection.release();
             if(err){
                 res.status(200).send(err.message);
             }else{
                 res.status(200).send(results);
             }
+            
         });
     });
+
 });
 
-router.post('/image', (req, res) => {
+router.post(url, (req, res) => {
     pool.getConnection(function (err, connection){
 
         const formData = req.body;
     
-        connection.query(`INSERT INTO image (name,url,alt) VALUES (?,?,?)`,
-        [formData.name, formData.url,formData.alt], (err, results, fields) => {
+        connection.query(`INSERT INTO user (email,password,pays) VALUES (?,?,?)`,
+        [formData.email, formData.password,formData.pays], (err, results, fields) => {
             connection.release();
             if(err){
                 res.status(200).send(err.message);
             }else{
                 const id = results.insertId;
-                connection.query(`SELECT * FROM image WHERE id=?`,[id], (err, results, fields) => {
+                connection.query(`SELECT * FROM user WHERE id=?`,[id], (err, results, fields) => {
                     if(err){
                         res.status(200).send(err.message);
                     }else{
@@ -61,18 +64,18 @@ router.post('/image', (req, res) => {
 
 });
 
-router.put('/image/:id', (req, res) => {
+router.put(url +'/:id', (req, res) => {
     const id = req.params.id;
 
     pool.getConnection(function (err, connection){
         const formData = req.body;
-        console.log(formData.name);
-        connection.query(`UPDATE image SET name=?,url=?,alt=? WHERE id=?`,[formData.name, formData.url, formData.alt, id], (err, results, fields) => {
+        
+        connection.query(`UPDATE user SET email=?,password=?,pays=? WHERE id=?`,[formData.email, formData.password, formData.pays, id], (err, results, fields) => {
             connection.release();
             if(err){
                 res.status(200).send(err.message);
             }else{
-                connection.query(`SELECT * FROM image WHERE id=?`,[id], (err, results, fields) => {
+                connection.query(`SELECT * FROM user WHERE id=?`,[id], (err, results, fields) => {
                     if(err){
                         res.status(200).send(err.message);
                     }else{
@@ -84,17 +87,17 @@ router.put('/image/:id', (req, res) => {
     });
 });
 
-router.delete('/image/:id', (req, res) => {
+router.delete(url + '/:id', (req, res) => {
     const id = req.params.id;
     pool.getConnection(function (err, connection){
-        connection.query(`SELECT * FROM image WHERE id=?`,[id], (err, results, fields) => {
+        connection.query(`SELECT * FROM user WHERE id=?`,[id], (err, results, fields) => {
             connection.release();
             if(err){
                 res.status(200).send(err.message);
             }else{
                 let output = results;
                 pool.getConnection(function (err, connection){
-                    connection.query(`DELETE FROM image WHERE id=?`,[id], (err, results, fields) => {
+                    connection.query(`DELETE FROM user WHERE id=?`,[id], (err, results, fields) => {
                         if(err){
                             res.status(200).send(err.message);
                         }else{
@@ -108,9 +111,9 @@ router.delete('/image/:id', (req, res) => {
 });
 
 //BBOOOOMMMM
-router.delete('/image', (req, res) => {
+router.delete(url, (req, res) => {
     pool.getConnection(function (err, connection){
-        connection.query('TRUNCATE TABLE image',(err, results, fields) => {
+        connection.query('TRUNCATE TABLE user',(err, results, fields) => {
             connection.release();
             if(err){
                 res.status(200).send(err.message);
