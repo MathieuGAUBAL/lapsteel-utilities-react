@@ -34,7 +34,7 @@ describe('CRUD route user', () => {
             expect(response.statusCode).toBe(200);
             let array = (JSON.parse(response.text));
             if(array.length !== 0){
-                obj.id = array[0].id
+                obj.id = array[array.length - 1].id
             }else{
                 obj.id = 1;
             }

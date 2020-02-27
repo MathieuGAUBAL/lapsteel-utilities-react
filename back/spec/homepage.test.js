@@ -1,8 +1,8 @@
 const request = require('supertest');
 const app = require('../app');
-const uri = '/api/image';
+const uri = '/api/homepage';
 
-describe('CRUD route image', () => {
+describe('CRUD route homepage', () => {
    
     const obj = {
         id:""
@@ -12,17 +12,17 @@ describe('CRUD route image', () => {
         request(app)
             .post(uri)
             .send({
-                name:"image 1",
-                url:"url image 1",
-                alt:"alt image 1"
+                category:"test@test.com",
+                type:"type1!",
+                description:"france"
             })
             .end((err, res) => {
                 if(err){
                     return done (err);
                 }else{
-                    expect(res.body[0].name).toBe("image 1");
-                    expect(res.body[0].url).toBe("url image 1");
-                    expect(res.body[0].alt).toBe("alt image 1");
+                    expect(res.body[0].category).toBe("test@test.com");
+                    expect(res.body[0].type).toBe("type1!");
+                    expect(res.body[0].description).toBe("france");
                     expect(res.status).toBe(200);
                     done();
                 }
@@ -51,9 +51,9 @@ describe('CRUD route image', () => {
                     return done (err);
                 }else{
                     expect(res.body[0].id).toBe(obj.id);
-                    expect(res.body[0].name).toBe("image 1");
-                    expect(res.body[0].url).toBe("url image 1")
-                    expect(res.body[0].alt).toBe("alt image 1")
+                    expect(res.body[0].category).toBe("test@test.com");
+                    expect(res.body[0].type).toBe("type1!");
+                    expect(res.body[0].description).toBe("france");
                     expect(res.status).toBe(200);
                     done();
                 }
@@ -64,15 +64,15 @@ describe('CRUD route image', () => {
 
         request(app)
             .put(uri + `/${obj.id}`)
-            .send({name:"Mon image modifié", url: "https://www.amazon.com/image", alt:"alt modifié"})
+            .send({category:"category_modifie@test.fr", type: "MDPmodifie", description:"allemagne"})
             .set('Accept', 'application/json')
             .end((err,res) => {
                 if(err){
                     return done (err);
                 }else{
-                    expect(res.request._data.name).toBe("Mon image modifié");
-                    expect(res.request._data.url).toBe("https://www.amazon.com/image");
-                    expect(res.request._data.alt).toBe("alt modifié");
+                    expect(res.request._data.category).toBe("category_modifie@test.fr");
+                    expect(res.request._data.type).toBe("MDPmodifie");
+                    expect(res.request._data.description).toBe("allemagne");
                     expect(res.status).toBe(200);
                     done();
                 }
