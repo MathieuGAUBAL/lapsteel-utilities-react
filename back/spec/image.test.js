@@ -1,50 +1,33 @@
 const request = require('supertest');
 const app = require('../app');
-const uri = '/api/videos';
+const uri = '/api/image';
 
-
-
-/* 
-procédure des tests : 
-
-importation :
-request = require('request');
-
-constante:
-const uri = 'adresse complete de la route à tester'
-
-description du test:
-- describe
-- creation d'un objet pour les tests
-- it + description du test + ajout de 'done'
-- on precise la methode qui va etre utiliser
-- expect qui précise ce qui est attendu 
-
-*/
-
-describe('CRUD route video', () => {
-
+describe('CRUD route image', () => {
+   
     const obj = {
         id:""
     }
 
     test('devrait retourner status code : 200 (POST) et la propriete url correcte', (done) => {
-       
         request(app)
             .post(uri)
-            .send({url: "https://www.google.com/videos"})
-            .set('Accept', 'application/json')
-            .end((err,res) => {
+            .send({
+                name:"image 1",
+                url:"url image 1",
+                alt:"alt image 1"
+            })
+            .end((err, res) => {
                 if(err){
                     return done (err);
                 }else{
-                    expect(res.body[0].url).toBe("https://www.google.com/videos");
+                    expect(res.body[0].name).toBe("image 1");
+                    expect(res.body[0].url).toBe("url image 1");
+                    expect(res.body[0].alt).toBe("alt image 1");
                     expect(res.status).toBe(200);
                     done();
                 }
-               
             });
-        });
+    });
 
     test('devrait retourner le status code 200 pour la méthode (GET)', (done) => {
         return request(app).get(uri).then(response => {
@@ -68,31 +51,35 @@ describe('CRUD route video', () => {
                     return done (err);
                 }else{
                     expect(res.body[0].id).toBe(obj.id);
-                    expect(res.body[0].url).toBe("https://www.google.com/videos")
+                    expect(res.body[0].name).toBe("image 1");
+                    expect(res.body[0].url).toBe("url image 1")
+                    expect(res.body[0].alt).toBe("alt image 1")
                     expect(res.status).toBe(200);
                     done();
                 }
             });
         })
-   
+
     test('devrait retourner status code : 200 (PUT) et la propriete url correctement modifiée', (done) => {
 
         request(app)
             .put(uri + `/${obj.id}`)
-            .send({url: "https://www.amazon.com/videos"})
+            .send({name:"Mon image modifié", url: "https://www.amazon.com/image", alt:"alt modifié"})
             .set('Accept', 'application/json')
             .end((err,res) => {
                 if(err){
                     return done (err);
                 }else{
-                    expect(res.request._data.url).toBe("https://www.amazon.com/videos");
+                    expect(res.request._data.name).toBe("Mon image modifié");
+                    expect(res.request._data.url).toBe("https://www.amazon.com/image");
+                    expect(res.request._data.alt).toBe("alt modifié");
                     expect(res.status).toBe(200);
                     done();
                 }
                 
             });
         });
- 
+
     test('devrait retourner status code : 200 (DELETE) et la l\'objet par id doit etre supprimé', (done) => {
 
         request(app)
@@ -106,5 +93,4 @@ describe('CRUD route video', () => {
             }
         })
     });
-    
 });
