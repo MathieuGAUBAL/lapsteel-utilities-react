@@ -3,14 +3,12 @@ const router = express.Router();
 const pool = require('../config.js');
 const bodyParser = require('body-parser');
 
-router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({
-  extended: true
-}));
 
-router.get('/videos', (req, res) => {
+ 
+
+router.get('/image', (req, res) => {
     pool.getConnection(function (err, connection){
-        connection.query(`SELECT * FROM video`, (err, results, fields) => {
+        connection.query(`SELECT * FROM image`, (err, results, fields) => {
             connection.release();
             if(err){
                 res.status(200).send(err.message);
@@ -23,10 +21,11 @@ router.get('/videos', (req, res) => {
 
 });
 
-router.get('/videos/:id', (req, res) => {
+
+router.get('/image/:id', (req, res) => {
     const id = req.params.id;
     pool.getConnection(function (err, connection){
-        connection.query(`SELECT * FROM video WHERE id=?`,[id], (err, results, fields) => {
+        connection.query(`SELECT * FROM image WHERE id=?`,[id], (err, results, fields) => {
             connection.release();
             if(err){
                 res.status(200).send(err.message);
@@ -39,19 +38,19 @@ router.get('/videos/:id', (req, res) => {
 
 });
 
-router.post('/videos', (req, res) => {
+router.post('/image', (req, res) => {
     pool.getConnection(function (err, connection){
 
         const formData = req.body;
-       
-        connection.query(`INSERT INTO video (url) VALUES (?)`,
-        [formData.url], (err, results, fields) => {
+    
+        connection.query(`INSERT INTO image (name,url,alt) VALUES (?,?,?)`,
+        [formData.name, formData.url,formData.alt], (err, results, fields) => {
             connection.release();
             if(err){
                 res.status(200).send(err.message);
             }else{
                 const id = results.insertId;
-                connection.query(`SELECT url FROM video WHERE id=?`,[id], (err, results, fields) => {
+                connection.query(`SELECT * FROM image WHERE id=?`,[id], (err, results, fields) => {
                     if(err){
                         res.status(200).send(err.message);
                     }else{
@@ -64,18 +63,18 @@ router.post('/videos', (req, res) => {
 
 });
 
-router.put('/videos/:id', (req, res) => {
+router.put('/image/:id', (req, res) => {
     const id = req.params.id;
 
     pool.getConnection(function (err, connection){
         const formData = req.body;
-
-        connection.query(`UPDATE video SET url=? WHERE id=?`,[formData.url, id], (err, results, fields) => {
+        console.log(formData.name);
+        connection.query(`UPDATE image SET name=?,url=?,alt=? WHERE id=?`,[formData.name, formData.url, formData.alt, id], (err, results, fields) => {
             connection.release();
             if(err){
                 res.status(200).send(err.message);
             }else{
-                connection.query(`SELECT * FROM video WHERE id=?`,[id], (err, results, fields) => {
+                connection.query(`SELECT * FROM image WHERE id=?`,[id], (err, results, fields) => {
                     if(err){
                         res.status(200).send(err.message);
                     }else{
@@ -87,17 +86,17 @@ router.put('/videos/:id', (req, res) => {
     });
 });
 
-router.delete('/videos/:id', (req, res) => {
+router.delete('/image/:id', (req, res) => {
     const id = req.params.id;
     pool.getConnection(function (err, connection){
-        connection.query(`SELECT * FROM video WHERE id=?`,[id], (err, results, fields) => {
+        connection.query(`SELECT * FROM image WHERE id=?`,[id], (err, results, fields) => {
             connection.release();
             if(err){
                 res.status(200).send(err.message);
             }else{
                 let output = results;
                 pool.getConnection(function (err, connection){
-                    connection.query(`DELETE FROM video WHERE id=?`,[id], (err, results, fields) => {
+                    connection.query(`DELETE FROM image WHERE id=?`,[id], (err, results, fields) => {
                         if(err){
                             res.status(200).send(err.message);
                         }else{
@@ -111,19 +110,18 @@ router.delete('/videos/:id', (req, res) => {
 });
 
 //BBOOOOMMMM
-router.delete('/videos', (req, res) => {
-        pool.getConnection(function (err, connection){
-            connection.query('TRUNCATE TABLE video',(err, results, fields) => {
-                connection.release();
-                if(err){
-                    res.status(200).send(err.message);
-                }else{
-                    res.send("BOOOMMMMM");
-                }
-        });
+router.delete('/image', (req, res) => {
+    pool.getConnection(function (err, connection){
+        connection.query('TRUNCATE TABLE image',(err, results, fields) => {
+            connection.release();
+            if(err){
+                res.status(200).send(err.message);
+            }else{
+                res.send("BOOOMMMMM");
+            }
     });
 });
-
+});
 
 
 
