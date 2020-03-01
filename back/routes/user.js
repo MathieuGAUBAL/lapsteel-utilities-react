@@ -43,7 +43,11 @@ router.post(url, (req, res) => {
     pool.getConnection(function (err, connection){
 
         const formData = req.body;
-    
+        isEmail = req.body.email != "" ? true:false;
+        isPassword = req.body.password != "" ? true:false;
+        isPays = req.body.pays != "" ? true:false;
+
+    if(isEmail && isPassword && isPays){
         connection.query(`INSERT INTO user (email,password,pays) VALUES (?,?,?)`,
         [formData.email, formData.password,formData.pays], (err, results, fields) => {
             connection.release();
@@ -60,6 +64,10 @@ router.post(url, (req, res) => {
                 });
             }
         });
+    }else{
+        return res.status(400).json({"error": "required field(s) missing"});
+    }
+
     });
 
 });

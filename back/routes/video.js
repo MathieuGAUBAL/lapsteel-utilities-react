@@ -32,7 +32,12 @@ router.get(url + '/:id', (req, res) => {
             if(err){
                 res.status(200).send(err.message);
             }else{
-                res.status(200).send(results);
+                if(results.length != 0){
+                    res.status(200).send(results);
+                }else{
+                    res.status(400).json({"message":"Bad Request"});
+                }
+
             }
             
         });
@@ -44,23 +49,27 @@ router.post(url, (req, res) => {
     pool.getConnection(function (err, connection){
 
         const formData = req.body;
-       
-        connection.query(`INSERT INTO video (url) VALUES (?)`,
-        [formData.url], (err, results, fields) => {
-            connection.release();
-            if(err){
-                res.status(200).send(err.message);
-            }else{
-                const id = results.insertId;
-                connection.query(`SELECT url FROM video WHERE id=?`,[id], (err, results, fields) => {
-                    if(err){
-                        res.status(200).send(err.message);
-                    }else{
-                        res.json(results)
-                    }
-                });
-            }
-        });
+        console.log("URL : ",!formData.url);
+       if(!req.body.url){
+           return res.status(422).json({"error": "required field(s) missing"});
+       }else{
+            connection.query(`INSERT INTO video (url) VALUES (?)`,
+            [formData.url], (err, results, fields) => {
+                connection.release();
+                if(err){
+                    res.status(200).send(err.message);
+                }else{
+                    const id = results.insertId;
+                    connection.query(`SELECT url FROM video WHERE id=?`,[id], (err, results, fields) => {
+                        if(err){
+                            res.status(200).send(err.message);
+                        }else{
+                            res.json(results)
+                        }
+                    });
+                }
+            });
+        }
     });
 
 });
@@ -97,15 +106,19 @@ router.delete(url + '/:id', (req, res) => {
                 res.status(200).send(err.message);
             }else{
                 let output = results;
-                pool.getConnection(function (err, connection){
-                    connection.query(`DELETE FROM video WHERE id=?`,[id], (err, results, fields) => {
-                        if(err){
-                            res.status(200).send(err.message);
-                        }else{
-                            res.send(output);
-                        }
+                if(output.length != 0){
+                    pool.getConnection(function (err, connection){
+                        connection.query(`DELETE FROM video WHERE id=?`,[id], (err, results, fields) => {
+                            if(err){
+                                res.status(200).send(err.message);
+                            }else{
+                                res.send(output);
+                            }
+                        });
                     });
-                });
+                }else{
+                    return res.status(400).json({"message":"Bad Request"});
+                }
             }
         });
     });
