@@ -29,6 +29,21 @@ describe('CRUD route user', () => {
             });
     });
 
+    test('devrait retourner status code : 400 (POST) s\'il manque une ou plusieurs entree', (done) => {
+        request(app)
+            .post(uri)
+            .send({
+                email:"",
+                password:"zer",
+                pays:"fr"
+            })
+            .then(response => {
+                const expected = {"error": "required field(s) missing"};
+                expect(response.body).toEqual(expected);
+            });
+           done();
+    });
+
     test('devrait retourner le status code 200 pour la méthode (GET)', (done) => {
         return request(app).get(uri).then(response => {
             expect(response.statusCode).toBe(200);
