@@ -1,11 +1,15 @@
 const request = require('supertest');
 const app = require('../app');
 const uri = '/api/user';
+const bcrypt_secret = process.env.BCRYPT_SECRET;
+const bcrypt_secret_modified = process.env.BCRYPT_SECRET_MODIFIED;
+const bcrypt = require('bcryptjs');
 
 describe('CRUD route user', () => {
    
     const obj = {
-        id:""
+        id:"",
+        passwordIsCorrect:false
     }
 
     test('devrait retourner status code : 200 (POST) et la propriete url correcte', (done) => {
@@ -13,15 +17,16 @@ describe('CRUD route user', () => {
             .post(uri)
             .send({
                 email:"test@test.com",
-                password:"password1!",
+                password:bcrypt_secret,
                 pays:"france"
             })
             .end((err, res) => {
                 if(err){
                     return done (err);
                 }else{
+                    obj.passwordIsCorrect = bcrypt.compareSync(`${bcrypt_secret}`, res.body[0].password);
+                    expect(obj.passwordIsCorrect).toBe(true);
                     expect(res.body[0].email).toBe("test@test.com");
-                    expect(res.body[0].password).toBe("password1!");
                     expect(res.body[0].pays).toBe("france");
                     expect(res.status).toBe(200);
                     done();
@@ -29,7 +34,7 @@ describe('CRUD route user', () => {
             });
     });
 
-    test('devrait retourner status code : 400 (POST) s\'il manque une ou plusieurs entree', (done) => {
+     test('devrait retourner status code : 400 (POST) s\'il manque une ou plusieurs entree', (done) => {
         request(app)
             .post(uri)
             .send({
@@ -67,7 +72,8 @@ describe('CRUD route user', () => {
                 }else{
                     expect(res.body[0].id).toBe(obj.id);
                     expect(res.body[0].email).toBe("test@test.com");
-                    expect(res.body[0].password).toBe("password1!");
+                    obj.passwordIsCorrect = bcrypt.compareSync(`${bcrypt_secret}`, res.body[0].password);
+                    expect(obj.passwordIsCorrect).toBe(true);
                     expect(res.body[0].pays).toBe("france");
                     expect(res.status).toBe(200);
                     done();
@@ -79,14 +85,15 @@ describe('CRUD route user', () => {
 
         request(app)
             .put(uri + `/${obj.id}`)
-            .send({email:"email_modifie@test.fr", password: "MDPmodifie", pays:"allemagne"})
+            .send({email:"email_modifie@test.fr", password: `${bcrypt_secret_modified}`, pays:"allemagne"})
             .set('Accept', 'application/json')
             .end((err,res) => {
                 if(err){
                     return done (err);
                 }else{
                     expect(res.request._data.email).toBe("email_modifie@test.fr");
-                    expect(res.request._data.password).toBe("MDPmodifie");
+                    obj.passwordIsCorrect = bcrypt.compareSync(`${bcrypt_secret_modified}`, res.body[0].password);
+                    expect(obj.passwordIsCorrect).toBe(true);
                     expect(res.request._data.pays).toBe("allemagne");
                     expect(res.status).toBe(200);
                     done();

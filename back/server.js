@@ -1,10 +1,10 @@
 
-const connection = require('./config.js');
+const dotenv = require('dotenv').config();
 const app = require('./app');
-const pool = require('./config.js');
 
-app.listen(5000, () => {
-    console.log(`Server is listening on 5000`);
+
+app.listen(dotenv.parsed.PORT_SERVER, () => {
+    console.log(`Server is listening on`, dotenv.parsed.PORT_SERVER);
   });
 
 
