@@ -3,7 +3,9 @@ const router = express.Router();
 const pool = require('../config.js');
 const url = "/admin";
 const bcrypt = require('bcryptjs');
-const salt = process.env.SALT;
+const dotenv = require('dotenv').config();
+const salt = dotenv.parsed.SALT;
+
 
 
 
@@ -45,7 +47,7 @@ router.post(url, (req, res) => {
     pool.getConnection(function (err, connection){
 
         const formData = req.body;
-        let hash = bcrypt.hashSync(`${formData.password}`, salt);
+        let hash = bcrypt.hashSync(`${formData.password}`, Number(salt));
         connection.query(`INSERT INTO admin (email,password) VALUES (?,?)`,
         [formData.email, hash], (err, results, fields) => {
             connection.release();
@@ -71,7 +73,7 @@ router.put(url +'/:id', (req, res) => {
 
     pool.getConnection(function (err, connection){
         const formData = req.body;
-        let hash = bcrypt.hashSync(`${formData.password}`, salt);
+        let hash = bcrypt.hashSync(`${formData.password}`, Number(salt));
         connection.query(`UPDATE admin SET email=?,password=? WHERE id=?`,[formData.email, hash, id], (err, results, fields) => {
             connection.release();
             if(err){

@@ -4,7 +4,7 @@ const pool = require('../config.js');
 const url = "/user";
 const bcrypt = require('bcryptjs');
 const salt = process.env.SALT;
-
+console.log("typeof salt : ", typeof salt);
 
  
 
@@ -44,7 +44,7 @@ router.post(url, (req, res) => {
     pool.getConnection(function (err, connection){
 
         const formData = req.body;
-        let hash = bcrypt.hashSync(`${formData.password}`, salt);
+        let hash = bcrypt.hashSync(`${formData.password}`, Number(salt));
         isEmail = req.body.email != "" ? true:false;
         isPassword = req.body.password != "" ? true:false;
         isPays = req.body.pays != "" ? true:false;
@@ -79,7 +79,7 @@ router.put(url +'/:id', (req, res) => {
 
     pool.getConnection(function (err, connection){
         const formData = req.body;
-        let hash = bcrypt.hashSync(`${formData.password}`, salt);
+        let hash = bcrypt.hashSync(`${formData.password}`, Number(salt));
         connection.query(`UPDATE user SET email=?,password=?,pays=? WHERE id=?`,[formData.email, hash, formData.pays, id], (err, results, fields) => {
             connection.release();
             if(err){

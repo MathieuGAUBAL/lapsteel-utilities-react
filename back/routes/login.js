@@ -12,19 +12,24 @@ router.post('/login', (req, res) => {
     pool.getConnection(function (err, connection){
         connection.query(sql, [user.email], (error, results, fields) => {
             connection.release();
-            if(error || !bcrypt.compareSync(`${user.password}`, results[0].password)){
-                res.status(501).send("Mot de passe ou email invalide");
+            if(results.length !== 0){
+                if(error || !bcrypt.compareSync(`${user.password}`, results[0].password)){
+                    res.status(501).send("Mot de passe ou email invalide");
+                }else{
+                
+                    jwt.sign( user, dotenv.parsed.JWT_SECRET, (err, token) => {
+                        
+                        if(err){
+                            res.status(501).send('JWT error : ');
+                        }else{
+                            res.json({ token })
+                        }
+                    });
+                }
             }else{
-            
-                jwt.sign( user, dotenv.parsed.JWT_SECRET, (err, token) => {
-                    
-                    if(err){
-                        res.status(501).send('JWT error : ');
-                    }else{
-                        res.json({ token })
-                    }
-                });
+                res.status(501).send("email ou mot de passe inexistant");  
             }
+
         })
     });
 });
