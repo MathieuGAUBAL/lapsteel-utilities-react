@@ -49,7 +49,6 @@ router.post(url, (req, res) => {
     pool.getConnection(function (err, connection){
 
         const formData = req.body;
-        console.log("URL : ",!formData.url);
        if(!req.body.url){
            return res.status(422).json({"error": "required field(s) missing"});
        }else{

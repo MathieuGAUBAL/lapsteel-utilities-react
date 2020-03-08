@@ -1,13 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../config.js');
-const bodyParser = require('body-parser');
 const url = "/admin";
+const bcrypt = require('bcryptjs');
+const dotenv = require('dotenv').config();
+const salt = dotenv.parsed.SALT;
+const auth = require('./verifyTokenAdmin');
+
+
 
 
  
 
-router.get(url, (req, res) => {
+router.get(url, auth, (req, res) => {
     pool.getConnection(function (err, connection){
         connection.query(`SELECT * FROM admin`, (err, results, fields) => {
             connection.release();
@@ -23,7 +28,7 @@ router.get(url, (req, res) => {
 });
 
 
-router.get(url + "/:id", (req, res) => {
+router.get(url + "/:id", auth, (req, res) => {
     const id = req.params.id;
     pool.getConnection(function (err, connection){
         connection.query(`SELECT * FROM admin WHERE id=?`,[id], (err, results, fields) => {
@@ -39,13 +44,13 @@ router.get(url + "/:id", (req, res) => {
 
 });
 
-router.post(url, (req, res) => {
+router.post(url, auth,(req, res) => {
     pool.getConnection(function (err, connection){
 
         const formData = req.body;
-    
+        let hash = bcrypt.hashSync(`${formData.password}`, Number(salt));
         connection.query(`INSERT INTO admin (email,password) VALUES (?,?)`,
-        [formData.email, formData.password], (err, results, fields) => {
+        [formData.email, hash], (err, results, fields) => {
             connection.release();
             if(err){
                 res.status(200).send(err.message);
@@ -64,13 +69,13 @@ router.post(url, (req, res) => {
 
 });
 
-router.put(url +'/:id', (req, res) => {
+router.put(url +'/:id', auth, (req, res) => {
     const id = req.params.id;
 
     pool.getConnection(function (err, connection){
         const formData = req.body;
-        
-        connection.query(`UPDATE admin SET email=?,password=? WHERE id=?`,[formData.email, formData.password, id], (err, results, fields) => {
+        let hash = bcrypt.hashSync(`${formData.password}`, Number(salt));
+        connection.query(`UPDATE admin SET email=?,password=? WHERE id=?`,[formData.email, hash, id], (err, results, fields) => {
             connection.release();
             if(err){
                 res.status(200).send(err.message);
@@ -87,7 +92,7 @@ router.put(url +'/:id', (req, res) => {
     });
 });
 
-router.delete(url + '/:id', (req, res) => {
+router.delete(url + '/:id', auth, (req, res) => {
     const id = req.params.id;
     pool.getConnection(function (err, connection){
         connection.query(`SELECT * FROM admin WHERE id=?`,[id], (err, results, fields) => {
@@ -111,7 +116,7 @@ router.delete(url + '/:id', (req, res) => {
 });
 
 //BBOOOOMMMM
-router.delete(url, (req, res) => {
+router.delete(url, auth, (req, res) => {
     pool.getConnection(function (err, connection){
         connection.query('TRUNCATE TABLE admin',(err, results, fields) => {
             connection.release();

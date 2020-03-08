@@ -1,13 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../config.js');
-const bodyParser = require('body-parser');
 const url = "/user";
-
+const bcrypt = require('bcryptjs');
+const salt = process.env.SALT;
+const auth = require('./verifyToken');
+const authAdmin = require('./verifyTokenAdmin');
 
  
 
-router.get(url, (req, res) => {
+router.get(url, authAdmin,(req, res) => {
     pool.getConnection(function (err, connection){
         connection.query(`SELECT * FROM user`, (err, results, fields) => {
             connection.release();
@@ -23,7 +25,7 @@ router.get(url, (req, res) => {
 });
 
 
-router.get(url + "/:id", (req, res) => {
+router.get(url + "/:id", authAdmin, (req, res) => {
     const id = req.params.id;
     pool.getConnection(function (err, connection){
         connection.query(`SELECT * FROM user WHERE id=?`,[id], (err, results, fields) => {
@@ -39,17 +41,18 @@ router.get(url + "/:id", (req, res) => {
 
 });
 
-router.post(url, (req, res) => {
+router.post(url, authAdmin, (req, res) => {
     pool.getConnection(function (err, connection){
 
         const formData = req.body;
+        let hash = bcrypt.hashSync(`${formData.password}`, Number(salt));
         isEmail = req.body.email != "" ? true:false;
         isPassword = req.body.password != "" ? true:false;
         isPays = req.body.pays != "" ? true:false;
 
     if(isEmail && isPassword && isPays){
         connection.query(`INSERT INTO user (email,password,pays) VALUES (?,?,?)`,
-        [formData.email, formData.password,formData.pays], (err, results, fields) => {
+        [formData.email, hash, formData.pays], (err, results, fields) => {
             connection.release();
             if(err){
                 res.status(200).send(err.message);
@@ -72,13 +75,13 @@ router.post(url, (req, res) => {
 
 });
 
-router.put(url +'/:id', (req, res) => {
+router.put(url +'/:id', auth, (req, res) => {
     const id = req.params.id;
 
     pool.getConnection(function (err, connection){
         const formData = req.body;
-        
-        connection.query(`UPDATE user SET email=?,password=?,pays=? WHERE id=?`,[formData.email, formData.password, formData.pays, id], (err, results, fields) => {
+        let hash = bcrypt.hashSync(`${formData.password}`, Number(salt));
+        connection.query(`UPDATE user SET email=?,password=?,pays=? WHERE id=?`,[formData.email, hash, formData.pays, id], (err, results, fields) => {
             connection.release();
             if(err){
                 res.status(200).send(err.message);
@@ -95,7 +98,7 @@ router.put(url +'/:id', (req, res) => {
     });
 });
 
-router.delete(url + '/:id', (req, res) => {
+router.delete(url + '/:id', authAdmin, (req, res) => {
     const id = req.params.id;
     pool.getConnection(function (err, connection){
         connection.query(`SELECT * FROM user WHERE id=?`,[id], (err, results, fields) => {
@@ -119,7 +122,7 @@ router.delete(url + '/:id', (req, res) => {
 });
 
 //BBOOOOMMMM
-router.delete(url, (req, res) => {
+router.delete(url, authAdmin, (req, res) => {
     pool.getConnection(function (err, connection){
         connection.query('TRUNCATE TABLE user',(err, results, fields) => {
             connection.release();
