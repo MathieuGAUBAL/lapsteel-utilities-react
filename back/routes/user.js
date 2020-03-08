@@ -4,11 +4,12 @@ const pool = require('../config.js');
 const url = "/user";
 const bcrypt = require('bcryptjs');
 const salt = process.env.SALT;
-console.log("typeof salt : ", typeof salt);
+const auth = require('./verifyToken');
+const authAdmin = require('./verifyTokenAdmin');
 
  
 
-router.get(url, (req, res) => {
+router.get(url, authAdmin,(req, res) => {
     pool.getConnection(function (err, connection){
         connection.query(`SELECT * FROM user`, (err, results, fields) => {
             connection.release();
@@ -24,7 +25,7 @@ router.get(url, (req, res) => {
 });
 
 
-router.get(url + "/:id", (req, res) => {
+router.get(url + "/:id", authAdmin, (req, res) => {
     const id = req.params.id;
     pool.getConnection(function (err, connection){
         connection.query(`SELECT * FROM user WHERE id=?`,[id], (err, results, fields) => {
@@ -40,7 +41,7 @@ router.get(url + "/:id", (req, res) => {
 
 });
 
-router.post(url, (req, res) => {
+router.post(url, authAdmin, (req, res) => {
     pool.getConnection(function (err, connection){
 
         const formData = req.body;
@@ -74,7 +75,7 @@ router.post(url, (req, res) => {
 
 });
 
-router.put(url +'/:id', (req, res) => {
+router.put(url +'/:id', auth, (req, res) => {
     const id = req.params.id;
 
     pool.getConnection(function (err, connection){
@@ -97,7 +98,7 @@ router.put(url +'/:id', (req, res) => {
     });
 });
 
-router.delete(url + '/:id', (req, res) => {
+router.delete(url + '/:id', authAdmin, (req, res) => {
     const id = req.params.id;
     pool.getConnection(function (err, connection){
         connection.query(`SELECT * FROM user WHERE id=?`,[id], (err, results, fields) => {
@@ -121,7 +122,7 @@ router.delete(url + '/:id', (req, res) => {
 });
 
 //BBOOOOMMMM
-router.delete(url, (req, res) => {
+router.delete(url, authAdmin, (req, res) => {
     pool.getConnection(function (err, connection){
         connection.query('TRUNCATE TABLE user',(err, results, fields) => {
             connection.release();

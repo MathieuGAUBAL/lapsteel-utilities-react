@@ -9,12 +9,12 @@ const pool = mysql.createPool({
 });
 
 
- pool.getConnection(function(err) {
+/*  pool.getConnection(function(err) {
     if (err){
         throw err;
     }else{
         console.log("connected to database");
     }
-});  
+});   */
 
 module.exports = pool;

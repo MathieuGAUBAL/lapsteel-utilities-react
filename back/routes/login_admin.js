@@ -6,23 +6,27 @@ const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv').config();
 
 
-router.post('/login', (req, res) => {
+router.post('/login@admin', (req, res) => {
     const user = req.body;
-    const sql = 'SELECT * FROM user WHERE email=?';
+
+
+    const sql = 'SELECT * FROM admin WHERE email=?';
     pool.getConnection(function (err, connection){
-        connection.query(sql, [user.email], (error, results, fields) => {
+        connection.query(sql, [req.body.email], (error, results, fields) => {
             connection.release();
+
             if(results.length !== 0){
                 if(error || !bcrypt.compareSync(`${user.password}`, results[0].password)){
                     res.status(501).send("Mot de passe ou email invalide");
                 }else{
                 
-                    jwt.sign( user, dotenv.parsed.JWT_SECRET, (err, token) => {
+                    jwt.sign( user, dotenv.parsed.JWT_SECRET_ADMIN, (err, token) => {
                         
                         if(err){
                             res.status(501).send('JWT error : ');
                         }else{
-                            res.json({ token })
+                          
+                            res.status(200).json({ token, 'role':'admin' });
                         }
                     });
                 }

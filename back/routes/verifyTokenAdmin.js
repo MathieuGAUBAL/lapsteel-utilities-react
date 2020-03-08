@@ -8,7 +8,7 @@ module.exports = function(req, res, next){
         let token = tab[1];
        
         req.token = token;
-        jwt.verify(token, dotenv.parsed.JWT_SECRET, (err, authenticationData) => {
+        jwt.verify(token, dotenv.parsed.JWT_SECRET_ADMIN, (err, authenticationData) => {
             token = authenticationData;
             if(err){
                 res.send('Unauthorized : ' + err.toString());
