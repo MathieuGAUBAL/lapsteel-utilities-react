@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import NavBarVitrine from './NavBarVitrine/NavBarVitrine';
 
 class Vitrine extends Component{
+
+
     render(){
         return(
         <div>

@@ -51,8 +51,8 @@ router.post(url, authAdmin, (req, res) => {
         isPays = req.body.pays != "" ? true:false;
 
     if(isEmail && isPassword && isPays){
-        connection.query(`INSERT INTO user (email,password,pays) VALUES (?,?,?)`,
-        [formData.email, hash, formData.pays], (err, results, fields) => {
+        connection.query(`INSERT INTO user (email,password,pays, loggued) VALUES (?,?,?,?)`,
+        [formData.email, hash, formData.pays, formData.loggued], (err, results, fields) => {
             connection.release();
             if(err){
                 res.status(200).send(err.message);
@@ -81,7 +81,7 @@ router.put(url +'/:id', auth, (req, res) => {
     pool.getConnection(function (err, connection){
         const formData = req.body;
         let hash = bcrypt.hashSync(`${formData.password}`, Number(salt));
-        connection.query(`UPDATE user SET email=?,password=?,pays=? WHERE id=?`,[formData.email, hash, formData.pays, id], (err, results, fields) => {
+        connection.query(`UPDATE user SET email=?,password=?,pays=?, loggued=? WHERE id=?`,[formData.email, hash, formData.pays, formData.loggued, id], (err, results, fields) => {
             connection.release();
             if(err){
                 res.status(200).send(err.message);
