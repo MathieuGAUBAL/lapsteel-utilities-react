@@ -38,6 +38,21 @@ router.get(url, (req, res) => {
 
 });
 
+router.get(url+'/homepage-card', (req, res) => {
+    pool.getConnection(function (err, connection){
+        connection.query(`SELECT i.name, i.url, i.alt, h.title, h.subtitle, h.description FROM homepage AS h JOIN image AS i ON h.image_id = i.homepage_id WHERE h.section=?`, [req.query.section],(err, results, fields) => {
+            connection.release();
+            if(err){
+                res.status(200).send(err.message);
+            }else{
+                res.status(200).send(results);
+            }
+            
+        });
+    });
+
+});
+
 
 router.get(url + "/:id", (req, res) => {
     const id = req.params.id;
