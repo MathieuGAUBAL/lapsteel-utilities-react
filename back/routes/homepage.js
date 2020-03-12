@@ -7,9 +7,25 @@ const url = "/homepage";
 
  
 
-router.get(url, (req, res) => {
+router.get(url + '/all', (req, res) => {
     pool.getConnection(function (err, connection){
         connection.query(`SELECT * FROM homepage`, (err, results, fields) => {
+            connection.release();
+            if(err){
+                res.status(200).send(err.message);
+            }else{
+                res.status(200).send(results);
+            }
+            
+        });
+    });
+
+});
+
+
+router.get(url, (req, res) => {
+    pool.getConnection(function (err, connection){
+        connection.query(`SELECT * FROM homepage WHERE section=? AND image_id is NULL`, [req.query.section],(err, results, fields) => {
             connection.release();
             if(err){
                 res.status(200).send(err.message);
