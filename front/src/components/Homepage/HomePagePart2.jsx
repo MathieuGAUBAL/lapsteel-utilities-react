@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import HomePagePart1 from './HomePagePart1';
+
 
 class HomePagePart2 extends Component {
+
     render(){
-        const { homepageCard } = this.props;
-        console.log(homepageCard);
+        const { homepageCard, handleClickLink } = this.props;
+
         return(
             <div className="container container-homepage-part2">
                 <hr className="mt-5 mb-5"></hr>
@@ -16,7 +17,7 @@ class HomePagePart2 extends Component {
                             <div className="card-body">
                                 <h5 className="card-title">{element.title}</h5>
                                 <p className="card-text">{element.description}</p>
-                                <a href="#" className="btn btn-primary">Go somewhere</a>
+                                <button id={element.image_id} className="btn btn-primary" onClick={ handleClickLink }>Go somewhere</button>
                             </div>
                         </div>   
                     ))}
