@@ -75,8 +75,8 @@ router.post(url, (req, res) => {
 
         const formData = req.body;
     
-        connection.query(`INSERT INTO homepage (category,type,description) VALUES (?,?,?)`,
-        [formData.category, formData.type,formData.description], (err, results, fields) => {
+        connection.query(`INSERT INTO homepage (title, subtitle, description, section, image_id) VALUES (?,?,?,?,?)`,
+        [formData.title, formData.subtitle,formData.description,formData.section,formData.image_id], (err, results, fields) => {
             connection.release();
             if(err){
                 res.status(200).send(err.message);
@@ -101,7 +101,7 @@ router.put(url +'/:id', (req, res) => {
     pool.getConnection(function (err, connection){
         const formData = req.body;
         
-        connection.query(`UPDATE homepage SET category=?,type=?,description=? WHERE id=?`,[formData.category, formData.type, formData.description, id], (err, results, fields) => {
+        connection.query(`UPDATE homepage SET title=?,subtitle=?,description=?, section=?, image_id=? WHERE id=?`,[formData.title, formData.subtitle, formData.description, formData.section, formData.image_id, id], (err, results, fields) => {
             connection.release();
             if(err){
                 res.status(200).send(err.message);

@@ -12,17 +12,21 @@ describe('CRUD route homepage', () => {
         request(app)
             .post(uri)
             .send({
-                category:"test@test.com",
-                type:"type1!",
-                description:"france"
+                title:"test@test.com",
+                subtitle:"subtitle1!",
+                description:"france",
+                section:"homepage",
+                image_id:1
             })
             .end((err, res) => {
                 if(err){
                     return done (err);
                 }else{
-                    expect(res.body[0].category).toBe("test@test.com");
-                    expect(res.body[0].type).toBe("type1!");
+                    expect(res.body[0].title).toBe("test@test.com");
+                    expect(res.body[0].subtitle).toBe("subtitle1!");
                     expect(res.body[0].description).toBe("france");
+                    expect(res.body[0].section).toBe("homepage");
+                    expect(res.body[0].image_id).toBe(1);
                     expect(res.status).toBe(200);
                     done();
                 }
@@ -30,7 +34,7 @@ describe('CRUD route homepage', () => {
     });
 
     test('devrait retourner le status code 200 pour la méthode (GET)', (done) => {
-        return request(app).get(uri).then(response => {
+        return request(app).get(uri+'/all').then(response => {
             expect(response.statusCode).toBe(200);
             let array = (JSON.parse(response.text));
             if(array.length !== 0){
@@ -51,9 +55,11 @@ describe('CRUD route homepage', () => {
                     return done (err);
                 }else{
                     expect(res.body[0].id).toBe(obj.id);
-                    expect(res.body[0].category).toBe("test@test.com");
-                    expect(res.body[0].type).toBe("type1!");
+                    expect(res.body[0].title).toBe("test@test.com");
+                    expect(res.body[0].subtitle).toBe("subtitle1!");
                     expect(res.body[0].description).toBe("france");
+                    expect(res.body[0].section).toBe("homepage");
+                    expect(res.body[0].image_id).toBe(1);
                     expect(res.status).toBe(200);
                     done();
                 }
@@ -64,15 +70,17 @@ describe('CRUD route homepage', () => {
 
         request(app)
             .put(uri + `/${obj.id}`)
-            .send({category:"category_modifie@test.fr", type: "MDPmodifie", description:"allemagne"})
+            .send({title:"title_modifie@test.fr", subtitle: "MDPmodifie", description:"allemagne", section: "MDPmodifie-homepage", image_id:6})
             .set('Accept', 'application/json')
             .end((err,res) => {
                 if(err){
                     return done (err);
                 }else{
-                    expect(res.request._data.category).toBe("category_modifie@test.fr");
-                    expect(res.request._data.type).toBe("MDPmodifie");
+                    expect(res.request._data.title).toBe("title_modifie@test.fr");
+                    expect(res.request._data.subtitle).toBe("MDPmodifie");
                     expect(res.request._data.description).toBe("allemagne");
+                    expect(res.request._data.section).toBe("MDPmodifie-homepage");
+                    expect(res.request._data.image_id).toBe(6);
                     expect(res.status).toBe(200);
                     done();
                 }
