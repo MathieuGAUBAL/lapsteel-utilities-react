@@ -29,10 +29,13 @@ const NavBarHomePage = (props) => {
           <NavbarText>
             <Nav className="mr-auto" navbar>
                 <NavItem>
-                <NavLink className="text-light" href="/Login">Login</NavLink>
+                <NavLink className="text-light" href="/Home">home</NavLink>
                 </NavItem>
                 <NavItem>
-                <NavLink className="text-light" href="/Signin">Sign in</NavLink>
+                <NavLink className="text-light" href="/profile">profile</NavLink>
+                </NavItem>
+                <NavItem>
+                <NavLink className="text-light" href="/">logout</NavLink>
                 </NavItem>
             </Nav>
           </NavbarText>

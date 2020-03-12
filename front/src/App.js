@@ -5,6 +5,8 @@ import Vitrine from './components/Vitrine';
 import LoginUser from './components/LoginUser/LoginUser';
 import SignInUser from './components/Signin/SignInUser';
 import Homepage from './components/Homepage/Homepage';
+import SectionVideo from './components/section video/SectionVideo';
+import Lapsteelator from './components/Lapsteelator/Lapsteelator';
 
 
 class App extends Component{
@@ -22,7 +24,7 @@ class App extends Component{
   }
 
   render(){
-    console.log("(APP) isLoggued : ", this.state.isLoggued);
+
     return (
       <div className="App">
         <Router>
@@ -31,6 +33,9 @@ class App extends Component{
             <Route path='/Login' component={() => <LoginUser isLoggued={this.state.isLoggued} userLogin={this.userLogin}/>}/>
             <Route path='/Signin' component={SignInUser}></Route>
             <Route path='/Home' component={() => <Homepage isLoggued={this.state.isLoggued}/>}/>
+            <Route path='/lapsteelator' component={() => <Lapsteelator isLoggued={this.state.isLoggued}/>}/>
+            <Route path='/videos' component={() => <SectionVideo isLoggued={this.state.isLoggued}/>}/>
+           
           </Switch>
         </Router>
       </div>
