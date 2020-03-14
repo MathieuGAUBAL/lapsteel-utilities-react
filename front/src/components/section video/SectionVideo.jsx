@@ -95,7 +95,7 @@ class SectionVideo extends Component{
 
                 <h2 className="p-5">{this.state.menu_selected} videos</h2>
                 
-                 <div className="video-map">
+                 <div className="container video-map">
                     {this.state.dataVideo.length > 0 && this.display()}
                 </div>
  

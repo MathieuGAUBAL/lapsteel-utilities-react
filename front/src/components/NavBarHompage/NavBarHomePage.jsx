@@ -10,10 +10,17 @@ import {
   NavbarText
 } from 'reactstrap';
 
+import './NavBarHomePage.css';
+
 const NavBarHomePage = (props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
+
+  const logout = () => {
+    localStorage.removeItem("tSoEkCeRnT");
+  }
+
 
   return (
     <div className="mb-5">
@@ -35,7 +42,7 @@ const NavBarHomePage = (props) => {
                 <NavLink className="text-light" href="/profile">profile</NavLink>
                 </NavItem>
                 <NavItem>
-                <NavLink className="text-light" href="/">logout</NavLink>
+                <NavLink className="logout text-light" href="/" onClick={logout}>logout</NavLink>
                 </NavItem>
             </Nav>
           </NavbarText>
