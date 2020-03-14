@@ -25,7 +25,7 @@ router.get(url + '/all', (req, res) => {
 
 router.get(url, (req, res) => {
     pool.getConnection(function (err, connection){
-        connection.query(`SELECT * FROM homepage WHERE section=? AND image_id is NULL`, [req.query.section],(err, results, fields) => {
+        connection.query(`SELECT * FROM homepage WHERE section=? AND image_id=0`, [req.query.section],(err, results, fields) => {
             connection.release();
             if(err){
                 res.status(200).send(err.message);
