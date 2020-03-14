@@ -24,6 +24,21 @@ router.get(url, (req, res) => {
 
 });
 
+router.get(url+'/selected', (req, res) => {
+    pool.getConnection(function (err, connection){
+        connection.query(`SELECT * FROM video WHERE section=?`,[req.query.section], (err, results, fields) => {
+            connection.release();
+            if(err){
+                res.status(200).send(err.message);
+            }else{
+                res.status(200).send(results);
+            }
+            
+        });
+    });
+
+});
+
 router.get(url + '/:id', (req, res) => {
     const id = req.params.id;
     pool.getConnection(function (err, connection){

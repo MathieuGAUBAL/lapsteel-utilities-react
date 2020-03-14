@@ -35,7 +35,6 @@ class App extends Component{
             <Route path='/Home' component={() => <Homepage isLoggued={this.state.isLoggued}/>}/>
             <Route path='/lapsteelator' component={() => <Lapsteelator isLoggued={this.state.isLoggued}/>}/>
             <Route path='/videos' component={() => <SectionVideo isLoggued={this.state.isLoggued}/>}/>
-           
           </Switch>
         </Router>
       </div>

@@ -16,7 +16,7 @@ const NavBarHomePage = (props) => {
   const toggle = () => setIsOpen(!isOpen);
 
   return (
-    <div>
+    <div className="mb-5">
       <Navbar color="dark" light expand="md">
         <NavbarBrand className="text-light" href="/">LapSteel</NavbarBrand>
         <NavbarToggler onClick={toggle} />

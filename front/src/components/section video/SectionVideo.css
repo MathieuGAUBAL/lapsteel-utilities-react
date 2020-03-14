@@ -1,0 +1,18 @@
+.sticky-wrap {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.sticky-footer {
+    margin-top: auto
+}
+
+
+.video-mapped{
+    display:flex;
+    flex-direction: row;
+}
+
+
+
