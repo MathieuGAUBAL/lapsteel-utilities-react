@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 
 class InputMode extends Component{
-    constructor(props){
-        super(props);
-    }
+
 
 
     render(){
+        const { handleOnChangeInput } = this.props;
         return(
             <div>
             {/* 	 <!-- Menu déroulant pour sélectionner le mode --> */}
@@ -15,7 +14,7 @@ class InputMode extends Component{
                         <label className="input-group-text" htmlFor="input-interval-mode">Mode</label>
                     </div>
                     
-                        <select id="input-interval-mode" name="nom" size="1" className="form-control">
+                        <select id="input-interval-mode" name="nom" size="1" className="form-control" onChange={handleOnChangeInput}>
                             <option value="1.5T 1T 1T 1.5T 1T">Pentatonique mineure</option>
                             <option value="1T 1T 1.5T 1T 1.5T">Pentatonique majeure</option>
                         </select>

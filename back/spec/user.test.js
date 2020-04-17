@@ -6,6 +6,8 @@ const uri_login_admin = '/api/login@admin';
 const bcrypt_secret = process.env.BCRYPT_SECRET;
 const bcrypt_secret_modified = process.env.BCRYPT_SECRET_MODIFIED;
 const bcrypt = require('bcryptjs');
+const admin_email = process.env.ADMIN_EMAIL;
+const admin_password = process.env.ADMIN_PASSWORD;
 const user_email = process.env.USER_EMAIL;
 const user_password = process.env.USER_PASSWORD;
 
@@ -24,11 +26,16 @@ describe('CRUD route user', () => {
         password:user_password
     }
 
+    const admin = {
+        email:admin_email,
+        password:admin_password
+    }
+
     //"Récupération du token Admin"
     beforeAll((done) => {
         request(app)
         .post(uri_login_admin)
-        .send({email:user.email, password:user.password})
+        .send({email:admin.email, password:admin.password})
         .end((err, res) => {
             if(err){
                 return done (err);

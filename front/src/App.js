@@ -16,6 +16,7 @@ class App extends Component{
       isLoggued:null,
       token:""
     }
+    console.log("APP constructor");
 
   }
 
@@ -24,7 +25,7 @@ class App extends Component{
   }
 
   render(){
-
+    console.log("APP render");
     return (
       <div className="App">
         <Router>

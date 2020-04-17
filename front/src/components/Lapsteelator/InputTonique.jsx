@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 
 class InputTonique extends Component{
-    constructor(props){
-        super(props);
-    }
+
+
 
 
     render(){

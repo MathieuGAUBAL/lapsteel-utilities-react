@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 
 
 class InputAccordage extends Component{
-    constructor(props){
-        super(props);
-    }
+
+    
 
     render(){
         const { inputAccordage, handleOnChangeInput } = this.props;
