@@ -10,7 +10,8 @@ class LapsteelModulePrincipal extends Component{
         this.state = {
             inputAccordage:"",
             inputTonique:"",
-            inputMode:""
+            inputMode:"",
+            isLapsteel:true
         }
     }
 
@@ -23,6 +24,19 @@ class LapsteelModulePrincipal extends Component{
             inputMode:mode
         });
         
+    }
+
+    handleChangeModeFrette = (event) => {
+        switch (event.target.value) {
+            case "guitar":
+                this.setState({isLapsteel:false});
+                break;
+            case "lapsteel":
+                this.setState({isLapsteel:true});
+                break;
+            default:
+                break;
+        }
     }
 
     handleOnChangeInput = (event) => {
@@ -43,19 +57,18 @@ class LapsteelModulePrincipal extends Component{
     }
 
     render(){
-        const { inputAccordage, inputTonique, inputMode } = this.state;
-        console.log("**********************************")
+        const { inputAccordage, inputTonique, inputMode, modeFrette} = this.state;
+/*         console.log("**********************************")
         console.log("inputAccordage : ",inputAccordage);
         console.log("inputTonique : ", inputTonique);
         console.log("inputTonique : ", inputMode);
-        console.log("**********************************")
-    
+        console.log("**********************************") */
         return(
             <div>
                 <InputAccordage handleOnChangeInput={this.handleOnChangeInput} inputAccordage={this.state.inputAccordage}/>
                 <InputTonique handleOnChangeInput={this.handleOnChangeInput} getPutValue={this.getInputValue}/>
-                <InputMode handleOnChangeInput={this.handleOnChangeInput}/>
-                <Canvas />
+                <InputMode handleChangeModeFrette={this.handleChangeModeFrette} handleOnChangeInput={this.handleOnChangeInput}/>
+                <Canvas {...this.state}/>
             </div>
         )
     }

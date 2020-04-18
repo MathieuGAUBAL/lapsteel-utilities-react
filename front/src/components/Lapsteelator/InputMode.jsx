@@ -5,7 +5,7 @@ class InputMode extends Component{
 
 
     render(){
-        const { handleOnChangeInput } = this.props;
+        const { handleOnChangeInput, handleChangeModeFrette } = this.props;
         return(
             <div>
             {/* 	 <!-- Menu déroulant pour sélectionner le mode --> */}
@@ -21,8 +21,8 @@ class InputMode extends Component{
                     
                         <div className="container pt-5">
                     <div className="btn-group" role="group" aria-label="Basic example">
-                        <button type="button" className="btn btn-primary" /* onclick="Guitar_fret()" */>Guitar</button>
-                        <button type="button" className="btn btn-primary" /* onclick="Lapsteel_fret()" */>Lapsteel</button>
+                        <button type="button" value="guitar" className="btn btn-primary" onClick={handleChangeModeFrette} >Guitar</button>
+                        <button type="button" value="lapsteel" className="btn btn-primary" onClick={handleChangeModeFrette}>Lapsteel</button>
                     </div>
                     <button className="btn btn-outline-primary" data-toggle="modal"  data-target="#ajoutMode"><i className="fa fa-plus"></i></button>
                     <button className="btn btn-outline-primary" data-toggle="modal" data-target="#suppressionMode"> <i className="fa fa-minus"></i> </button>
