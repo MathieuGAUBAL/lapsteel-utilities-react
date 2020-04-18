@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import $ from 'jquery';
 import './Lapsteelator.css';
+import './Canvas.css';
 
 
 
@@ -12,7 +14,7 @@ let data = {
   modeNum:[],
   gammeMode : [],
   notesFinales:[],
-  localStorageArray:[]
+  localStorageArray:[],
 }
 
 //images des numéros des frettes
@@ -134,6 +136,7 @@ let alignement_note_y = [38,68,100,130,161,194];
 // numeros case note     1    2   3   4   5   6   7   8   9   10  11  12  13   14   15    16   17   18   19    20    
 let alignement_note_x = [100,177,252,330,407,485,560,635,713,789,865,940, 1015, 1092,1164,1240,1316,1395, 1468,1544];
 let alignement_note_x_guitar = 35;
+
 let alignement_frette_y = 0;
 //                          3   5   7   9   12  15   17   19   21
 let alignement_frette_x = [255,405,560,710,935,1165,1318,1470,1610];
@@ -143,19 +146,27 @@ let arr_num_frette = [num_fret_3,num_fret_5,num_fret_7,num_fret_9,
                       num_fret_12,num_fret_15,num_fret_17,num_fret_19,
                       num_fret_21];
 
+
+
 let alignement_mode_x = [104,180,256,332,408,484,560,636,712];
 
 let arr_note_gif = [];
 
+
 var canvas = null;
 var context = null;
+let ajoutModeBouton = null; 
+
+
 
 class Canvas extends Component{
   constructor(props){
       super(props);
       this.state = {
-        isLapsteel:""
+        isLapsteel:true,
+        inputAccordage:this.props.inputAccordage
       }
+  
   }
 
 
@@ -249,15 +260,15 @@ class Canvas extends Component{
   }
 
   lancer = () => {
+
+ 
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
     const { inputAccordage, inputTonique, inputMode, isLapsteel} = this.props;
-/*     console.log("inputAccordage : ",inputAccordage);
-    console.log("inputTonique : ", inputTonique);
-    console.log("inputTonique : ", inputMode);
-    console.log("isLapsteel : ", isLapsteel); */
 
     data.mancheGuitare = [];
     data.notesFinales = [];
-    
+
     console.log(inputAccordage);
     let inputIsVerified_accordage = this.verification_input_accordage(inputAccordage);
     let inputIsVerified_tonique = this.verification_input_tonique(inputTonique);
@@ -274,6 +285,7 @@ class Canvas extends Component{
       accordage.map((arr) => data.mancheGuitare.push(arr));
       data.notesFinales  = this.constructionNotesFinales(data.mancheGuitare, data.gammeMode);
       arr_note_gif = [];
+      
 
       let line = [];
       for(let i = 0; i < data.notesFinales.length; i++){
@@ -364,13 +376,25 @@ class Canvas extends Component{
      //displayMode.innerHTML = "Gamme : " + data.gammeMode.join(' ').replace(regex," ");
      
      this.init();
-  }
+ 
+    }else{
+      $('.alert-saisie-accordage').show();
+      context.drawImage(guitar_bg,0,0);
+    }
 
   }
 
 
 
   initialisation = () => {
+    ajoutModeBouton = document.getElementById('ajouter-mode');
+
+
+    $('.alert-saisie-accordage').hide();
+    $('.alert-ajout-mode').hide();
+    $('.alert-modeAjout-mode').hide();
+    $('.alert-doublon-modeAjout-mode').hide();
+
     canvas = document.getElementById('canvas');
     context = canvas.getContext('2d');
 
@@ -378,19 +402,126 @@ class Canvas extends Component{
       canvas.width = guitar_bg.naturalWidth
       canvas.height = guitar_bg.naturalHeight
       context.drawImage(guitar_bg,0,0);
-      
+      context.drawImage(guitar_bg,0,0);
+      this.generator_frette();
+    }
+  }
+
+  generator_frette = () => {
+    //affiche les images frettes
+    for(let j = 0; j < alignement_frette_x.length; j++){
+      context.drawImage(arr_num_frette[j], this.state.isLapsteel ? alignement_frette_x[j] : alignement_frette_x[j] - alignement_frette_x_guitar, alignement_frette_y);
     }
   }
 
   init = () => {
     context.drawImage(guitar_bg,0,0);
+    this.generator_frette();
+
     //affiche les notes 
      for(let i = 0; i < 21; i++){
       for(let j = 0; j < alignement_note_y.length; j++){
         if(arr_note_gif[j] != undefined){
-          context.drawImage(arr_note_gif[j][i], (data.isLapteel ? alignement_note_x[i] : alignement_note_x[i] + alignement_note_x_guitar), alignement_note_y[j]);
+          context.drawImage(arr_note_gif[j][i], (this.state.isLapsteel ? alignement_note_x[i] : alignement_note_x[i] + alignement_note_x_guitar), alignement_note_y[j]);
         } 
       }
+    }
+
+      // affichage de l'accordage sur le manche
+  let alignement_note_manche_x = 5;
+  for(let i = 0; i < data.accordage.length; i++){
+    if(data.accordage[i] === 'C'){
+      context.drawImage(c_manche,alignement_note_manche_x, alignement_note_y[i]);
+    }else if(data.accordage[i] === 'C#'){
+      context.drawImage(cd_manche,alignement_note_manche_x, alignement_note_y[i]);
+    }else if(data.accordage[i] === 'D'){  
+      context.drawImage(d_manche,alignement_note_manche_x, alignement_note_y[i]);
+    }else if(data.accordage[i] === 'D#'){
+      context.drawImage(dd_manche,alignement_note_manche_x, alignement_note_y[i]);
+    }else if(data.accordage[i] === 'E'){
+      context.drawImage(e_manche,alignement_note_manche_x, alignement_note_y[i]);
+    }else if(data.accordage[i] === 'F'){
+      context.drawImage(f_manche,alignement_note_manche_x, alignement_note_y[i]);
+    }else if(data.accordage[i] === 'F#'){
+      context.drawImage(fd_manche,alignement_note_manche_x, alignement_note_y[i]);
+    }else if(data.accordage[i] === 'G'){
+      context.drawImage(g_manche,alignement_note_manche_x, alignement_note_y[i]);
+    }else if(data.accordage[i] === 'G#'){
+      context.drawImage(gd_manche,alignement_note_manche_x, alignement_note_y[i]);
+    }else if(data.accordage[i] === 'A'){
+      context.drawImage(a_manche,alignement_note_manche_x, alignement_note_y[i]);
+    }else if(data.accordage[i] === 'A#'){
+      context.drawImage(ad_manche,alignement_note_manche_x, alignement_note_y[i]);
+    }else if(data.accordage[i] === 'B'){
+      context.drawImage(b_manche,alignement_note_manche_x, alignement_note_y[i]);
+    }
+  }
+
+    
+  }
+
+  add_mode = () => {
+    //Ajout d'un mode en ouvrant une MODAL
+    
+    let nomAjoutMode = this.props.ajoutMode;
+    nomAjoutMode = nomAjoutMode.trim();
+
+    let intervalAjoutMode = this.props.ajoutInterval;
+    intervalAjoutMode = intervalAjoutMode.toUpperCase();
+
+  let sameName = false;
+
+  if(nomAjoutMode != "" && intervalAjoutMode != ""){
+    if(this.hasDataInLocalStorage().length > 0){
+      for(let i = 0; i < data.localStorageArray.length; i++){
+        if(data.localStorageArray[i].hasOwnProperty(nomAjoutMode)){
+          for(let j in data.localStorageArray){
+            if(j == i){
+              sameName = true;
+            }
+          }
+        }
+      }
+
+      if(!sameName){
+        data.localStorageArray = JSON.parse(window.localStorage.getItem('objetAjoutMode'));
+        data.localStorageArray.push({[`${nomAjoutMode}`]:intervalAjoutMode});
+        window.localStorage.setItem('objetAjoutMode', JSON.stringify([...data.localStorageArray]));
+
+        $('.alert-modeAjout-mode').show();
+
+      }
+      
+    }else{
+      data.localStorageArray.push({[`${nomAjoutMode}`]:intervalAjoutMode});
+      window.localStorage.setItem('objetAjoutMode', JSON.stringify([...data.localStorageArray]));
+      $('.alert-modeAjout-mode').show();
+    }
+
+  }   
+  }
+
+  hasDataInLocalStorage= () =>{
+
+    let obj = JSON.parse(window.localStorage.getItem('objetAjoutMode'));
+  
+    let count = [];
+    for(let i in obj){
+      count.push(i);
+    }
+    if(count.length === 0){
+      console.log("Le local Storage est vide");
+    }
+    return count;
+  }
+
+  componentDidUpdate(prevProps){
+    if(prevProps.isLapsteel !== this.props.isLapsteel){
+      this.setState({isLapsteel:this.props.isLapsteel});
+    }else if(prevProps.inputAccordage !== this.props.inputAccordage){
+      $('.alert-saisie-accordage').hide();
+      context.drawImage(guitar_bg,0,0);
+      this.generator_frette();
     }
   }
 
@@ -401,8 +532,7 @@ class Canvas extends Component{
 
 
   render(){
-    
-      //console.log("state canva : ",this.state);
+      console.log("props: ",this.props);
       return(
           <div className="container text-center mb-5">
               <div id="display-mode" className="text-center p-5 h2 display-mode-class"></div>

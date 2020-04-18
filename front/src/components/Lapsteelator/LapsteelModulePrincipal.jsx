@@ -11,6 +11,8 @@ class LapsteelModulePrincipal extends Component{
             inputAccordage:"",
             inputTonique:"",
             inputMode:"",
+            ajoutMode:"",
+            ajoutInterval:"",
             isLapsteel:true
         }
     }
@@ -51,6 +53,24 @@ class LapsteelModulePrincipal extends Component{
             case 'input-interval-mode':
                 this.setState({inputMode:event.target.value});
                 break;
+            case 'nom-ajout-mode':
+                this.setState({ajoutMode:event.target.value});
+                break;
+            case 'input-interval-mode-added':
+                this.setState({ajoutInterval:event.target.value});
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    handleOpenWindowMode = (event) => {
+        switch (event.target.id) {
+            case 'ajouter-mode':
+                this.setState({inputAccordage:event.target.value});
+                break;
+
             default:
                 break;
         }
