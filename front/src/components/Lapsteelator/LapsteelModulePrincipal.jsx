@@ -53,42 +53,21 @@ class LapsteelModulePrincipal extends Component{
             case 'input-interval-mode':
                 this.setState({inputMode:event.target.value});
                 break;
-            case 'nom-ajout-mode':
-                this.setState({ajoutMode:event.target.value});
-                break;
-            case 'input-interval-mode-added':
-                this.setState({ajoutInterval:event.target.value});
-                break;
-
             default:
                 break;
         }
     }
 
-    handleOpenWindowMode = (event) => {
-        switch (event.target.id) {
-            case 'ajouter-mode':
-                this.setState({inputAccordage:event.target.value});
-                break;
 
-            default:
-                break;
-        }
-    }
 
     render(){
-        const { inputAccordage, inputTonique, inputMode, modeFrette} = this.state;
-/*         console.log("**********************************")
-        console.log("inputAccordage : ",inputAccordage);
-        console.log("inputTonique : ", inputTonique);
-        console.log("inputTonique : ", inputMode);
-        console.log("**********************************") */
+
         return(
             <div>
                 <InputAccordage handleOnChangeInput={this.handleOnChangeInput} inputAccordage={this.state.inputAccordage}/>
                 <InputTonique handleOnChangeInput={this.handleOnChangeInput} getPutValue={this.getInputValue}/>
                 <InputMode handleChangeModeFrette={this.handleChangeModeFrette} handleOnChangeInput={this.handleOnChangeInput}/>
-                <Canvas {...this.state}/>
+                <Canvas handleOnChangeInput={this.handleOnChangeInput} {...this.state}/>
             </div>
         )
     }

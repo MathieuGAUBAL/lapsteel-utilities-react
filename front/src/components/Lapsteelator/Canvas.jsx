@@ -148,14 +148,14 @@ let arr_num_frette = [num_fret_3,num_fret_5,num_fret_7,num_fret_9,
 
 
 
-let alignement_mode_x = [104,180,256,332,408,484,560,636,712];
+//let alignement_mode_x = [104,180,256,332,408,484,560,636,712];
 
 let arr_note_gif = [];
 
 
 var canvas = null;
 var context = null;
-let ajoutModeBouton = null; 
+
 
 
 
@@ -164,9 +164,13 @@ class Canvas extends Component{
       super(props);
       this.state = {
         isLapsteel:true,
-        inputAccordage:this.props.inputAccordage
+        inputAccordage:this.props.inputAccordage,
+        closeModalAjoutMode:false,
+        ajoutMode:"",
+        ajoutInterval:"",
+        errorAjoutMode:false,
+        successAddMode:false
       }
-  
   }
 
 
@@ -264,7 +268,7 @@ class Canvas extends Component{
  
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-    const { inputAccordage, inputTonique, inputMode, isLapsteel} = this.props;
+    const { inputAccordage, inputTonique, inputMode} = this.props;
 
     data.mancheGuitare = [];
     data.notesFinales = [];
@@ -372,7 +376,7 @@ class Canvas extends Component{
               }
           }
       }
-      let regex = /[,]/gi;
+      //let regex = /[,]/gi;
      //displayMode.innerHTML = "Gamme : " + data.gammeMode.join(' ').replace(regex," ");
      
      this.init();
@@ -387,7 +391,7 @@ class Canvas extends Component{
 
 
   initialisation = () => {
-    ajoutModeBouton = document.getElementById('ajouter-mode');
+  
 
 
     $('.alert-saisie-accordage').hide();
@@ -405,6 +409,22 @@ class Canvas extends Component{
       context.drawImage(guitar_bg,0,0);
       this.generator_frette();
     }
+
+    if(this.hasDataInLocalStorage().length > 0){
+    
+      data.localStorageArray = JSON.parse(window.localStorage.getItem('objetAjoutMode'));
+      let selectIntervalMode = document.getElementById('input-interval-mode');
+      for(let property in data.localStorageArray){
+        let name = Object.keys(data.localStorageArray[property]).join('');
+        let interval = Object.values(data.localStorageArray[property]).join('');
+        selectIntervalMode.options[selectIntervalMode.options.length] = new Option(`${name}`, `${interval}`);
+        //selectIntervalModeListed.options[selectIntervalModeListed.options.length] = new Option(`${name}`, `${interval}`);
+        //selectIntervalModeListedModification.options[selectIntervalModeListedModification.options.length] = new Option(`${name}`, `${interval}`);
+      }
+    
+    }else{
+      console.log("Local Storage vide");
+    }
   }
 
   generator_frette = () => {
@@ -421,7 +441,7 @@ class Canvas extends Component{
     //affiche les notes 
      for(let i = 0; i < 21; i++){
       for(let j = 0; j < alignement_note_y.length; j++){
-        if(arr_note_gif[j] != undefined){
+        if(arr_note_gif[j] !== undefined){
           context.drawImage(arr_note_gif[j][i], (this.state.isLapsteel ? alignement_note_x[i] : alignement_note_x[i] + alignement_note_x_guitar), alignement_note_y[j]);
         } 
       }
@@ -461,44 +481,61 @@ class Canvas extends Component{
   }
 
   add_mode = () => {
-    //Ajout d'un mode en ouvrant une MODAL
-    
-    let nomAjoutMode = this.props.ajoutMode;
+ 
+      //Ajout d'un mode en ouvrant une MODAL
+
+    let nomAjoutMode = this.state.ajoutMode;
     nomAjoutMode = nomAjoutMode.trim();
 
-    let intervalAjoutMode = this.props.ajoutInterval;
+    let intervalAjoutMode = this.state.ajoutInterval;
     intervalAjoutMode = intervalAjoutMode.toUpperCase();
 
-  let sameName = false;
+    let sameName = false;
 
-  if(nomAjoutMode != "" && intervalAjoutMode != ""){
-    if(this.hasDataInLocalStorage().length > 0){
-      for(let i = 0; i < data.localStorageArray.length; i++){
-        if(data.localStorageArray[i].hasOwnProperty(nomAjoutMode)){
-          for(let j in data.localStorageArray){
-            if(j == i){
-              sameName = true;
+    if(nomAjoutMode.length > 0 && intervalAjoutMode.length > 0){
+      if(this.hasDataInLocalStorage().length > 0){
+        for(let i = 0; i < data.localStorageArray.length; i++){
+          if(data.localStorageArray[i].hasOwnProperty(nomAjoutMode)){
+            for(let j in data.localStorageArray){
+              if(j === i){
+                sameName = true;
+              }
             }
           }
         }
-      }
 
-      if(!sameName){
-        data.localStorageArray = JSON.parse(window.localStorage.getItem('objetAjoutMode'));
+        if(!sameName){
+          data.localStorageArray = JSON.parse(window.localStorage.getItem('objetAjoutMode'));
+          data.localStorageArray.push({[`${nomAjoutMode}`]:intervalAjoutMode});
+          window.localStorage.setItem('objetAjoutMode', JSON.stringify([...data.localStorageArray]));
+
+          $('.alert-modeAjout-mode').show();
+          this.setState({ajoutMode:"",ajoutInterval:"",successAddMode:true});
+          setTimeout(() => {
+            $('.alert-modeAjout-mode').hide();
+            this.setState({successAddMode:false})
+          }, 3000);
+
+        }
+        
+      }else{
         data.localStorageArray.push({[`${nomAjoutMode}`]:intervalAjoutMode});
         window.localStorage.setItem('objetAjoutMode', JSON.stringify([...data.localStorageArray]));
-
+        this.setState({ajoutMode:"",ajoutInterval:"",successAddMode:true});
         $('.alert-modeAjout-mode').show();
-
-      }
+        setTimeout(() => {
+          $('.alert-modeAjout-mode').hide();
+          this.setState({successAddMode:false})
+        }, 3000);
       
-    }else{
-      data.localStorageArray.push({[`${nomAjoutMode}`]:intervalAjoutMode});
-      window.localStorage.setItem('objetAjoutMode', JSON.stringify([...data.localStorageArray]));
-      $('.alert-modeAjout-mode').show();
-    }
+      }
 
-  }   
+    }else{
+      //affiche un message d'erreur si les champs ne sont pas saisies
+      console.log("MERDE");
+      $('.alert-ajout-mode').show();
+      this.setState({errorAjoutMode:true});
+    }  
   }
 
   hasDataInLocalStorage= () =>{
@@ -525,14 +562,43 @@ class Canvas extends Component{
     }
   }
 
+  handleOnChangeAddMode = (event) => {
+    switch (event.target.id) {
+        case 'nom-ajout-mode':
+            this.setState({ajoutMode:event.target.value});
+            break;
+        case 'input-interval-mode-added':
+            this.setState({ajoutInterval:event.target.value});
+            break;
+        default:
+            break;
+    }
+}
+
 
   componentDidMount(){
     this.initialisation();
   }
 
+  closeModalAjoutMode = () => {
+    console.log("modal ajout mode fermée");
+    this.setState({ajoutMode:"",ajoutInterval:""});
+  }
+
 
   render(){
-      console.log("props: ",this.props);
+    const { ajoutInterval, ajoutMode, errorAjoutMode} = this.state;
+
+    if(errorAjoutMode){
+      if(ajoutInterval.length > 0 || ajoutMode.length > 0){
+        $('.alert-ajout-mode').hide();
+        this.setState({errorAjoutMode:false});
+      }
+    
+    }
+
+    
+
       return(
           <div className="container text-center mb-5">
               <div id="display-mode" className="text-center p-5 h2 display-mode-class"></div>
@@ -541,6 +607,53 @@ class Canvas extends Component{
           <div className="text-center container mt-3 pb-5">
               <button type="button" className="btn btn-primary" id="button-lancer" onClick={this.lancer}>Lancer</button>
           </div>
+                           {/*    <!-- debut Modal Ajout Mode --> */}
+                           <div className="modal" id="ajoutMode">
+                    <div className="modal-dialog modal-dialog-centered modal-lg">
+                        <div className="modal-content">
+
+                        {/*  <!-- Header --> */}
+                            <div className="modal-header">
+                                <h5 className="modal-title">Ajouter un mode</h5>
+                                <button className="close" data-dismiss="modal">&times;</button>
+                            </div>
+
+                            {/* <!-- Body --> */}
+                            <div className="modal-body">
+                                {/* <!-- div error si l'utilisateur ne rentre pas d'accordage --> */}
+                                <div className="alert alert-warning alert-dismissible fade show container alert-ajout-mode" role="alert">
+                                    <strong>OOPS!</strong> Il faut saisir les deux champs.
+                                </div>
+
+                                <form id='form-id-ajout-mode text-center form-group'>
+                                    <label>Nom du mode</label>
+                                    <input name="nom-ajout-mode" id="nom-ajout-mode" value={this.state.ajoutMode} type='text' required='required'
+                                        className="form-control" onChange={this.handleOnChangeAddMode}/>
+                                    <label>intervalle des notes</label>
+                                    <input name="input-interval-mode-added" id="input-interval-mode-added" value={this.state.ajoutInterval} type='text' required='required'
+                                        className="form-control" onChange={this.handleOnChangeAddMode}/>
+                                    <div className="pt-3 pb-3">
+                                        <button type="button" className="btn btn-primary" id="ajouter-mode" onClick={this.add_mode}>Ajouter un mode</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div className="alert alert-warning alert-dismissible fade show container alert-modeAjout-mode" role="alert">
+                                <strong>Bravo!</strong> Un mode a été ajouté.
+                            </div>
+
+                            <div className="alert alert-warning fade show container alert-doublon-modeAjout-mode" role="alert">
+                                <strong>OOPS!</strong> Enresgitrement déjà existant.
+                            </div>
+
+                            {/* <!-- Footer --> */}
+                            <div className="modal-footer">
+                                <button className="btn btn-secondary" data-dismiss="modal" onClick={this.closeModalAjoutMode}>Fermer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {/*  <!-- fin Modal Ajout Mode --> */} 
         </div>  
       )
   }

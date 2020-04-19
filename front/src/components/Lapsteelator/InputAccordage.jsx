@@ -6,7 +6,7 @@ class InputAccordage extends Component{
     
 
     render(){
-        const { inputAccordage, handleOnChangeInput, handleOpenWindowAddMode } = this.props;
+        const { inputAccordage, handleOnChangeInput} = this.props;
         //console.log(this.state.inputAccordage);
         return(
             <div>
