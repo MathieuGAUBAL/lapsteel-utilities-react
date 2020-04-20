@@ -173,10 +173,7 @@ class Canvas extends Component{
         localAddMode:[],
         saveLocalStorage:[]
       }
-  
   }
-
-
 
     verification_input_accordage(input_v){
       let regex =  /([A-G]|[ACDFG]#)([A-G]|[ACDFG]#){4}([A-G]|[ACDFG]#)$/;
@@ -268,7 +265,6 @@ class Canvas extends Component{
 
   lancer = () => {
 
- 
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     const { inputAccordage, inputTonique, inputMode} = this.props;
@@ -379,9 +375,7 @@ class Canvas extends Component{
               }
           }
       }
-      //let regex = /[,]/gi;
-     //displayMode.innerHTML = "Gamme : " + data.gammeMode.join(' ').replace(regex," ");
-     
+   
      this.init();
  
     }else{
@@ -394,8 +388,6 @@ class Canvas extends Component{
 
 
   initialisation = () => {
-  
-
 
     $('.alert-saisie-accordage').hide();
     $('.alert-ajout-mode').hide();
@@ -420,8 +412,6 @@ class Canvas extends Component{
     if(this.hasDataInLocalStorage().length > 0){
     
       data.localStorageArray = JSON.parse(window.localStorage.getItem('objetAjoutMode'));
-      //selectIntervalMode = document.getElementById('input-interval-mode');
-      console.log(data.localStorageArray);
       this.setAddListMode(data.localStorageArray);
     
     }else{
@@ -494,33 +484,29 @@ class Canvas extends Component{
   add_mode = () => {
  
       //Ajout d'un mode en ouvrant une MODAL
+  
     let array = [];
+    let arrayNameMode = [];
     let nomAjoutMode = this.state.ajoutMode;
     nomAjoutMode = nomAjoutMode.trim();
-
+    console.log(nomAjoutMode);
     let intervalAjoutMode = this.state.ajoutInterval;
     intervalAjoutMode = intervalAjoutMode.toUpperCase();
-
+  
     let sameName = false;
-
+    console.log(data.localStorageArray);
     if(nomAjoutMode.length > 0 && intervalAjoutMode.length > 0){
       if(this.hasDataInLocalStorage().length > 0){
-        for(let i = 0; i < data.localStorageArray.length; i++){
-          if(data.localStorageArray[i].hasOwnProperty(nomAjoutMode)){
-            for(let j in data.localStorageArray){
-              if(j === i){
-                sameName = true;
-              }
-            }
-          }
+        for(let property in data.localStorageArray){
+          arrayNameMode.push(Object.keys(data.localStorageArray[property]).join(''));
+        }
+        if(arrayNameMode.includes(nomAjoutMode)){
+          sameName = true;
         }
 
+        console.log(sameName);
         if(!sameName){
           array.push({[`${nomAjoutMode}`]:intervalAjoutMode});
-          //data.localStorageArray = JSON.parse(window.localStorage.getItem('objetAjoutMode'));
-         // data.localStorageArray.push({[`${nomAjoutMode}`]:intervalAjoutMode});
-          //window.localStorage.setItem('objetAjoutMode', JSON.stringify([...data.localStorageArray]));
-          //this.setState({ajoutMode:"",ajoutInterval:"",successAddMode:true, localStorageAddMode:[...data.localStorageArray]});
           $('.alert-modeAjout-mode').show();
           this.setState({ajoutMode:"",ajoutInterval:"",successAddMode:true});
           this.setState(state => {
@@ -535,12 +521,16 @@ class Canvas extends Component{
             this.setState({successAddMode:false})
           }, 3000);
 
+        }else{
+          $('.alert-doublon-modeAjout-mode').show();
+          this.setState({ajoutInterval:"",ajoutMode:""})
+          setTimeout(() => {
+            $('.alert-doublon-modeAjout-mode').hide();
+          }, 3000);
         }
         
       }else{
         array.push({[`${nomAjoutMode}`]:intervalAjoutMode});
-        //data.localStorageArray.push({[`${nomAjoutMode}`]:intervalAjoutMode});
-        //window.localStorage.setItem('objetAjoutMode', JSON.stringify([...data.localStorageArray]));
         this.setState({ajoutMode:"",ajoutInterval:"",successAddMode:true}) ;
         this.setState(state => {
           const localAddMode = [...state.localAddMode, array[0]];
@@ -611,10 +601,14 @@ class Canvas extends Component{
   }
 
   closeModalAjoutMode = () => {
-    console.log("modal ajout mode fermée");
     this.setState({ajoutMode:"",ajoutInterval:""});
     this.setAddListMode(this.state.localAddMode);
+    this.saveModetoLocalStorage();
 
+  }
+
+  cancelModalAddMode = () => {
+    this.setState({ajoutInterval:"",ajoutMode:""});
   }
 
   saveModetoLocalStorage = () => {
@@ -643,17 +637,13 @@ class Canvas extends Component{
       window.localStorage.setItem('objetAjoutMode', JSON.stringify(this.state.localAddMode));
       this.setState({saveLocalStorage:"",localAddMode:""});
     }
-    
-
-
-    
+     
 }
 
 
 
   render(){
     const { ajoutInterval, ajoutMode, errorAjoutMode} = this.state;
-
     if(errorAjoutMode){
       if(ajoutInterval.length > 0 || ajoutMode.length > 0){
         $('.alert-ajout-mode').hide();
@@ -666,60 +656,105 @@ class Canvas extends Component{
 
       return(
           <div className="container text-center mb-5">
-             <button className="btn btn-outline-primary " data-toggle="modal" data-target="#saveMode" onClick={this.saveModetoLocalStorage}> <i className="fa fa-save"></i> </button>
               <div id="display-mode" className="text-center p-5 h2 display-mode-class"></div>
               <canvas id="canvas"></canvas>
-            {/*   <!-- Bouton Lancer et Effacer --> */}
-          <div className="text-center container mt-3 pb-5">
-              <button type="button" className="btn btn-primary" id="button-lancer" onClick={this.lancer}>Lancer</button>
-          </div>
-                           {/*    <!-- debut Modal Ajout Mode --> */}
-                           <div className="modal" id="ajoutMode">
-                    <div className="modal-dialog modal-dialog-centered modal-lg">
-                        <div className="modal-content">
+              {/*   <!-- Bouton Lancer et Effacer --> */}
+              <div className="text-center container mt-3 pb-5">
+                  <button type="button" className="btn btn-primary" id="button-lancer" onClick={this.lancer}>Lancer</button>
+              </div>
 
-                        {/*  <!-- Header --> */}
-                            <div className="modal-header">
-                                <h5 className="modal-title">Ajouter un mode</h5>
-                                <button className="close" data-dismiss="modal">&times;</button>
-                            </div>
 
-                            {/* <!-- Body --> */}
-                            <div className="modal-body">
-                                {/* <!-- div error si l'utilisateur ne rentre pas d'accordage --> */}
-                                <div className="alert alert-warning alert-dismissible fade show container alert-ajout-mode" role="alert">
-                                    <strong>OOPS!</strong> Il faut saisir les deux champs.
-                                </div>
+              {/*    <!-- debut Modal Ajout Mode --> */}
+              <div className="modal fade" id="ajoutMode" data-backdrop="static" tabIndex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div className="modal-dialog modal-dialog-centered modal-lg">
+                  <div className="modal-content">
 
-                                <form id='form-id-ajout-mode text-center form-group'>
-                                    <label>Nom du mode</label>
-                                    <input name="nom-ajout-mode" id="nom-ajout-mode" value={this.state.ajoutMode} type='text' required='required'
-                                        className="form-control" onChange={this.handleOnChangeAddMode}/>
-                                    <label>intervalle des notes</label>
-                                    <input name="input-interval-mode-added" id="input-interval-mode-added" value={this.state.ajoutInterval} type='text' required='required'
-                                        className="form-control" onChange={this.handleOnChangeAddMode}/>
-                                    <div className="pt-3 pb-3">
-                                        <button type="button" className="btn btn-primary" id="ajouter-mode" onClick={this.add_mode}>Ajouter un mode</button>
-                                    </div>
-                                </form>
-                            </div>
-
-                            <div className="alert alert-warning alert-dismissible fade show container alert-modeAjout-mode" role="alert">
-                                <strong>Bravo!</strong> Un mode a été ajouté.
-                            </div>
-
-                            <div className="alert alert-warning fade show container alert-doublon-modeAjout-mode" role="alert">
-                                <strong>OOPS!</strong> Enresgitrement déjà existant.
-                            </div>
-
-                            {/* <!-- Footer --> */}
-                            <div className="modal-footer">
-                                <button className="btn btn-secondary" data-dismiss="modal" onClick={this.closeModalAjoutMode}>Appliquer</button>
-                            </div>
-                        </div>
+                    {/*  <!-- Header --> */}
+                    <div className="modal-header">
+                        <h5 className="modal-title" id="staticBackdropLabel">Ajouter un mode</h5>
+                        
                     </div>
+
+                    {/* <!-- Body --> */}
+                    <div className="modal-body">
+                        {/* <!-- div error si l'utilisateur ne rentre pas d'accordage --> */}
+                        <div className="alert alert-warning alert-dismissible fade show container alert-ajout-mode" role="alert">
+                            <strong>OOPS!</strong> Il faut saisir les deux champs.
+                        </div>
+
+                        <form id='form-id-ajout-mode text-center form-group'>
+                            <label>Nom du mode</label>
+                            <input name="nom-ajout-mode" id="nom-ajout-mode" value={this.state.ajoutMode} type='text' required='required'
+                                className="form-control" onChange={this.handleOnChangeAddMode}/>
+                            <label>intervalle des notes</label>
+                            <input name="input-interval-mode-added" id="input-interval-mode-added" value={this.state.ajoutInterval} type='text' required='required'
+                                className="form-control" onChange={this.handleOnChangeAddMode}/>
+                            <div className="pt-3 pb-3">
+                                <button type="button" className="btn btn-primary" id="ajouter-mode" onClick={this.add_mode}>Ajouter un mode</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div className="alert alert-warning alert-dismissible fade show container alert-modeAjout-mode" role="alert">
+                        <strong>Bravo!</strong> Un mode a été ajouté.
+                    </div>
+
+                    <div className="alert alert-warning fade show container alert-doublon-modeAjout-mode" role="alert">
+                        <strong>OOPS!</strong> Enresgitrement déjà existant.
+                    </div>
+
+                    {/* <!-- Footer --> */}
+                    <div className="modal-footer">
+                        {/* {this.state.ajoutMode !== "" && this.state.ajoutInterval !== "" 
+                        ? 
+                        <button className="btn btn-primary" data-dismiss="modal" onClick={this.closeModalAjoutMode}>Appliquer</button> 
+                        : 
+                        <button className="btn btn-secondary">Appliquer</button>} */}
+                        <button className="btn btn-primary" data-dismiss="modal" onClick={this.closeModalAjoutMode}>Appliquer</button> 
+                        <button className="btn btn-secondary" data-dismiss="modal" onClick={this.cancelModalAddMode}>Annuler</button>
+                    </div>
+                  </div>
+              </div>
+          </div>
+          {/*  <!-- fin Modal Ajout Mode --> */} 
+
+          {/*     <!-- debut Modal supprimer Mode --> */}
+          <div class="modal" id="suppressionMode">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+
+              {/*    <!-- Header --> */}
+              <div class="modal-header">
+              <h5 class="modal-title">Supprimer un mode</h5>
+              <button class="close" data-dismiss="modal">&times;</button>
+              </div>
+
+              {/*  <!-- Body --> */}
+              <div class="modal-body">
+              <form id='form-id-suppression-mode text-center form-group'>
+                <select id="interval-mode-list" name="interval-mode-list" size="1" class="form-control"></select>
+                <div class="pt-3 pb-3">
+                <button type="button" class="btn btn-primary" id="supprimer-mode" onclick="reload()">Supprimer un mode</button>
                 </div>
-            {/*  <!-- fin Modal Ajout Mode --> */} 
+              </form>
+              </div>
+
+              <div class="alert alert-warning alert-dismissible fade show container alert-suppression-mode" role="alert">
+                <strong>Alerte!</strong> Le mode a été supprimé.
+              </div>
+
+              <div class="alert alert-warning alert-dismissible fade show container alert-error-suppression-mode" role="alert">
+                <strong>Alerte!</strong> Rien à supprimer.
+              </div>
+
+              {/*  <!-- Footer --> */}
+              <div class="modal-footer">
+              <button class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+              </div>
+            </div>
+            </div>
+          </div>
+          {/*  <!-- fin Modal supprimer Mode --> */}
         </div>  
       )
   }

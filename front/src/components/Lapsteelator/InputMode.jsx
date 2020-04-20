@@ -3,9 +3,11 @@ import React, { Component } from 'react';
 class InputMode extends Component{
 
 
-  
+
+
+
     render(){
-        const { handleOnChangeInput, handleChangeModeFrette} = this.props;
+        const { handleOnChangeInput, handleChangeModeFrette, handleOpenModalAddMode, handleOpenModalDeleteMode} = this.props;
         return(
             <div>
             {/* 	 <!-- Menu déroulant pour sélectionner le mode --> */}
@@ -24,9 +26,9 @@ class InputMode extends Component{
                         <button type="button" value="guitar" className="btn btn-primary" onClick={handleChangeModeFrette} >Guitar</button>
                         <button type="button" value="lapsteel" className="btn btn-primary" onClick={handleChangeModeFrette}>Lapsteel</button>
                     </div>
-                    <button className="btn btn-outline-primary" data-toggle="modal"  data-target="#ajoutMode"><i className="fa fa-plus"></i></button>
-                    <button className="btn btn-outline-primary" data-toggle="modal" data-target="#suppressionMode"> <i className="fa fa-minus"></i> </button>
-                    <button className="btn btn-outline-primary" data-toggle="modal" data-target="#modifierMode"> <i className="fa fa-edit"></i> </button>
+                        <button className="btn btn-outline-primary" data-toggle="modal"  data-target="#ajoutMode" onClick={handleOpenModalAddMode}><i className="fa fa-plus"></i></button>
+                        <button className="btn btn-outline-primary" data-toggle="modal" data-target="#suppressionMode" onClick={handleOpenModalDeleteMode}> <i className="fa fa-minus"></i> </button>
+                        <button className="btn btn-outline-primary" data-toggle="modal" data-target="#modifierMode"> <i className="fa fa-edit"></i> </button>
                     </div>
                    
                 </div>
