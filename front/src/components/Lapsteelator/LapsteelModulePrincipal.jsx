@@ -67,7 +67,7 @@ class LapsteelModulePrincipal extends Component{
                 <InputAccordage handleOnChangeInput={this.handleOnChangeInput} inputAccordage={this.state.inputAccordage}/>
                 <InputTonique handleOnChangeInput={this.handleOnChangeInput} getPutValue={this.getInputValue}/>
                 <InputMode handleChangeModeFrette={this.handleChangeModeFrette} handleOnChangeInput={this.handleOnChangeInput}/>
-                <Canvas handleOnChangeInput={this.handleOnChangeInput} {...this.state}/>
+                <Canvas handleOnChangeInput={this.handleOnChangeInput} {...this.state} />
             </div>
         )
     }

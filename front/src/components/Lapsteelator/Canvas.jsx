@@ -14,7 +14,7 @@ let data = {
   modeNum:[],
   gammeMode : [],
   notesFinales:[],
-  localStorageArray:[],
+  localStorageArray:'',
 }
 
 //images des numéros des frettes
@@ -156,7 +156,7 @@ let arr_note_gif = [];
 var canvas = null;
 var context = null;
 
-
+let selectIntervalMode = null;
 
 
 class Canvas extends Component{
@@ -169,8 +169,11 @@ class Canvas extends Component{
         ajoutMode:"",
         ajoutInterval:"",
         errorAjoutMode:false,
-        successAddMode:false
+        successAddMode:false,
+        localAddMode:[],
+        saveLocalStorage:[]
       }
+  
   }
 
 
@@ -410,20 +413,28 @@ class Canvas extends Component{
       this.generator_frette();
     }
 
+    this.getListgammeLocalStorage();
+  }
+
+  getListgammeLocalStorage = () => {
     if(this.hasDataInLocalStorage().length > 0){
     
       data.localStorageArray = JSON.parse(window.localStorage.getItem('objetAjoutMode'));
-      let selectIntervalMode = document.getElementById('input-interval-mode');
-      for(let property in data.localStorageArray){
-        let name = Object.keys(data.localStorageArray[property]).join('');
-        let interval = Object.values(data.localStorageArray[property]).join('');
-        selectIntervalMode.options[selectIntervalMode.options.length] = new Option(`${name}`, `${interval}`);
-        //selectIntervalModeListed.options[selectIntervalModeListed.options.length] = new Option(`${name}`, `${interval}`);
-        //selectIntervalModeListedModification.options[selectIntervalModeListedModification.options.length] = new Option(`${name}`, `${interval}`);
-      }
+      //selectIntervalMode = document.getElementById('input-interval-mode');
+      console.log(data.localStorageArray);
+      this.setAddListMode(data.localStorageArray);
     
     }else{
       console.log("Local Storage vide");
+    }
+  }
+
+  setAddListMode = (source) => {
+    selectIntervalMode = document.getElementById('input-interval-mode');
+    for(let property in source){
+      let name = Object.keys(source[property]).join('');
+      let interval = Object.values(source[property]).join('');
+      selectIntervalMode.options[selectIntervalMode.options.length] = new Option(`${name}`, `${interval}`);
     }
   }
 
@@ -483,7 +494,7 @@ class Canvas extends Component{
   add_mode = () => {
  
       //Ajout d'un mode en ouvrant une MODAL
-
+    let array = [];
     let nomAjoutMode = this.state.ajoutMode;
     nomAjoutMode = nomAjoutMode.trim();
 
@@ -505,12 +516,20 @@ class Canvas extends Component{
         }
 
         if(!sameName){
-          data.localStorageArray = JSON.parse(window.localStorage.getItem('objetAjoutMode'));
-          data.localStorageArray.push({[`${nomAjoutMode}`]:intervalAjoutMode});
-          window.localStorage.setItem('objetAjoutMode', JSON.stringify([...data.localStorageArray]));
-
+          array.push({[`${nomAjoutMode}`]:intervalAjoutMode});
+          //data.localStorageArray = JSON.parse(window.localStorage.getItem('objetAjoutMode'));
+         // data.localStorageArray.push({[`${nomAjoutMode}`]:intervalAjoutMode});
+          //window.localStorage.setItem('objetAjoutMode', JSON.stringify([...data.localStorageArray]));
+          //this.setState({ajoutMode:"",ajoutInterval:"",successAddMode:true, localStorageAddMode:[...data.localStorageArray]});
           $('.alert-modeAjout-mode').show();
           this.setState({ajoutMode:"",ajoutInterval:"",successAddMode:true});
+          this.setState(state => {
+            const localAddMode = [...state.localAddMode, array[0]];
+  
+            return {
+              localAddMode
+            }
+          });
           setTimeout(() => {
             $('.alert-modeAjout-mode').hide();
             this.setState({successAddMode:false})
@@ -519,14 +538,25 @@ class Canvas extends Component{
         }
         
       }else{
-        data.localStorageArray.push({[`${nomAjoutMode}`]:intervalAjoutMode});
-        window.localStorage.setItem('objetAjoutMode', JSON.stringify([...data.localStorageArray]));
-        this.setState({ajoutMode:"",ajoutInterval:"",successAddMode:true});
+        array.push({[`${nomAjoutMode}`]:intervalAjoutMode});
+        //data.localStorageArray.push({[`${nomAjoutMode}`]:intervalAjoutMode});
+        //window.localStorage.setItem('objetAjoutMode', JSON.stringify([...data.localStorageArray]));
+        this.setState({ajoutMode:"",ajoutInterval:"",successAddMode:true}) ;
+        this.setState(state => {
+          const localAddMode = [...state.localAddMode, array[0]];
+
+          return {
+            localAddMode
+          }
+        });
+    
+        
         $('.alert-modeAjout-mode').show();
         setTimeout(() => {
           $('.alert-modeAjout-mode').hide();
           this.setState({successAddMode:false})
         }, 3000);
+
       
       }
 
@@ -583,7 +613,42 @@ class Canvas extends Component{
   closeModalAjoutMode = () => {
     console.log("modal ajout mode fermée");
     this.setState({ajoutMode:"",ajoutInterval:""});
+    this.setAddListMode(this.state.localAddMode);
+
   }
+
+  saveModetoLocalStorage = () => {
+    let array = [];
+    let localStorage = JSON.parse(window.localStorage.getItem('objetAjoutMode'));
+    let selectIntervalMode = document.getElementById('input-interval-mode');
+    
+    console.log(selectIntervalMode.options[selectIntervalMode.options.length]);
+    
+    
+    if(localStorage !== null && this.state.localAddMode.length !== 0){
+
+      for(let i in this.state.localAddMode){
+        console.log(this.state.localAddMode[i]);
+        array.push(this.state.localAddMode[i]);
+      }
+      for(let i in localStorage){
+        console.log(localStorage[i]);
+        array.push(localStorage[i]);
+      }
+
+      window.localStorage.setItem('objetAjoutMode', JSON.stringify(array));
+      this.setState({saveLocalStorage:"",localAddMode:""});
+    }else if(this.state.localAddMode.length > 0){
+      this.setState({saveLocalStorage:this.state.localAddMode});
+      window.localStorage.setItem('objetAjoutMode', JSON.stringify(this.state.localAddMode));
+      this.setState({saveLocalStorage:"",localAddMode:""});
+    }
+    
+
+
+    
+}
+
 
 
   render(){
@@ -601,6 +666,7 @@ class Canvas extends Component{
 
       return(
           <div className="container text-center mb-5">
+             <button className="btn btn-outline-primary " data-toggle="modal" data-target="#saveMode" onClick={this.saveModetoLocalStorage}> <i className="fa fa-save"></i> </button>
               <div id="display-mode" className="text-center p-5 h2 display-mode-class"></div>
               <canvas id="canvas"></canvas>
             {/*   <!-- Bouton Lancer et Effacer --> */}
@@ -648,7 +714,7 @@ class Canvas extends Component{
 
                             {/* <!-- Footer --> */}
                             <div className="modal-footer">
-                                <button className="btn btn-secondary" data-dismiss="modal" onClick={this.closeModalAjoutMode}>Fermer</button>
+                                <button className="btn btn-secondary" data-dismiss="modal" onClick={this.closeModalAjoutMode}>Appliquer</button>
                             </div>
                         </div>
                     </div>

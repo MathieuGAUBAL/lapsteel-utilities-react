@@ -5,7 +5,7 @@ class InputMode extends Component{
 
   
     render(){
-        const { handleOnChangeInput, handleChangeModeFrette } = this.props;
+        const { handleOnChangeInput, handleChangeModeFrette} = this.props;
         return(
             <div>
             {/* 	 <!-- Menu déroulant pour sélectionner le mode --> */}
