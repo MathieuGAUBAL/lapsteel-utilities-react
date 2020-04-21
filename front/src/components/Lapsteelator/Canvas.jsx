@@ -15,6 +15,7 @@ let data = {
   gammeMode : [],
   notesFinales:[],
   localStorageArray:'',
+  selectedEditArray:[]
 }
 
 //images des numéros des frettes
@@ -395,6 +396,9 @@ class Canvas extends Component{
     $('.alert-modeAjout-mode').hide();
     $('.alert-doublon-modeAjout-mode').hide();
     $('.alert-suppression-mode').hide();
+    $('.alert-error-rename-modeAjout-mode').hide();
+    $('.alert-doublon-modeAjout-mode').hide();
+    $('.alert-rename-modeAjout-mode').hide();
 
     canvas = document.getElementById('canvas');
     context = canvas.getContext('2d');
@@ -410,17 +414,6 @@ class Canvas extends Component{
     this.setState({localStorageArray:this.props.localStorageArray});
   }
 
-  getListgammeLocalStorage = (select_mode_interval) => {
-
-    if(this.hasDataInLocalStorage().length > 0){
-    
-      data.localStorageArray = JSON.parse(window.localStorage.getItem('objetAjoutMode'));
-      this.setAddListMode(data.localStorageArray, select_mode_interval);
-    
-    }else{
-      console.log("Local Storage vide");
-    }
-  }
 
   generator_frette = () => {
     //affiche les images frettes
@@ -551,11 +544,6 @@ class Canvas extends Component{
     }  
   }
 
-  selectModeToDelete = () => {
-
-    let modeSelection = document.getElementById('interval-mode-list');
-    this.setState({selectedModeDelete:modeSelection.options[modeSelection.selectedIndex].innerText});
-  }
 
    deleteMode = () => {
     
@@ -599,6 +587,62 @@ class Canvas extends Component{
       },3000); 
   
     }
+  }
+
+
+  editMode = () => {
+      // array qui servira a accueillir le local storage
+    let localStorageArray = [];
+    let sameName = false;
+/*   
+    //boucle qui servira a savoir s'il exite des doublons avec nomModificationMode et le data.localStorageArray
+    //si true alors pas de modification du nom
+    for(let i = 0; i < data.localStorageArray.length; i++){
+      if(data.localStorageArray[i].hasOwnProperty(nomModificationMode)){
+        for(let j in data.localStorageArray){
+          if(j == i){
+            sameName = true;
+          }
+        }
+      }
+    }
+
+    if(!sameName){
+      if(modeSelection.length > 0 && nomModificationMode != "" && intervalModificationMode != ""){
+        for(let i = 0; i < data.localStorageArray.length; i++){
+          if(data.localStorageArray[i].hasOwnProperty(modeSelectionIndex.text)){
+            data.localStorageArray[i][modeSelectionIndex.text] = intervalModificationMode;
+            str = JSON.stringify(data.localStorageArray[i]);
+            str = str.replace(modeSelectionIndex.text, nomModificationMode);
+            parsed = JSON.parse(str);
+            localStorageArray.push(parsed);
+          }else{
+            localStorageArray.push(data.localStorageArray[i]);
+          }
+        }
+    
+        data.localStorageArray = localStorageArray;
+        window.localStorage.setItem('objetAjoutMode', JSON.stringify([...localStorageArray]));
+    
+        $('.alert-rename-modeAjout-mode').show();
+        setTimeout( () => {
+          $('.alert-rename-modeAjout-mode').hide();
+        },2000);
+
+      }else{
+        $('.alert-error-rename-modeAjout-mode').show();
+        setTimeout( () => {
+          $('.alert-error-rename-modeAjout-mode').hide();
+      
+        },2000);
+      }
+
+    }else{
+      $('.alert-doublon-modeAjout-mode').show();
+      setTimeout( () => {
+        $('.alert-doublon-modeAjout-mode').hide();
+      },2000);
+    } */
   }
 
   hasDataInLocalStorage= () =>{
@@ -697,7 +741,10 @@ class Canvas extends Component{
 
 
   render(){
-    const { localStorageArray, selectedModeToDelete, deleteMode } = this.props;
+    const { localStorageArray, selectedModeToDelete, 
+            deleteMode, selectedModeToEdit,
+            selectedEditMode, selectedEditArray,
+            closeModalEditMode } = this.props;
 
     const { ajoutInterval, ajoutMode, errorAjoutMode } = this.state;
     if(errorAjoutMode){
@@ -822,9 +869,73 @@ class Canvas extends Component{
             </div>
           </div>
           {/*  <!-- fin Modal supprimer Mode --> */}
+
+
+          {/* <!-- debut Modal modifier Mode --> */}
+          <div className="modal fade" id="modifierMode" data-backdrop="static" tabIndex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div className="modal-dialog modal-dialog-centered modal-lg">
+            <div className="modal-content">
+
+            {/*   <!-- Header --> */}
+              <div className="modal-header">
+              <h4 className="modal-title">Modifier un mode</h4>
+              </div>
+
+             {/*  <!-- Body --> */}
+              <div className="modal-body">
+              <form id='form-id-modifier-mode text-center form-group'>
+                <label className="h5">Choisir le mode à modifier</label>
+                <select id="interval-mode-list-modification" name="interval-mode-list-modification" size="1" className="form-control" onChange={selectedModeToEdit}>
+                  <option value="default" selected>-- Choisir un mode --</option>
+                  {selectOptionsModeList}
+                </select>
+
+                {selectedEditMode.length > 0 && selectedEditArray[1] !== "default" && selectedEditArray !== undefined &&
+                  <div className="show-edit-selected">
+                      {selectedEditArray.length > 0 ? <h6>{ `nom du mode : ${selectedEditArray[0]}`}</h6> : null}
+                      {selectedEditArray.length > 0 ? <h6>{ `interval du mode : ${selectedEditArray[1]}`}</h6> : null}
+                  </div>
+                }
+            
+                <div className="pt-3 pb-3">
+                  <div id="resultat-mode-selection" className="h2"></div>
+
+                  <div className="pt-3 pb-3">
+                    <label className="h5">nom du mode</label>
+                    <input name="nom-modification-mode" id="nom-modification-mode" type='text' required='required' className="form-control"/>
+                    <label className="h5 pt-2">interval du mode</label>
+                    <input name="interval-modification-mode" id="interval-modification-mode" type='text' required='required' className="form-control"/>
+                  </div>
+
+                  <button type="button" className="btn btn-primary" id="modifier-mode">Modifier</button>
+                  
+                </div>
+              </form>
+              </div>
+
+              <div className="alert alert-warning fade show container alert-doublon-modeAjout-mode" role="alert">
+                <strong>OOPS!</strong> Enresgitrement déjà existant.
+              </div>
+
+              <div className="alert alert-warning fade show container alert-rename-modeAjout-mode" role="alert">
+                <strong>Bravo!</strong> Modification effectuée.
+              </div>
+
+              <div className="alert alert-warning fade show container alert-error-rename-modeAjout-mode" role="alert">
+                <strong>OOPS!</strong> Vérifier les champs à modifier.
+              </div>
+
+              {/* <!-- Footer --> */}
+              <div className="modal-footer">
+              <button className="btn btn-secondary" data-dismiss="modal" onClick={closeModalEditMode}>Fermer</button>
+              </div>
+            </div>
+            </div>
+          </div>
+            {/* <!-- fin Modal modifier Mode --> */}
         </div>  
       )
-                      }
+  }
 }
 
 export default Canvas;

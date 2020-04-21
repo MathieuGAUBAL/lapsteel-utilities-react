@@ -8,7 +8,7 @@ class InputMode extends Component{
 
 
     render(){
-        const { handleOnChangeInput, handleChangeModeFrette, handleOpenModalAddMode, openModalDeleteMode, localStorageArray } = this.props;
+        const { handleOnChangeInput, handleChangeModeFrette, handleOpenModalAddMode, openModalDeleteMode, localStorageArray, openModalEditMode } = this.props;
         let selectOptionsModeList = [];
 
         if( localStorageArray !== null){
@@ -43,7 +43,7 @@ class InputMode extends Component{
                     </div>
                         <button className="btn btn-outline-primary" data-toggle="modal"  data-target="#ajoutMode" onClick={handleOpenModalAddMode}><i className="fa fa-plus"></i></button>
                         <button className="btn btn-outline-primary" data-toggle="modal" data-target="#suppressionMode" onClick={openModalDeleteMode}> <i className="fa fa-minus"></i> </button>
-                        <button className="btn btn-outline-primary" data-toggle="modal" data-target="#modifierMode"> <i className="fa fa-edit"></i> </button>
+                        <button className="btn btn-outline-primary" data-toggle="modal" data-target="#modifierMode" onClick={openModalEditMode}> <i className="fa fa-edit"></i> </button>
                     </div>
                    
                 </div>

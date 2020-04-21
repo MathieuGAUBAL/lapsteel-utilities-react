@@ -17,7 +17,9 @@ class LapsteelModulePrincipal extends Component{
             isLapsteel:true,
             selectAddMode:"",
             localStorageArray:[],
-            selectedDeleteMode:""
+            selectedDeleteMode:"",
+            selectedEditMode:"",
+            selectedEditArray:[]
         }
     }
 
@@ -73,6 +75,15 @@ class LapsteelModulePrincipal extends Component{
         this.setState({selectedDeleteMode:selectedDeleteMode});
     }
 
+    selectedModeToEdit = (event) => {
+        let arrayEditMode = [];
+        let selectedEditMode = event.target.options[event.target.options.selectedIndex].innerText;
+        arrayEditMode.push(selectedEditMode);
+        arrayEditMode.push(event.target.options[event.target.options.selectedIndex].value);
+
+        this.setState({selectedEditMode:selectedEditMode, selectedEditArray:arrayEditMode});
+    }
+
     deleteMode = () => {
         
         let newObj = [];
@@ -87,35 +98,25 @@ class LapsteelModulePrincipal extends Component{
                 }
               }
 
-              this.setState({localStorageArray:newObj});
-              window.localStorage.setItem('objetAjoutMode', JSON.stringify([...newObj]));
-                if(this.state.localStorageArray.length > 0 && this.state.localStorageArray !== null){
-                    $('.alert-suppression-mode').show();
-                    setTimeout( () => {
-                        $('.alert-suppression-mode').hide();
-                    },3000);
-                    
-                }else{
-                    return (
-                        <div class="alert alert-warning alert-dismissible fade show container alert-error-suppression-mode" role="alert">
-                            <strong>Alerte!</strong> Rien à supprimer.
-                        </div> 
-                    )
-                }
-              return (
-                  <div class="alert alert-warning alert-dismissible fade show container alert-suppression-mode" role="alert">
-                      <strong>Alerte!</strong> Le mode a été supprimé.
-                  </div> 
-              )
+            this.setState({localStorageArray:newObj});
+            window.localStorage.setItem('objetAjoutMode', JSON.stringify([...newObj]));
+            if(this.state.localStorageArray.length > 0 && this.state.localStorageArray !== null){
+                $('.alert-suppression-mode').show();
+                setTimeout( () => {
+                    $('.alert-suppression-mode').hide();
+                },3000); 
+            }
         }
-
-        
 
     }
 
 
     isCloseModalDeleteMode = (bool) => {
         this.setState({openModalDeleteMode:bool});
+    }
+
+    closeModalEditMode = () => {
+        this.setState({selectedEditMode:"default"});
     }
 
 
@@ -131,6 +132,8 @@ class LapsteelModulePrincipal extends Component{
                     dispatchLocalStorageMode={this.dispatchLocalStorageMode}
                     selectedModeToDelete = {this.selectedModeToDelete}
                     deleteMode = {this.deleteMode}
+                    selectedModeToEdit = {this.selectedModeToEdit}
+                    closeModalEditMode={this.closeModalEditMode}
                 />
             </div>
         )
