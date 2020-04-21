@@ -6,8 +6,21 @@ class InputMode extends Component{
 
 
 
+
     render(){
-        const { handleOnChangeInput, handleChangeModeFrette, handleOpenModalAddMode, handleOpenModalDeleteMode} = this.props;
+        const { handleOnChangeInput, handleChangeModeFrette, handleOpenModalAddMode, handleOpenModalDeleteMode, localStorageArray } = this.props;
+        let selectOptionsModeList = [];
+
+        if( localStorageArray !== null){
+            for(let property in localStorageArray){
+                let name = Object.keys(localStorageArray[property]).join('');
+                let interval = Object.values(localStorageArray[property]).join('');
+                selectOptionsModeList.push(<option key={name} value={interval}>{name}</option>)
+            }
+        }
+       
+
+        
         return(
             <div>
             {/* 	 <!-- Menu déroulant pour sélectionner le mode --> */}
@@ -17,8 +30,10 @@ class InputMode extends Component{
                     </div>
                     
                         <select id="input-interval-mode" name="nom" size="1" className="form-control" onChange={handleOnChangeInput}>
+                            <option value="default">-- Choisir un mode --</option>
                             <option value="1.5T 1T 1T 1.5T 1T">Pentatonique mineure</option>
                             <option value="1T 1T 1.5T 1T 1.5T">Pentatonique majeure</option>
+                            {selectOptionsModeList}
                         </select>
                     
                         <div className="container pt-5">
