@@ -13,7 +13,8 @@ class LapsteelModulePrincipal extends Component{
             inputMode:"",
             ajoutMode:"",
             ajoutInterval:"",
-            isLapsteel:true
+            isLapsteel:true,
+            openModalDeleteMode:false
         }
     }
 
@@ -58,15 +59,22 @@ class LapsteelModulePrincipal extends Component{
         }
     }
 
+    openModalDeleteMode = () => {
+        this.setState({openModalDeleteMode:true});
+    }
+
+    isCloseModalDeleteMode = (bool) => {
+        this.setState({openModalDeleteMode:bool});
+    }
+
 
     render(){
-
         return(
             <div>
                 <InputAccordage handleOnChangeInput={this.handleOnChangeInput} inputAccordage={this.state.inputAccordage}/>
                 <InputTonique handleOnChangeInput={this.handleOnChangeInput} getPutValue={this.getInputValue}/>
-                <InputMode handleChangeModeFrette={this.handleChangeModeFrette} handleOnChangeInput={this.handleOnChangeInput}/>
-                <Canvas handleOnChangeInput={this.handleOnChangeInput} {...this.state} />
+                <InputMode handleChangeModeFrette={this.handleChangeModeFrette} handleOnChangeInput={this.handleOnChangeInput} openModalDeleteMode={this.openModalDeleteMode}/>
+                <Canvas handleOnChangeInput={this.handleOnChangeInput} {...this.state} isCloseModalDeleteMode={this.isCloseModalDeleteMode} />
             </div>
         )
     }

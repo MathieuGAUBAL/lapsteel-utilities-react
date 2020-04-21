@@ -7,7 +7,7 @@ class InputMode extends Component{
 
 
     render(){
-        const { handleOnChangeInput, handleChangeModeFrette, handleOpenModalAddMode, handleOpenModalDeleteMode} = this.props;
+        const { handleOnChangeInput, handleChangeModeFrette, handleOpenModalAddMode, openModalDeleteMode} = this.props;
         return(
             <div>
             {/* 	 <!-- Menu déroulant pour sélectionner le mode --> */}
@@ -17,6 +17,7 @@ class InputMode extends Component{
                     </div>
                     
                         <select id="input-interval-mode" name="nom" size="1" className="form-control" onChange={handleOnChangeInput}>
+                            <option value="default">Choisir un mode</option>
                             <option value="1.5T 1T 1T 1.5T 1T">Pentatonique mineure</option>
                             <option value="1T 1T 1.5T 1T 1.5T">Pentatonique majeure</option>
                         </select>
@@ -27,7 +28,7 @@ class InputMode extends Component{
                         <button type="button" value="lapsteel" className="btn btn-primary" onClick={handleChangeModeFrette}>Lapsteel</button>
                     </div>
                         <button className="btn btn-outline-primary" data-toggle="modal"  data-target="#ajoutMode" onClick={handleOpenModalAddMode}><i className="fa fa-plus"></i></button>
-                        <button className="btn btn-outline-primary" data-toggle="modal" data-target="#suppressionMode" onClick={handleOpenModalDeleteMode}> <i className="fa fa-minus"></i> </button>
+                        <button className="btn btn-outline-primary" data-toggle="modal" data-target="#suppressionMode" onClick={openModalDeleteMode}> <i className="fa fa-minus"></i> </button>
                         <button className="btn btn-outline-primary" data-toggle="modal" data-target="#modifierMode"> <i className="fa fa-edit"></i> </button>
                     </div>
                    

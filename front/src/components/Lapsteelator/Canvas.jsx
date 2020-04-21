@@ -171,7 +171,10 @@ class Canvas extends Component{
         errorAjoutMode:false,
         successAddMode:false,
         localAddMode:[],
-        saveLocalStorage:[]
+        saveLocalStorage:[],
+        selectedModeDelete:"",
+        numModeList:0,
+        numModeListeDelete:0
       }
   }
 
@@ -393,6 +396,8 @@ class Canvas extends Component{
     $('.alert-ajout-mode').hide();
     $('.alert-modeAjout-mode').hide();
     $('.alert-doublon-modeAjout-mode').hide();
+    $('.alert-suppression-mode').hide();
+    $('.alert-error-suppression-mode').hide();
 
     canvas = document.getElementById('canvas');
     context = canvas.getContext('2d');
@@ -405,22 +410,34 @@ class Canvas extends Component{
       this.generator_frette();
     }
 
-    this.getListgammeLocalStorage();
+    let select_mode_interval_add = 'input-interval-mode';
+    let select_mode_interval_delete = 'interval-mode-list';
+    this.getListgammeLocalStorage(select_mode_interval_add);
+    this.getListgammeLocalStorage(select_mode_interval_delete);
+    let getOptionsAddMode = document.getElementById(select_mode_interval_add);
+    let getOptionsDeleteMode = document.getElementById(select_mode_interval_delete);
+    this.setState({
+      numModeList:getOptionsAddMode.options.length - 3,
+      numModeListeDelete:getOptionsDeleteMode.options.length - 1,
+    
+    });
   }
 
-  getListgammeLocalStorage = () => {
+  getListgammeLocalStorage = (select_mode_interval) => {
+
     if(this.hasDataInLocalStorage().length > 0){
     
       data.localStorageArray = JSON.parse(window.localStorage.getItem('objetAjoutMode'));
-      this.setAddListMode(data.localStorageArray);
+      this.setAddListMode(data.localStorageArray, select_mode_interval);
     
     }else{
       console.log("Local Storage vide");
     }
   }
 
-  setAddListMode = (source) => {
-    selectIntervalMode = document.getElementById('input-interval-mode');
+  setAddListMode = (source, select_mode_interval) => {
+    
+    let selectIntervalMode = document.getElementById(select_mode_interval);
     for(let property in source){
       let name = Object.keys(source[property]).join('');
       let interval = Object.values(source[property]).join('');
@@ -558,6 +575,56 @@ class Canvas extends Component{
     }  
   }
 
+  selectModeToDelete = () => {
+
+    let modeSelection = document.getElementById('interval-mode-list');
+    this.setState({selectedModeDelete:modeSelection.options[modeSelection.selectedIndex].innerText});
+  }
+
+   deleteMode = () => {
+    
+     const { selectedModeDelete } = this.state;
+     this.setState(state => {
+       const localAddMode = [...state.localAddMode, selectedModeDelete];
+
+       return {
+         localAddMode
+       }
+     });
+    if(this.hasDataInLocalStorage().length > 0){
+  
+      let newObj = [];
+      for(let i = 0; i < data.localStorageArray.length; i++){
+        if(data.localStorageArray[i].hasOwnProperty(selectedModeDelete)){
+          for(let j in data.localStorageArray){
+            if(j != i){
+              newObj.push(data.localStorageArray[j]);
+            }
+          }
+        }
+      }
+      
+  
+      data.localStorageArray = newObj;
+      console.log(data.localStorageArray);
+      window.localStorage.setItem('objetAjoutMode', JSON.stringify([...data.localStorageArray]));
+  
+      //message : Le mode a été supprimé.
+      $('.alert-suppression-mode').show();
+      setTimeout( () => {
+        $('.alert-suppression-mode').hide();
+      },3000);  
+  
+    }else{
+      //message d'erreur : rien à supprimer.
+      $('.alert-error-suppression-mode').show();
+      setTimeout( () => {
+        $('.alert-error-suppression-mode').hide();
+      },3000); 
+  
+    }
+  }
+
   hasDataInLocalStorage= () =>{
 
     let obj = JSON.parse(window.localStorage.getItem('objetAjoutMode'));
@@ -601,24 +668,43 @@ class Canvas extends Component{
   }
 
   closeModalAjoutMode = () => {
-    this.setState({ajoutMode:"",ajoutInterval:""});
-    this.setAddListMode(this.state.localAddMode);
-    this.saveModetoLocalStorage();
+    let select_mode_interval_delete = 'interval-mode-list';
+    let select_mode_interval_add = 'input-interval-mode';
+    let array = [select_mode_interval_delete,select_mode_interval_add];
+
+    let getOptionsAddMode = document.getElementById(select_mode_interval_add);
+    console.log(getOptionsAddMode.options.length - 3);
+    this.setState({ajoutMode:"",ajoutInterval:"", numModeList:getOptionsAddMode.options.length - 3});
+    console.log(this.state.localAddMode);
+    for(let i in array){
+      console.log(array[i]);
+      this.setAddListMode(this.state.localAddMode, array[i]);
+    }
+    this.saveModetoLocalStorage(select_mode_interval_add);
 
   }
+
+  closeModalDeleteMode = () => {
+    let select_mode_interval_delete = 'interval-mode-list';
+    let select_mode_interval_add = 'input-interval-mode';
+    let array = [select_mode_interval_delete,select_mode_interval_add];
+    this.props.isCloseModalDeleteMode(false);
+    this.saveModetoLocalStorage(select_mode_interval_delete);
+  }
+  
+
+
 
   cancelModalAddMode = () => {
-    this.setState({ajoutInterval:"",ajoutMode:""});
+    this.setState({ajoutInterval:"",ajoutMode:"", localAddMode:[]});
   }
 
-  saveModetoLocalStorage = () => {
+  saveModetoLocalStorage = (id_mode) => {
     let array = [];
     let localStorage = JSON.parse(window.localStorage.getItem('objetAjoutMode'));
-    let selectIntervalMode = document.getElementById('input-interval-mode');
+    let selectIntervalMode = document.getElementById(id_mode);
     
-    console.log(selectIntervalMode.options[selectIntervalMode.options.length]);
-    
-    
+
     if(localStorage !== null && this.state.localAddMode.length !== 0){
 
       for(let i in this.state.localAddMode){
@@ -642,6 +728,7 @@ class Canvas extends Component{
 
 
 
+
   render(){
     const { ajoutInterval, ajoutMode, errorAjoutMode} = this.state;
     if(errorAjoutMode){
@@ -649,10 +736,8 @@ class Canvas extends Component{
         $('.alert-ajout-mode').hide();
         this.setState({errorAjoutMode:false});
       }
-    
     }
 
-    
 
       return(
           <div className="container text-center mb-5">
@@ -719,37 +804,38 @@ class Canvas extends Component{
           {/*  <!-- fin Modal Ajout Mode --> */} 
 
           {/*     <!-- debut Modal supprimer Mode --> */}
-          <div class="modal" id="suppressionMode">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
+          <div className="modal fade" id="suppressionMode" data-backdrop="static" tabIndex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div className="modal-dialog modal-dialog-centered modal-lg">
+            <div className="modal-content">
 
               {/*    <!-- Header --> */}
-              <div class="modal-header">
-              <h5 class="modal-title">Supprimer un mode</h5>
-              <button class="close" data-dismiss="modal">&times;</button>
+              <div className="modal-header">
+              <h5 className="modal-title">Supprimer un mode</h5>
               </div>
 
               {/*  <!-- Body --> */}
-              <div class="modal-body">
+              <div className="modal-body">
               <form id='form-id-suppression-mode text-center form-group'>
-                <select id="interval-mode-list" name="interval-mode-list" size="1" class="form-control"></select>
-                <div class="pt-3 pb-3">
-                <button type="button" class="btn btn-primary" id="supprimer-mode" onclick="reload()">Supprimer un mode</button>
+                <select id="interval-mode-list" name="interval-mode-list" size="1" className="form-control" onChange={this.selectModeToDelete}>
+                  <option value="default">Choisir un mode</option>
+                </select>
+                <div className="pt-3 pb-3">
+                <button type="button" className="btn btn-primary" id="supprimer-mode" onClick={this.deleteMode}>Supprimer un mode</button>
                 </div>
               </form>
               </div>
 
-              <div class="alert alert-warning alert-dismissible fade show container alert-suppression-mode" role="alert">
+              <div className="alert alert-warning alert-dismissible fade show container alert-suppression-mode" role="alert">
                 <strong>Alerte!</strong> Le mode a été supprimé.
               </div>
 
-              <div class="alert alert-warning alert-dismissible fade show container alert-error-suppression-mode" role="alert">
+              <div className="alert alert-warning alert-dismissible fade show container alert-error-suppression-mode" role="alert">
                 <strong>Alerte!</strong> Rien à supprimer.
               </div>
 
               {/*  <!-- Footer --> */}
-              <div class="modal-footer">
-              <button class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+              <div className="modal-footer">
+              <button className="btn btn-secondary" data-dismiss="modal" onClick={this.closeModalDeleteMode}>Fermer</button>
               </div>
             </div>
             </div>
