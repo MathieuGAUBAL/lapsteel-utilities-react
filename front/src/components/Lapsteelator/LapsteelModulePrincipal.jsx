@@ -109,28 +109,31 @@ class LapsteelModulePrincipal extends Component{
     }
 
     deleteMode = () => {
-        
-        let newObj = [];
-        if(this.state.localStorageArray !== null){
-            for(let i = 0; i < this.state.localStorageArray.length; i++){
-                if(this.state.localStorageArray[i].hasOwnProperty(this.state.selectedDeleteMode)){
-                  for(let j in this.state.localStorageArray){
-                    if(j != i){
-                      newObj.push(this.state.localStorageArray[j]);
+        if(this.state.selectedDeleteMode){
+            let newObj = [];
+            if(this.state.localStorageArray !== null){
+                for(let i = 0; i < this.state.localStorageArray.length; i++){
+                    if(this.state.localStorageArray[i].hasOwnProperty(this.state.selectedDeleteMode)){
+                      for(let j in this.state.localStorageArray){
+                        if(j != i){
+                          newObj.push(this.state.localStorageArray[j]);
+                        }
+                      }
                     }
                   }
+    
+                
+                window.localStorage.setItem('objetAjoutMode', JSON.stringify([...newObj]));
+                this.setState({localStorageArray:newObj, selectedDeleteMode:""});
+                if(this.state.localStorageArray.length > 0 && this.state.localStorageArray !== null){
+                    $('.alert-suppression-mode').show();
+                    setTimeout( () => {
+                        $('.alert-suppression-mode').hide();
+                    },3000); 
                 }
-              }
-
-            this.setState({localStorageArray:newObj});
-            window.localStorage.setItem('objetAjoutMode', JSON.stringify([...newObj]));
-            if(this.state.localStorageArray.length > 0 && this.state.localStorageArray !== null){
-                $('.alert-suppression-mode').show();
-                setTimeout( () => {
-                    $('.alert-suppression-mode').hide();
-                },3000); 
             }
         }
+
 
     }
 
@@ -215,8 +218,12 @@ class LapsteelModulePrincipal extends Component{
     }
 
 
-    isCloseModalDeleteMode = (bool) => {
-        this.setState({openModalDeleteMode:bool});
+    isCloseModalDeleteMode = () => {
+        
+        if(this.state.selectedDeleteMode){
+            this.setState({selectedDeleteMode:""});
+        }
+       
     }
 
     closeModalEditMode = () => {
@@ -240,6 +247,7 @@ class LapsteelModulePrincipal extends Component{
                     closeModalEditMode={this.closeModalEditMode}
                     handleChangeEditMode={this.handleChangeEditMode}
                     editMode={this.editMode}
+                    isCloseModalDeleteMode={this.isCloseModalDeleteMode}
                 />
             </div>
         )

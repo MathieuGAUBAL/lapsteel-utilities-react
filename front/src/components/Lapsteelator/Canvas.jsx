@@ -695,7 +695,7 @@ class Canvas extends Component{
     const { localStorageArray, selectedModeToDelete, 
             deleteMode, selectedModeToEdit,
             selectedEditMode, selectedEditArray,
-            closeModalEditMode, editMode, handleChangeEditMode } = this.props;
+            closeModalEditMode, editMode, handleChangeEditMode, isCloseModalDeleteMode } = this.props;
 
     const { ajoutInterval, ajoutMode, errorAjoutMode } = this.state;
     if(errorAjoutMode){
@@ -813,7 +813,7 @@ class Canvas extends Component{
 
               {/*  <!-- Footer --> */}
               <div className="modal-footer">
-              <button className="btn btn-secondary" data-dismiss="modal">Fermer</button>
+              <button className="btn btn-secondary" data-dismiss="modal" onClick={isCloseModalDeleteMode}>Fermer</button>
               </div>
             </div>
             </div>
