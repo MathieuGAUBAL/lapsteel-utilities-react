@@ -19,7 +19,9 @@ class LapsteelModulePrincipal extends Component{
             localStorageArray:[],
             selectedDeleteMode:"",
             selectedEditMode:"",
-            selectedEditArray:[]
+            selectedEditArray:[],
+            editNameMode:"",
+            editIntervalMode:""
         }
     }
 
@@ -36,6 +38,7 @@ class LapsteelModulePrincipal extends Component{
         
     }
 
+
     handleChangeModeFrette = (event) => {
         switch (event.target.value) {
             case "guitar":
@@ -48,6 +51,24 @@ class LapsteelModulePrincipal extends Component{
                 break;
         }
     }
+
+    handleChangeEditMode = (event) => {
+
+        switch (event.target.name) {
+          case "nom-modification-mode":
+              
+              this.setState({editNameMode:event.target.value});
+            break;
+    
+          case "interval-modification-mode":
+           
+              this.setState({editIntervalMode:event.target.value});
+            break;
+        
+          default:
+            break;
+        }
+      }
 
     handleOnChangeInput = (event) => {
         switch (event.target.id) {
@@ -81,7 +102,10 @@ class LapsteelModulePrincipal extends Component{
         arrayEditMode.push(selectedEditMode);
         arrayEditMode.push(event.target.options[event.target.options.selectedIndex].value);
 
-        this.setState({selectedEditMode:selectedEditMode, selectedEditArray:arrayEditMode});
+        this.setState({
+            selectedEditMode:selectedEditMode,
+            selectedEditArray:arrayEditMode
+            });
     }
 
     deleteMode = () => {
@@ -111,6 +135,86 @@ class LapsteelModulePrincipal extends Component{
     }
 
 
+    editMode = () => {
+        // array qui servira a accueillir le local storage
+      let localStorageArray = this.state.localStorageArray;
+      let array = [];
+      let sameName = false;
+    
+      let nomModificationMode = this.state.editNameMode.trim();
+      let intervalModificationMode = this.state.editIntervalMode.toUpperCase().trim();
+  
+      let modeSelection = document.getElementById('interval-mode-list-modification');
+  
+      
+  
+      //boucle qui servira a savoir s'il exite des doublons avec nomModificationMode et le data.localStorageArray
+      //si true alors pas de modification du nom
+      for(let i = 0; i < this.state.localStorageArray.length; i++){
+        if(this.state.localStorageArray[i].hasOwnProperty(nomModificationMode)){
+          for(let j in this.state.localStorageArray){
+            if(j == i){
+              sameName = true;
+            }
+          }
+        }
+      }
+      
+      
+      if(!sameName){
+        if(this.state.selectedEditMode){
+          for(let i = 0; i < localStorageArray.length; i++){ 
+            if(localStorageArray[i].hasOwnProperty(this.state.selectedEditMode)){
+
+                // si l'input interval n'est pas renseigné alors on le le modifie pas
+                if(intervalModificationMode !== ""){
+                localStorageArray[i][`${this.state.selectedEditMode}`] = intervalModificationMode;
+                }
+
+                if(this.state.editNameMode !== ""){
+                    let str = JSON.stringify(localStorageArray[i]);
+                    str = str.replace(this.state.selectedEditMode, nomModificationMode);
+                    let parsed = JSON.parse(str);
+                    array.push(parsed);
+                }else{
+                    let str = JSON.stringify(localStorageArray[i]);
+                    str = str.replace(this.state.selectedEditMode, this.state.selectedEditMode);
+                    let parsed = JSON.parse(str);
+                    array.push(parsed);
+                }
+
+            }else{
+              array.push(localStorageArray[i]);
+            }
+          }
+          console.log(array);
+          this.setState({localStorageArray:array})
+          //data.localStorageArray = array;
+          //console.log(data.localStorageArray)
+          window.localStorage.setItem('objetAjoutMode', JSON.stringify([...array]));
+          this.setState({editNameMode:"", editIntervalMode:""});
+          $('.alert-rename-modeAjout-mode').show();
+          setTimeout( () => {
+            $('.alert-rename-modeAjout-mode').hide();
+          },2000);
+  
+        }else{
+          $('.alert-error-rename-modeAjout-mode').show();
+          setTimeout( () => {
+            $('.alert-error-rename-modeAjout-mode').hide();
+        
+          },2000);
+        }
+  
+      }else{
+        $('.alert-doublon-modeAjout-mode').show();
+        setTimeout( () => {
+          $('.alert-doublon-modeAjout-mode').hide();
+        },2000);
+      }
+    }
+
+
     isCloseModalDeleteMode = (bool) => {
         this.setState({openModalDeleteMode:bool});
     }
@@ -134,6 +238,8 @@ class LapsteelModulePrincipal extends Component{
                     deleteMode = {this.deleteMode}
                     selectedModeToEdit = {this.selectedModeToEdit}
                     closeModalEditMode={this.closeModalEditMode}
+                    handleChangeEditMode={this.handleChangeEditMode}
+                    editMode={this.editMode}
                 />
             </div>
         )

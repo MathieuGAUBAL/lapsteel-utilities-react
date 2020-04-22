@@ -476,7 +476,7 @@ class Canvas extends Component{
     let arrayNameMode = [];
     let nomAjoutMode = this.state.ajoutMode;
     nomAjoutMode = nomAjoutMode.trim();
-    console.log(nomAjoutMode);
+
     let intervalAjoutMode = this.state.ajoutInterval;
     intervalAjoutMode = intervalAjoutMode.toUpperCase();
   
@@ -590,61 +590,6 @@ class Canvas extends Component{
   }
 
 
-  editMode = () => {
-      // array qui servira a accueillir le local storage
-    let localStorageArray = [];
-    let sameName = false;
-/*   
-    //boucle qui servira a savoir s'il exite des doublons avec nomModificationMode et le data.localStorageArray
-    //si true alors pas de modification du nom
-    for(let i = 0; i < data.localStorageArray.length; i++){
-      if(data.localStorageArray[i].hasOwnProperty(nomModificationMode)){
-        for(let j in data.localStorageArray){
-          if(j == i){
-            sameName = true;
-          }
-        }
-      }
-    }
-
-    if(!sameName){
-      if(modeSelection.length > 0 && nomModificationMode != "" && intervalModificationMode != ""){
-        for(let i = 0; i < data.localStorageArray.length; i++){
-          if(data.localStorageArray[i].hasOwnProperty(modeSelectionIndex.text)){
-            data.localStorageArray[i][modeSelectionIndex.text] = intervalModificationMode;
-            str = JSON.stringify(data.localStorageArray[i]);
-            str = str.replace(modeSelectionIndex.text, nomModificationMode);
-            parsed = JSON.parse(str);
-            localStorageArray.push(parsed);
-          }else{
-            localStorageArray.push(data.localStorageArray[i]);
-          }
-        }
-    
-        data.localStorageArray = localStorageArray;
-        window.localStorage.setItem('objetAjoutMode', JSON.stringify([...localStorageArray]));
-    
-        $('.alert-rename-modeAjout-mode').show();
-        setTimeout( () => {
-          $('.alert-rename-modeAjout-mode').hide();
-        },2000);
-
-      }else{
-        $('.alert-error-rename-modeAjout-mode').show();
-        setTimeout( () => {
-          $('.alert-error-rename-modeAjout-mode').hide();
-      
-        },2000);
-      }
-
-    }else{
-      $('.alert-doublon-modeAjout-mode').show();
-      setTimeout( () => {
-        $('.alert-doublon-modeAjout-mode').hide();
-      },2000);
-    } */
-  }
-
   hasDataInLocalStorage= () =>{
 
     let obj = JSON.parse(window.localStorage.getItem('objetAjoutMode'));
@@ -660,6 +605,7 @@ class Canvas extends Component{
   }
 
   componentDidUpdate(prevProps){
+    
     if(prevProps.isLapsteel !== this.props.isLapsteel){
       this.setState({isLapsteel:this.props.isLapsteel});
     }else if(prevProps.inputAccordage !== this.props.inputAccordage){
@@ -741,10 +687,15 @@ class Canvas extends Component{
 
 
   render(){
+    for(let i in this.props.localStorageArray){
+      if(this.props.localStorageArray[i].hasOwnProperty('blues1')){
+        console.log("coucou");
+      }
+    }
     const { localStorageArray, selectedModeToDelete, 
             deleteMode, selectedModeToEdit,
             selectedEditMode, selectedEditArray,
-            closeModalEditMode } = this.props;
+            closeModalEditMode, editMode, handleChangeEditMode } = this.props;
 
     const { ajoutInterval, ajoutMode, errorAjoutMode } = this.state;
     if(errorAjoutMode){
@@ -764,7 +715,6 @@ class Canvas extends Component{
         }
     }
  
-    console.log(this.props.localStorageArray);
 
       return(
           <div className="container text-center mb-5">
@@ -886,29 +836,21 @@ class Canvas extends Component{
               <form id='form-id-modifier-mode text-center form-group'>
                 <label className="h5">Choisir le mode à modifier</label>
                 <select id="interval-mode-list-modification" name="interval-mode-list-modification" size="1" className="form-control" onChange={selectedModeToEdit}>
-                  <option value="default" selected>-- Choisir un mode --</option>
+                  <option value="default">-- Choisir un mode --</option>
                   {selectOptionsModeList}
                 </select>
-
-                {selectedEditMode.length > 0 && selectedEditArray[1] !== "default" && selectedEditArray !== undefined &&
-                  <div className="show-edit-selected">
-                      {selectedEditArray.length > 0 ? <h6>{ `nom du mode : ${selectedEditArray[0]}`}</h6> : null}
-                      {selectedEditArray.length > 0 ? <h6>{ `interval du mode : ${selectedEditArray[1]}`}</h6> : null}
-                  </div>
-                }
             
                 <div className="pt-3 pb-3">
                   <div id="resultat-mode-selection" className="h2"></div>
-
                   <div className="pt-3 pb-3">
                     <label className="h5">nom du mode</label>
-                    <input name="nom-modification-mode" id="nom-modification-mode" type='text' required='required' className="form-control"/>
+                    <input name="nom-modification-mode" id="nom-modification-mode" value={this.props.editNameMode} type='text' required='required' className="form-control" onChange={handleChangeEditMode}/>
                     <label className="h5 pt-2">interval du mode</label>
-                    <input name="interval-modification-mode" id="interval-modification-mode" type='text' required='required' className="form-control"/>
+                    <input name="interval-modification-mode" id="interval-modification-mode" value={this.props.editIntervalMode} type='text' required='required' className="form-control" onChange={handleChangeEditMode}/>
                   </div>
 
-                  <button type="button" className="btn btn-primary" id="modifier-mode">Modifier</button>
-                  
+            {  this.props.editNameMode.length > 0 || this.props.editIntervalMode ? <button type="button" className="btn btn-primary" id="modifier-mode" onClick={editMode}>Modifier</button>
+            : null}                  
                 </div>
               </form>
               </div>
