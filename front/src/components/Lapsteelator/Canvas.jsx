@@ -15,7 +15,9 @@ let data = {
   gammeMode : [],
   notesFinales:[],
   localStorageArray:'',
-  selectedEditArray:[]
+  selectedEditArray:[],
+  verifySameAddMode:[],
+  addModeTemp :[]
 }
 
 //images des numéros des frettes
@@ -468,81 +470,92 @@ class Canvas extends Component{
     
   }
 
+  isTheSameAddMode = (obj) => {
+    let nameMode = [];
+    for(let i in data.verifySameAddMode){
+      nameMode.push(Object.keys(data.verifySameAddMode[i])[0]);
+    }
+
+    console.log("this.state.localAddMode : ",this.state.localAddMode);
+    if(!nameMode.includes(Object.keys(obj)[0])){
+      data.verifySameAddMode.push(obj);
+      this.setState(state => {const localAddMode = [...state.localAddMode, obj];return {localAddMode}});
+
+      
+      $('.alert-modeAjout-mode').show();
+      setTimeout(() => {$('.alert-modeAjout-mode').hide();this.setState({ajoutInterval:"",ajoutMode:"",successAddMode:true})}, 3000);
+
+    }else{
+      $('.alert-doublon-modeAjout-mode').show();this.setState({ajoutInterval:"",ajoutMode:""})
+      setTimeout(() => { $('.alert-doublon-modeAjout-mode').hide();}, 3000);
+    }
+
+
+/*     let sameName = false;
+    let arrayNameMode = [];
+
+    for(let property in data.localStorageArray){
+      arrayNameMode.push(Object.keys(data.localStorageArray[property]).join(''));
+    }
+    if(arrayNameMode.includes(nomAjoutMode)){
+      sameName = true;
+    }
+
+    if(!sameName){
+      array.push({[`${nomAjoutMode}`]:intervalAjoutMode});
+      $('.alert-modeAjout-mode').show();
+      this.setState({ajoutMode:"",ajoutInterval:"",successAddMode:true});
+      this.setState(state => {
+        const localAddMode = [...state.localAddMode, array[0]];
+
+        return {
+          localAddMode
+        }
+        
+      });
+      setTimeout(() => {$('.alert-modeAjout-mode').hide();this.setState({successAddMode:false})}, 3000);
+
+    }else{
+      $('.alert-doublon-modeAjout-mode').show();this.setState({ajoutInterval:"",ajoutMode:""})
+      setTimeout(() => { $('.alert-doublon-modeAjout-mode').hide();}, 3000);
+    } */
+
+  }
+
+
+  //Ajout d'un mode en ouvrant une MODAL
   add_mode = () => {
  
-      //Ajout d'un mode en ouvrant une MODAL
-  
-    let array = [];
-    let arrayNameMode = [];
+    //saisie du champs nom
     let nomAjoutMode = this.state.ajoutMode;
     nomAjoutMode = nomAjoutMode.trim();
 
+    //saisie du champs interval
     let intervalAjoutMode = this.state.ajoutInterval;
     intervalAjoutMode = intervalAjoutMode.toUpperCase();
-  
-    let sameName = false;
-    console.log(data.localStorageArray);
-    if(nomAjoutMode.length > 0 && intervalAjoutMode.length > 0){
-      if(this.hasDataInLocalStorage().length > 0){
-        for(let property in data.localStorageArray){
-          arrayNameMode.push(Object.keys(data.localStorageArray[property]).join(''));
-        }
-        if(arrayNameMode.includes(nomAjoutMode)){
-          sameName = true;
-        }
 
-        if(!sameName){
-          array.push({[`${nomAjoutMode}`]:intervalAjoutMode});
-          $('.alert-modeAjout-mode').show();
-          this.setState({ajoutMode:"",ajoutInterval:"",successAddMode:true});
-          this.setState(state => {
-            const localAddMode = [...state.localAddMode, array[0]];
-  
-            return {
-              localAddMode
-            }
-          });
-          setTimeout(() => {
-            $('.alert-modeAjout-mode').hide();
-            this.setState({successAddMode:false})
-          }, 3000);
-
-        }else{
-          $('.alert-doublon-modeAjout-mode').show();
-          this.setState({ajoutInterval:"",ajoutMode:""})
-          setTimeout(() => {
-            $('.alert-doublon-modeAjout-mode').hide();
-          }, 3000);
-        }
-        
-      }else{
-        array.push({[`${nomAjoutMode}`]:intervalAjoutMode});
-        this.setState({ajoutMode:"",ajoutInterval:"",successAddMode:true}) ;
-        this.setState(state => {
-          const localAddMode = [...state.localAddMode, array[0]];
-
-          return {
-            localAddMode
-          }
-        });
-    
-        
+    if(nomAjoutMode !== "" && intervalAjoutMode !== ""){
+      if(data.verifySameAddMode.length < 1){
+        data.verifySameAddMode.push({[`${nomAjoutMode}`]:intervalAjoutMode});
+        this.setState(state => {const localAddMode = [...state.localAddMode, {[`${nomAjoutMode}`]:intervalAjoutMode}];return {localAddMode}});
         $('.alert-modeAjout-mode').show();
-        setTimeout(() => {
-          $('.alert-modeAjout-mode').hide();
-          this.setState({successAddMode:false})
-        }, 3000);
-
-      
+        setTimeout(() => {$('.alert-modeAjout-mode').hide();this.setState({successAddMode:false})}, 3000);
+  
+      }else{
+        this.isTheSameAddMode({[`${nomAjoutMode}`]:intervalAjoutMode});
       }
-
+      
+       
     }else{
-      //affiche un message d'erreur si les champs ne sont pas saisies
-      console.log("MERDE");
       $('.alert-ajout-mode').show();
-      this.setState({errorAjoutMode:true});
-    }  
+      setTimeout( () => {
+        $('.alert-ajout-mode').hide();
+      },3000); 
+    }
+
   }
+
+
 
 
    deleteMode = () => {
@@ -599,12 +612,12 @@ class Canvas extends Component{
       count.push(i);
     }
     if(count.length === 0){
-      console.log("Le local Storage est vide");
+      //console.log("Le local Storage est vide");
     }
     return count;
   }
 
-  componentDidUpdate(prevProps){
+  componentDidUpdate(prevProps, prevState){
     
     if(prevProps.isLapsteel !== this.props.isLapsteel){
       this.setState({isLapsteel:this.props.isLapsteel});
@@ -612,6 +625,8 @@ class Canvas extends Component{
       $('.alert-saisie-accordage').hide();
       context.drawImage(guitar_bg,0,0);
       this.generator_frette();
+    }else if(prevState.localAddMode !== this.state.localAddMode){
+      this.setState({localAddMode:data.verifySameAddMode})
     }
   }
 
@@ -661,11 +676,9 @@ class Canvas extends Component{
     if(localStorage !== null && this.state.localAddMode.length !== 0){
 
       for(let i in this.state.localAddMode){
-        console.log(this.state.localAddMode[i]);
         array.push(this.state.localAddMode[i]);
       }
       for(let i in localStorage){
-        console.log(localStorage[i]);
         array.push(localStorage[i]);
       }
 
@@ -679,6 +692,7 @@ class Canvas extends Component{
       window.localStorage.setItem('objetAjoutMode', JSON.stringify(this.state.localAddMode));
       this.setState({saveLocalStorage:"",localAddMode:""});
       this.props.dispatchLocalStorageMode(this.state.localAddMode);
+      data.verifySameAddMode = [];
     }
      
 }
@@ -687,6 +701,7 @@ class Canvas extends Component{
 
 
   render(){
+ 
     for(let i in this.props.localStorageArray){
       if(this.props.localStorageArray[i].hasOwnProperty('blues1')){
         console.log("coucou");
@@ -772,7 +787,9 @@ class Canvas extends Component{
                         <button className="btn btn-primary" data-dismiss="modal" onClick={this.closeModalAjoutMode}>Appliquer</button> 
                         : 
                         <button className="btn btn-secondary">Appliquer</button>} */}
-                        <button className="btn btn-primary" data-dismiss="modal" onClick={this.closeModalAjoutMode}>Appliquer</button> 
+                        {this.state.localAddMode.length > 0 ? 
+                        <button className="btn btn-primary" data-dismiss="modal" onClick={this.closeModalAjoutMode}>Appliquer</button> :
+                        <button className="btn btn-secondary">Appliquer</button> } 
                         <button className="btn btn-secondary" data-dismiss="modal" onClick={this.cancelModalAddMode}>Annuler</button>
                     </div>
                   </div>
