@@ -472,16 +472,26 @@ class Canvas extends Component{
 
   isTheSameAddMode = (obj) => {
     let nameMode = [];
+    let nameModeLocalStorage = [];
+    if(this.hasDataInLocalStorage().length > 0){
+      
+      let dataLocalStorage = JSON.parse(window.localStorage.getItem('objetAjoutMode'));;
+      for(let i in dataLocalStorage){
+        let objet = dataLocalStorage[i];
+        nameModeLocalStorage.push(Object.keys(objet)[0]);
+      }
+    }
+    
+    console.log("nameModeLocalStorage :",nameModeLocalStorage);
     for(let i in data.verifySameAddMode){
       nameMode.push(Object.keys(data.verifySameAddMode[i])[0]);
     }
 
     console.log("this.state.localAddMode : ",this.state.localAddMode);
-    if(!nameMode.includes(Object.keys(obj)[0])){
+    if(!nameMode.includes(Object.keys(obj)[0]) && !nameModeLocalStorage.includes(Object.keys(obj)[0])){
       data.verifySameAddMode.push(obj);
       this.setState(state => {const localAddMode = [...state.localAddMode, obj];return {localAddMode}});
 
-      
       $('.alert-modeAjout-mode').show();
       setTimeout(() => {$('.alert-modeAjout-mode').hide();this.setState({ajoutInterval:"",ajoutMode:"",successAddMode:true})}, 3000);
 
@@ -489,37 +499,6 @@ class Canvas extends Component{
       $('.alert-doublon-modeAjout-mode').show();this.setState({ajoutInterval:"",ajoutMode:""})
       setTimeout(() => { $('.alert-doublon-modeAjout-mode').hide();}, 3000);
     }
-
-
-/*     let sameName = false;
-    let arrayNameMode = [];
-
-    for(let property in data.localStorageArray){
-      arrayNameMode.push(Object.keys(data.localStorageArray[property]).join(''));
-    }
-    if(arrayNameMode.includes(nomAjoutMode)){
-      sameName = true;
-    }
-
-    if(!sameName){
-      array.push({[`${nomAjoutMode}`]:intervalAjoutMode});
-      $('.alert-modeAjout-mode').show();
-      this.setState({ajoutMode:"",ajoutInterval:"",successAddMode:true});
-      this.setState(state => {
-        const localAddMode = [...state.localAddMode, array[0]];
-
-        return {
-          localAddMode
-        }
-        
-      });
-      setTimeout(() => {$('.alert-modeAjout-mode').hide();this.setState({successAddMode:false})}, 3000);
-
-    }else{
-      $('.alert-doublon-modeAjout-mode').show();this.setState({ajoutInterval:"",ajoutMode:""})
-      setTimeout(() => { $('.alert-doublon-modeAjout-mode').hide();}, 3000);
-    } */
-
   }
 
 
@@ -533,19 +512,22 @@ class Canvas extends Component{
     //saisie du champs interval
     let intervalAjoutMode = this.state.ajoutInterval;
     intervalAjoutMode = intervalAjoutMode.toUpperCase();
+    //si le local storage possede au moins un mode
 
+    console.log("nombre d'element dans le data storage :", this.hasDataInLocalStorage().length);
     if(nomAjoutMode !== "" && intervalAjoutMode !== ""){
-      if(data.verifySameAddMode.length < 1){
-        data.verifySameAddMode.push({[`${nomAjoutMode}`]:intervalAjoutMode});
-        this.setState(state => {const localAddMode = [...state.localAddMode, {[`${nomAjoutMode}`]:intervalAjoutMode}];return {localAddMode}});
-        $('.alert-modeAjout-mode').show();
-        setTimeout(() => {$('.alert-modeAjout-mode').hide();this.setState({successAddMode:false})}, 3000);
-  
-      }else{
+      if(this.hasDataInLocalStorage().length > 0){
         this.isTheSameAddMode({[`${nomAjoutMode}`]:intervalAjoutMode});
-      }
-      
-       
+        this.setState({ajoutInterval:"",ajoutMode:""});
+        
+      }else if(data.verifySameAddMode.length < 1){
+          data.verifySameAddMode.push({[`${nomAjoutMode}`]:intervalAjoutMode});
+          this.setState(state => {const localAddMode = [...state.localAddMode, {[`${nomAjoutMode}`]:intervalAjoutMode}];return {localAddMode}});
+          $('.alert-modeAjout-mode').show();
+          this.setState({ajoutInterval:"",ajoutMode:""})
+          setTimeout(() => {$('.alert-modeAjout-mode').hide();this.setState({successAddMode:false,ajoutInterval:"",ajoutMode:""})}, 3000);
+    
+      }else{this.isTheSameAddMode({[`${nomAjoutMode}`]:intervalAjoutMode});}
     }else{
       $('.alert-ajout-mode').show();
       setTimeout( () => {
@@ -603,7 +585,7 @@ class Canvas extends Component{
   }
 
 
-  hasDataInLocalStorage= () =>{
+  hasDataInLocalStorage = () => {
 
     let obj = JSON.parse(window.localStorage.getItem('objetAjoutMode'));
   
@@ -683,18 +665,18 @@ class Canvas extends Component{
       }
 
       window.localStorage.setItem('objetAjoutMode', JSON.stringify(array));
-      this.setState({saveLocalStorage:"",localAddMode:""});
       this.props.dispatchLocalStorageMode(array);
 
     }else if(this.state.localAddMode.length > 0){
 
       this.setState({saveLocalStorage:this.state.localAddMode});
       window.localStorage.setItem('objetAjoutMode', JSON.stringify(this.state.localAddMode));
-      this.setState({saveLocalStorage:"",localAddMode:""});
-      this.props.dispatchLocalStorageMode(this.state.localAddMode);
-      data.verifySameAddMode = [];
-    }
      
+      this.props.dispatchLocalStorageMode(this.state.localAddMode);
+      
+    }
+    this.setState({saveLocalStorage:"",localAddMode:""});
+    data.verifySameAddMode = [];
 }
 
 
