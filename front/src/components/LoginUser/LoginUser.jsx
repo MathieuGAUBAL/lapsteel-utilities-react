@@ -76,7 +76,7 @@ class LoginUser extends Component{
 
         return(
             <div>
-                {localStorage.getItem('tSoEkCeRnT') ?  <Redirect to="/Home" /> :  this.props.isLoggued && <Redirect to="/Home" />}
+                {localStorage.getItem('tSoEkCeRnT') ?  <Redirect to="/Home" /> :  this.props.isLoggued && <Redirect to="/login" />}
                 <NavBarVitrine />
                 <h1>LOGIN USER</h1>
                 <form className="container">

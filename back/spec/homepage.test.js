@@ -1,16 +1,39 @@
 const request = require('supertest');
 const app = require('../app');
 const uri = '/api/homepage';
+const uri_login_admin = '/api/login@admin';
+const admin_email = process.env.ADMIN_EMAIL;
+const admin_password = process.env.ADMIN_PASSWORD;
 
 describe('CRUD route homepage', () => {
    
     const obj = {
-        id:""
+        id:"",
+        tokenAdmin:"",
     }
+
+        //"Récupération du token Admin"
+        beforeAll((done) => {
+            request(app)
+            .post(uri_login_admin)
+            .send({email:admin_email, password:admin_password})
+            .end((err, res) => {
+                if(err){
+                    return done (err);
+                }else{
+                    obj.tokenAdmin = res.body.token;
+        
+                   done();
+                
+                }
+            })
+        
+        });
 
     test('devrait retourner status code : 200 (POST) et la propriete url correcte', (done) => {
         request(app)
             .post(uri)
+            .set({'authorization':'Bearer ' + obj.tokenAdmin})
             .send({
                 title:"test@test.com",
                 subtitle:"subtitle1!",
@@ -70,6 +93,7 @@ describe('CRUD route homepage', () => {
 
         request(app)
             .put(uri + `/${obj.id}`)
+            .set({'authorization':'Bearer ' + obj.tokenAdmin})
             .send({title:"title_modifie@test.fr", subtitle: "MDPmodifie", description:"allemagne", section: "MDPmodifie-homepage", image_id:6})
             .set('Accept', 'application/json')
             .end((err,res) => {
@@ -92,6 +116,7 @@ describe('CRUD route homepage', () => {
 
         request(app)
             .delete(uri + `/${obj.id}`)
+            .set({'authorization':'Bearer ' + obj.tokenAdmin})
             .end((err, res) => {
                 if(err){
                     return done (err);

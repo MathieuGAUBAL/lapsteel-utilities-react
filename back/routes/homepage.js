@@ -3,6 +3,7 @@ const router = express.Router();
 const pool = require('../config.js');
 const bodyParser = require('body-parser');
 const url = "/homepage";
+const authAdmin = require('./verifyTokenAdmin');
 
 
  
@@ -70,11 +71,10 @@ router.get(url + "/:id", (req, res) => {
 
 });
 
-router.post(url, (req, res) => {
+router.post(url, authAdmin, (req, res) => {
     pool.getConnection(function (err, connection){
 
         const formData = req.body;
-    
         connection.query(`INSERT INTO homepage (title, subtitle, description, section, image_id) VALUES (?,?,?,?,?)`,
         [formData.title, formData.subtitle,formData.description,formData.section,formData.image_id], (err, results, fields) => {
             connection.release();
@@ -95,7 +95,7 @@ router.post(url, (req, res) => {
 
 });
 
-router.put(url +'/:id', (req, res) => {
+router.put(url +'/:id', authAdmin, (req, res) => {
     const id = req.params.id;
 
     pool.getConnection(function (err, connection){
@@ -118,7 +118,7 @@ router.put(url +'/:id', (req, res) => {
     });
 });
 
-router.delete(url + '/:id', (req, res) => {
+router.delete(url + '/:id', authAdmin, (req, res) => {
     const id = req.params.id;
     pool.getConnection(function (err, connection){
         connection.query(`SELECT * FROM homepage WHERE id=?`,[id], (err, results, fields) => {
@@ -142,7 +142,7 @@ router.delete(url + '/:id', (req, res) => {
 });
 
 //BBOOOOMMMM
-router.delete(url, (req, res) => {
+router.delete(url, authAdmin, (req, res) => {
     pool.getConnection(function (err, connection){
         connection.query('TRUNCATE TABLE homepage',(err, results, fields) => {
             connection.release();

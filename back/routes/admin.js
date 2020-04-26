@@ -44,9 +44,8 @@ router.get(url + "/:id", auth, (req, res) => {
 
 });
 
-router.post(url, auth,(req, res) => {
+router.post(url,auth,(req, res) => {
     pool.getConnection(function (err, connection){
-
         const formData = req.body;
         let hash = bcrypt.hashSync(`${formData.password}`, Number(salt));
         connection.query(`INSERT INTO admin (email,password) VALUES (?,?)`,
