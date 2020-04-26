@@ -70,6 +70,93 @@ class LapsteelModulePrincipal extends Component{
         }
       }
 
+      selectEditModeBtn = (event) => {
+        let editIntervalMode = this.state.editIntervalMode.length > 0 ? this.state.editIntervalMode + " " : this.state.editIntervalMode;
+        switch (event.target.id) {
+          case "0.5T":
+            console.log("0.5T");
+            this.setState({editIntervalMode:editIntervalMode + event.target.id})
+            break;
+    
+          case "1T":
+            console.log("1T");
+            this.setState({editIntervalMode:editIntervalMode + event.target.id})
+            break;
+          
+          case "1.5T":
+            console.log("1.5T");
+            this.setState({editIntervalMode:editIntervalMode + event.target.id})
+            break;
+    
+          case "X":
+            let arrayEditIntervalMode = this.state.editIntervalMode.split(" ");
+            let newArrayEditIntervalMode = arrayEditIntervalMode.splice(arrayEditIntervalMode.length -1, 1);
+            this.setState({editIntervalMode:arrayEditIntervalMode.join(" ")})
+            break;
+        
+          default:
+            break;
+        }
+    
+      }
+
+    selectTuningModeBtn = (event) => {
+      console.log(event.target.id);
+      let inputAccordage = this.state.inputAccordage.length > 0 ? this.state.inputAccordage + " " : this.state.inputAccordage;
+      switch (event.target.id) {
+        case "C":
+          console.log("C");
+          this.setState({inputAccordage:inputAccordage + event.target.id})
+          break;
+
+        case "D":
+          console.log("D");
+          this.setState({inputAccordage:inputAccordage + event.target.id})
+          break;
+    
+        case "E":
+          console.log("E");
+          this.setState({inputAccordage:inputAccordage + event.target.id})
+          break; 
+        
+        case "F":
+          console.log("F");
+          this.setState({inputAccordage:inputAccordage + event.target.id})
+          break; 
+
+        case "G":
+          console.log("G");
+          this.setState({inputAccordage:inputAccordage + event.target.id})
+          break;
+          
+        case "A":
+          console.log("A");
+          this.setState({inputAccordage:inputAccordage + event.target.id})
+          break; 
+
+        case "B":
+          console.log("B");
+          this.setState({inputAccordage:inputAccordage + event.target.id})
+          break;
+
+        case "#":
+          console.log("#");
+          this.setState({inputAccordage:inputAccordage + event.target.id})
+          break; 
+  
+        case "X":
+          let arrayInputAccordage = this.state.inputAccordage.split(" ");
+          let newArrayInputAccordage = arrayInputAccordage.splice(arrayInputAccordage.length -1, 1);
+          this.setState({inputAccordage:arrayInputAccordage.join(" ")})
+          break;
+      
+        default:
+          break;
+      }
+  
+    }
+
+
     handleOnChangeInput = (event) => {
         switch (event.target.id) {
             case 'input-accordage':
@@ -234,7 +321,7 @@ class LapsteelModulePrincipal extends Component{
     render(){
         return(
             <div>
-                <InputAccordage handleOnChangeInput={this.handleOnChangeInput} inputAccordage={this.state.inputAccordage}/>
+                <InputAccordage handleOnChangeInput={this.handleOnChangeInput} inputAccordage={this.state.inputAccordage}  selectTuningModeBtn={this.selectTuningModeBtn}/>
                 <InputTonique handleOnChangeInput={this.handleOnChangeInput} getPutValue={this.getInputValue}/>
                 <InputMode handleChangeModeFrette={this.handleChangeModeFrette} handleOnChangeInput={this.handleOnChangeInput} {...this.state}/>
                 <Canvas 
@@ -248,6 +335,8 @@ class LapsteelModulePrincipal extends Component{
                     handleChangeEditMode={this.handleChangeEditMode}
                     editMode={this.editMode}
                     isCloseModalDeleteMode={this.isCloseModalDeleteMode}
+                    selectEditModeBtn={this.selectEditModeBtn}
+                   
                 />
             </div>
         )

@@ -126,9 +126,8 @@ a_tonique.src = '/images/image-tonique-selected/A_tonique.gif';
 ad_tonique.src = '/images/image-tonique-selected/Ad_tonique.gif';
 b_tonique.src = '/images/image-tonique-selected/B_tonique.gif';
 
-//image du manche de la guitare
 let guitar_bg = new Image();
-guitar_bg.src = '/images/image-manche/neck_guitar.gif';
+//guitar_bg.src = '/images/image-manche/neck_guitar.gif';
 let mode = new Image();
 mode.src = '/mode.png';
 
@@ -401,6 +400,15 @@ class Canvas extends Component{
     $('.alert-error-rename-modeAjout-mode').hide();
     $('.alert-doublon-modeAjout-mode').hide();
     $('.alert-rename-modeAjout-mode').hide();
+    let widthEcran = window.screen.availWidth;
+    console.log("widthEcran : ",widthEcran);
+    //image du manche de la guitare
+    if(widthEcran < 1000){
+      guitar_bg.src = '/images/image-manche/neck_guitar_mobile.gif';
+    }else{
+      guitar_bg.src = '/images/image-manche/neck_guitar.gif';
+    }
+    
 
     canvas = document.getElementById('canvas');
     context = canvas.getContext('2d');
@@ -425,6 +433,7 @@ class Canvas extends Component{
   }
 
   init = () => {
+
     context.drawImage(guitar_bg,0,0);
     this.generator_frette();
 
@@ -432,7 +441,7 @@ class Canvas extends Component{
      for(let i = 0; i < 21; i++){
       for(let j = 0; j < alignement_note_y.length; j++){
         if(arr_note_gif[j] !== undefined){
-          context.drawImage(arr_note_gif[j][i], (this.state.isLapsteel ? alignement_note_x[i] : alignement_note_x[i] + alignement_note_x_guitar), alignement_note_y[j]);
+          context.drawImage(arr_note_gif[j][i], (this.state.isLapsteel ? alignement_note_x[i] : alignement_note_x[i] + alignement_note_x_guitar - 70), alignement_note_y[j]);
         } 
       }
     }
@@ -677,7 +686,39 @@ class Canvas extends Component{
     }
     this.setState({saveLocalStorage:"",localAddMode:""});
     data.verifySameAddMode = [];
-}
+  }
+
+  selectAddModeBtn = (event) => {
+    let ajoutInterval = this.state.ajoutInterval.length > 0 ? this.state.ajoutInterval + " " : this.state.ajoutInterval;
+    switch (event.target.id) {
+      case "0.5T":
+        console.log("0.5T");
+        this.setState({ajoutInterval:ajoutInterval + event.target.id})
+        break;
+
+      case "1T":
+        console.log("1T");
+        this.setState({ajoutInterval:ajoutInterval + event.target.id})
+        break;
+      
+      case "1.5T":
+        console.log("1.5T");
+        this.setState({ajoutInterval:ajoutInterval + event.target.id})
+        break;
+
+      case "X":
+        let arrayAjoutMode = this.state.ajoutInterval.split(" ");
+        let newArrayAjoutMode = arrayAjoutMode.splice(arrayAjoutMode.length -1, 1);
+        this.setState({ajoutInterval:arrayAjoutMode.join(" ")})
+        break;
+    
+      default:
+        break;
+    }
+
+  }
+
+
 
 
 
@@ -692,7 +733,7 @@ class Canvas extends Component{
     const { localStorageArray, selectedModeToDelete, 
             deleteMode, selectedModeToEdit,
             selectedEditMode, selectedEditArray,
-            closeModalEditMode, editMode, handleChangeEditMode, isCloseModalDeleteMode } = this.props;
+            closeModalEditMode, editMode, handleChangeEditMode, isCloseModalDeleteMode, selectEditModeBtn } = this.props;
 
     const { ajoutInterval, ajoutMode, errorAjoutMode } = this.state;
     if(errorAjoutMode){
@@ -745,7 +786,15 @@ class Canvas extends Component{
                             <label>Nom du mode</label>
                             <input name="nom-ajout-mode" id="nom-ajout-mode" value={this.state.ajoutMode} type='text' required='required'
                                 className="form-control" onChange={this.handleOnChangeAddMode}/>
-                            <label>intervalle des notes</label>
+                            <div className="mt-3"><label>intervalle des notes</label></div>
+
+                            <div className="btn-group mb-2" role="group" aria-label="Basic example">
+                              <button type="button" className="btn btn-outline-primary" id="0.5T" onClick={this.selectAddModeBtn}>0.5T</button>
+                              <button type="button" className="btn btn-outline-primary" id="1T" onClick={this.selectAddModeBtn}>1T</button>
+                              <button type="button" className="btn btn-outline-primary" id="1.5T" onClick={this.selectAddModeBtn}>1.5T</button>
+                              <button type="button" className="btn btn-outline-danger" id="X" onClick={this.selectAddModeBtn}>X</button>
+                            </div>
+
                             <input name="input-interval-mode-added" id="input-interval-mode-added" value={this.state.ajoutInterval} type='text' required='required'
                                 className="form-control" onChange={this.handleOnChangeAddMode}/>
                             <div className="pt-3 pb-3">
@@ -844,7 +893,13 @@ class Canvas extends Component{
                   <div className="pt-3 pb-3">
                     <label className="h5">nom du mode</label>
                     <input name="nom-modification-mode" id="nom-modification-mode" value={this.props.editNameMode} type='text' required='required' className="form-control" onChange={handleChangeEditMode}/>
-                    <label className="h5 pt-2">interval du mode</label>
+                    <div><label className="h5 pt-2">interval du mode</label></div>
+                    <div className="btn-group mb-2" role="group" aria-label="Basic example">
+                      <button type="button" className="btn btn-outline-primary" id="0.5T" onClick={selectEditModeBtn}>0.5T</button>
+                      <button type="button" className="btn btn-outline-primary" id="1T" onClick={selectEditModeBtn}>1T</button>
+                      <button type="button" className="btn btn-outline-primary" id="1.5T" onClick={selectEditModeBtn}>1.5T</button>
+                      <button type="button" className="btn btn-outline-danger" id="X" onClick={selectEditModeBtn}>X</button>
+                    </div>
                     <input name="interval-modification-mode" id="interval-modification-mode" value={this.props.editIntervalMode} type='text' required='required' className="form-control" onChange={handleChangeEditMode}/>
                   </div>
 
