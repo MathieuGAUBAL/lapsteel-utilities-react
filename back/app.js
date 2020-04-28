@@ -14,7 +14,8 @@ const homepage = require('./routes/homepage');
 const cors = require('cors');
 
 
-app.use(cors())
+app.use(cors());
+
 
 app.use('/api', video);
 app.use('/api', image);

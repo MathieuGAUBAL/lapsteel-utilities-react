@@ -24,9 +24,10 @@ router.get(url, (req, res) => {
 
 });
 
-router.get(url+'/selected', (req, res) => {
+router.get(url+'/:selected', (req, res) => {
+    const selected = req.params.selected;
     pool.getConnection(function (err, connection){
-        connection.query(`SELECT * FROM video WHERE section=?`,[req.query.section], (err, results, fields) => {
+        connection.query(`SELECT * FROM video WHERE rubrique=?`,[selected], (err, results, fields) => {
             connection.release();
             if(err){
                 res.status(200).send(err.message);
@@ -67,14 +68,14 @@ router.post(url, (req, res) => {
        if(!req.body.url){
            return res.status(422).json({"error": "required field(s) missing"});
        }else{
-            connection.query(`INSERT INTO video (url) VALUES (?)`,
-            [formData.url], (err, results, fields) => {
+            connection.query(`INSERT INTO video (url, rubrique) VALUES (?, ?)`,
+            [formData.url, formData.rubrique], (err, results, fields) => {
                 connection.release();
                 if(err){
                     res.status(200).send(err.message);
                 }else{
                     const id = results.insertId;
-                    connection.query(`SELECT url FROM video WHERE id=?`,[id], (err, results, fields) => {
+                    connection.query(`SELECT url, rubrique FROM video WHERE id=?`,[id], (err, results, fields) => {
                         if(err){
                             res.status(200).send(err.message);
                         }else{
@@ -94,7 +95,7 @@ router.put(url + '/:id', (req, res) => {
     pool.getConnection(function (err, connection){
         const formData = req.body;
 
-        connection.query(`UPDATE video SET url=? WHERE id=?`,[formData.url, id], (err, results, fields) => {
+        connection.query(`UPDATE video SET url=?,rubrique=? WHERE id=?`,[formData.url, formData.rubrique, id], (err, results, fields) => {
             connection.release();
             if(err){
                 res.status(200).send(err.message);

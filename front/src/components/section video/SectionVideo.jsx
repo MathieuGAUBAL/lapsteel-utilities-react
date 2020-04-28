@@ -23,61 +23,48 @@ class SectionVideo extends Component{
         this.setState({video_select:list})
     }
 
-    options = () => {
-        const options = {
-            headers: new Headers({
-                'Content-Type': 'application/json',
-                'authorization': 'Bearer ' + localStorage.getItem('tSoEkCeRnT')
-            }),
+    getVideos = async() => {
+        // obtenir les ressources pour la section video
+        let videosArray = await getRessources('videos',0 , 0, REACT_APP_SERVER_ADDRESS_FULL);
+        console.log(videosArray);
+        let section_rubrique = [];
+        for(let i = 0; i < videosArray.length; i++){
+            section_rubrique.push(videosArray[i].rubrique);
+            if(i === videosArray.length - 1){
+                this.get_section_name(section_rubrique);
+            }
         }
-        return options;
+        this.setState({dataVideo:videosArray, menu_selected:"all"});
+    }
+
+    async getVideosSelected(rubrique){
+        let url;
+        if(rubrique === 'default'){
+            url = REACT_APP_SERVER_ADDRESS_FULL + "/api/videos";
+        }else{
+            url = REACT_APP_SERVER_ADDRESS_FULL + "/api/videos/"+ rubrique;
+        }
+        
+
+        const data = await (await (fetch(url))).json();
+  
+        this.setState({dataVideo:data, menu_selected:rubrique});
+
     }
 
 
-    componentDidMount = async () => {
-        // obtenir les ressources pour la section video
-        let videosArray = await getRessources('videos',0 , 0, REACT_APP_SERVER_ADDRESS_FULL);
-        //console.log(videosArray);
-        let section_name = [];
-        for(let i = 0; i < videosArray.length; i++){
-            section_name.push(videosArray[i].section);
-            if(i === videosArray.length - 1){
-                this.get_section_name(section_name);
-            }
-        }
-        this.setState({dataVideo:videosArray});
+    componentDidMount = () => {
+        this.getVideos();
     }
 
     handleClickMenuSelected = (event) => {
-        this.setState({menu_selected:event.target.id});
+  
+        this.getVideosSelected(event.target.value);
     }
-
-    display = () => {
-        if(this.state.menu_selected === 'all'){
-            return (
-                <div className="video-mapped">
-                    {this.state.dataVideo.map((element, index) => ( 
-                        <iframe key={index} className="embed-responsive-item mb-2 p-2" title={index}  src={element.url}  frameBorder="0"  allowFullScreen></iframe>
-                    ))}
-                </div>
-            )
-        }else {
-            const result = this.state.dataVideo.filter((element, index) => element.section === this.state.menu_selected ? element : "");
-            return (
-                <div className="video-mapped mb-5">
-                    {result.map((element, index) => ( 
-                        <iframe key={index} className="embed-responsive-item mb-2 p-2" title={index}  src={element.url} frameBorder="0" allowFullScreen></iframe>
-                    ))}
-                </div>
-            )
-        }
-
-    }
-
 
 
     render(){
-        console.log("MENU : ",this.state.dataVideo);
+        //console.log("MENU : ",this.state.video_select);
         //console.log("RENDER ARRAY : " ,menuArray);
         
         return(
@@ -86,17 +73,23 @@ class SectionVideo extends Component{
                  <NavBarHomePage/>
                 <h2>SECTION VIDEO</h2>
                 <div className="container menu-deroulant-video">
-                    <select className="form-control form-control-sm custom-select-video" >
-                        <option id="all" onClick={this.handleClickMenuSelected} value='default'>all</option>
-                        {this.state.video_select.map((element, index) =>  (<option key={index} id={element} value={index + 1} onClick={this.handleClickMenuSelected}>{element}</option>))}  
+                    <select className="form-control form-control-sm custom-select-video" onChange={this.handleClickMenuSelected}>
+                        <option id="all"  value='default'>all</option>
+                        {this.state.video_select.map((element, index) => (
+                        <option key={index} id={element} >{element}</option>
+                        ))   }  
                     </select>
                 </div>
 
 
-                <h2 className="p-5">{this.state.menu_selected} videos</h2>
+                <h2 className="p-5">{this.state.menu_selected === "default" ? "all" : this.state.menu_selected } videos</h2>
                 
                  <div className="container video-map">
-                    {this.state.dataVideo.length > 0 && this.display()}
+                    {this.state.dataVideo.length > 0 && <div className="video-mapped mb-5">
+                        {this.state.dataVideo.map((element, index) => ( 
+                            <iframe key={index} className="embed-responsive-item mb-2 p-2" title={index}  src={element.url} frameBorder="0" allowFullScreen></iframe>
+                        ))}
+                    </div>}
                 </div>
  
                 <div className="sticky-footer">

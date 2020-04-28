@@ -44,7 +44,7 @@ class Homepage extends Component{
     let homepageNewsArray = await getRessources('homepage','homepage-news', 0, REACT_APP_SERVER_ADDRESS_FULL);
     // obtenir les ressources pour la section homepage-news
     let homepageCardArray = await getRessources('homepage','homepage-card',true, REACT_APP_SERVER_ADDRESS_FULL);
-
+    console.log(homepageCardArray);
     this.setState({
         homepageNews:homepageNewsArray,
         homepageCard:homepageCardArray
