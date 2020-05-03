@@ -158,8 +158,6 @@ let arr_note_gif = [];
 var canvas = null;
 var context = null;
 
-let selectIntervalMode = null;
-
 
 class Canvas extends Component{
   constructor(props){
@@ -275,7 +273,7 @@ class Canvas extends Component{
     data.mancheGuitare = [];
     data.notesFinales = [];
 
-    console.log(inputAccordage);
+ 
     let inputIsVerified_accordage = this.verification_input_accordage(inputAccordage);
     let inputIsVerified_tonique = this.verification_input_tonique(inputTonique);
 
@@ -401,7 +399,7 @@ class Canvas extends Component{
     $('.alert-doublon-modeAjout-mode').hide();
     $('.alert-rename-modeAjout-mode').hide();
     let widthEcran = window.screen.availWidth;
-    console.log("widthEcran : ",widthEcran);
+
     //image du manche de la guitare
     if(widthEcran < 1000){
       guitar_bg.src = '/images/image-manche/neck_guitar_mobile.gif';
@@ -491,12 +489,12 @@ class Canvas extends Component{
       }
     }
     
-    console.log("nameModeLocalStorage :",nameModeLocalStorage);
+
     for(let i in data.verifySameAddMode){
       nameMode.push(Object.keys(data.verifySameAddMode[i])[0]);
     }
 
-    console.log("this.state.localAddMode : ",this.state.localAddMode);
+  
     if(!nameMode.includes(Object.keys(obj)[0]) && !nameModeLocalStorage.includes(Object.keys(obj)[0])){
       data.verifySameAddMode.push(obj);
       this.setState(state => {const localAddMode = [...state.localAddMode, obj];return {localAddMode}});
@@ -523,7 +521,6 @@ class Canvas extends Component{
     intervalAjoutMode = intervalAjoutMode.toUpperCase();
     //si le local storage possede au moins un mode
 
-    console.log("nombre d'element dans le data storage :", this.hasDataInLocalStorage().length);
     if(nomAjoutMode !== "" && intervalAjoutMode !== ""){
       if(this.hasDataInLocalStorage().length > 0){
         this.isTheSameAddMode({[`${nomAjoutMode}`]:intervalAjoutMode});
@@ -565,7 +562,7 @@ class Canvas extends Component{
       for(let i = 0; i < data.localStorageArray.length; i++){
         if(data.localStorageArray[i].hasOwnProperty(selectedModeDelete)){
           for(let j in data.localStorageArray){
-            if(j != i){
+            if(j !== i){
               newObj.push(data.localStorageArray[j]);
             }
           }
@@ -574,7 +571,6 @@ class Canvas extends Component{
       
   
       data.localStorageArray = newObj;
-      console.log(data.localStorageArray);
       window.localStorage.setItem('objetAjoutMode', JSON.stringify([...data.localStorageArray]));
   
       //message : Le mode a été supprimé.
@@ -602,9 +598,7 @@ class Canvas extends Component{
     for(let i in obj){
       count.push(i);
     }
-    if(count.length === 0){
-      //console.log("Le local Storage est vide");
-    }
+
     return count;
   }
 
@@ -646,8 +640,6 @@ class Canvas extends Component{
 
   closeModalDeleteMode = () => {
     let select_mode_interval_delete = 'interval-mode-list';
-    let select_mode_interval_add = 'input-interval-mode';
-    let array = [select_mode_interval_delete,select_mode_interval_add];
     this.props.isCloseModalDeleteMode(false);
     this.saveModetoLocalStorage(select_mode_interval_delete);
   }
@@ -692,23 +684,23 @@ class Canvas extends Component{
     let ajoutInterval = this.state.ajoutInterval.length > 0 ? this.state.ajoutInterval + " " : this.state.ajoutInterval;
     switch (event.target.id) {
       case "0.5T":
-        console.log("0.5T");
+      
         this.setState({ajoutInterval:ajoutInterval + event.target.id})
         break;
 
       case "1T":
-        console.log("1T");
+       
         this.setState({ajoutInterval:ajoutInterval + event.target.id})
         break;
       
       case "1.5T":
-        console.log("1.5T");
+      
         this.setState({ajoutInterval:ajoutInterval + event.target.id})
         break;
 
       case "X":
         let arrayAjoutMode = this.state.ajoutInterval.split(" ");
-        let newArrayAjoutMode = arrayAjoutMode.splice(arrayAjoutMode.length -1, 1);
+        arrayAjoutMode.splice(arrayAjoutMode.length -1, 1);
         this.setState({ajoutInterval:arrayAjoutMode.join(" ")})
         break;
     
@@ -725,14 +717,8 @@ class Canvas extends Component{
 
   render(){
  
-    for(let i in this.props.localStorageArray){
-      if(this.props.localStorageArray[i].hasOwnProperty('blues1')){
-        console.log("coucou");
-      }
-    }
     const { localStorageArray, selectedModeToDelete, 
             deleteMode, selectedModeToEdit,
-            selectedEditMode, selectedEditArray,
             closeModalEditMode, editMode, handleChangeEditMode, isCloseModalDeleteMode, selectEditModeBtn } = this.props;
 
     const { ajoutInterval, ajoutMode, errorAjoutMode } = this.state;
@@ -855,7 +841,7 @@ class Canvas extends Component{
                 <strong>Alerte!</strong> Le mode a été supprimé.
               </div>
 
-              { localStorageArray === null || localStorageArray.length == 0 && <div className="alert alert-warning alert-dismissible fade show container alert-error-suppression-mode" role="alert">
+              { ((localStorageArray === null) || (localStorageArray.length === 0)) && <div className="alert alert-warning alert-dismissible fade show container alert-error-suppression-mode" role="alert">
                 <strong>Alerte!</strong> Rien à supprimer.
               </div>}
 

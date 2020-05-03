@@ -22,7 +22,7 @@ class InputAccordage extends Component{
                         <strong>OOPS!</strong> la saisie semble incorrecte.
                         </div>
                     </div>
-                    <div className="btn-group mt-2 mb-2" role="group" aria-label="Basic example">
+                    <div className="btn-group mt-1 mb-1" role="group" aria-label="Basic example">
                       <button type="button" className="btn btn-outline-primary btn-lg" id="C" onClick={selectTuningModeBtn}>C</button>
                       <button type="button" className="btn btn-outline-primary btn-lg" id="D" onClick={selectTuningModeBtn}>D</button>
                       <button type="button" className="btn btn-outline-primary btn-lg" id="E" onClick={selectTuningModeBtn}>E</button>
@@ -31,7 +31,7 @@ class InputAccordage extends Component{
                       <button type="button" className="btn btn-outline-primary btn-lg" id="A" onClick={selectTuningModeBtn}>A</button>
                       <button type="button" className="btn btn-outline-primary btn-lg" id="B" onClick={selectTuningModeBtn}>B</button>
                     </div>
-                    <div className="mb-2">
+                    <div className="mb-1">
                         <button type="button" className="btn btn-outline-primary btn-lg" id="#" onClick={selectTuningModeBtn}>#</button>
                     </div>
                     <div>

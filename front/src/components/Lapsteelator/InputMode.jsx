@@ -29,23 +29,27 @@ class InputMode extends Component{
                         <label className="input-group-text" htmlFor="input-interval-mode">Mode</label>
                     </div>
                     
-                        <select id="input-interval-mode" name="nom" size="1" className="form-control" onChange={handleOnChangeInput}>
-                            <option value="default">-- Choisir un mode --</option>
-                            <option value="1.5T 1T 1T 1.5T 1T">Pentatonique mineure</option>
-                            <option value="1T 1T 1.5T 1T 1.5T">Pentatonique majeure</option>
-                            {selectOptionsModeList}
-                        </select>
-                    
-                        <div className="container pt-5">
-                    <div className="btn-group" role="group" aria-label="Basic example">
-                        <button type="button" value="guitar" className="btn btn-primary" onClick={handleChangeModeFrette} >Guitar</button>
-                        <button type="button" value="lapsteel" className="btn btn-primary" onClick={handleChangeModeFrette}>Lapsteel</button>
+                    <select id="input-interval-mode" name="nom" size="1" className="form-control" onChange={handleOnChangeInput}>
+                        <option value="default">-- Choisir un mode --</option>
+                        <option value="1.5T 1T 1T 1.5T 1T">Pentatonique mineure</option>
+                        <option value="1T 1T 1.5T 1T 1.5T">Pentatonique majeure</option>
+                        {selectOptionsModeList}
+                    </select>
+                
+                    <div className="container pt-5">
+                        <div className="btn-group" role="group" aria-label="Basic example">
+                            <button type="button" value="guitar" className="btn btn-primary" onClick={handleChangeModeFrette} >Guitare</button>
+                            <button type="button" value="lapsteel" className="btn btn-primary" onClick={handleChangeModeFrette}>Lapsteel</button>
+
+                            <div className="btn-group-panel">
+                                <button className="btn btn-outline-primary ml-1 mr-1" data-toggle="modal"  data-target="#ajoutMode" onClick={handleOpenModalAddMode}><i className="fa fa-plus"></i></button>
+                                <button className="btn btn-outline-primary mr-1" data-toggle="modal" data-target="#suppressionMode" onClick={openModalDeleteMode}> <i className="fa fa-minus"></i> </button>
+                                <button className="btn btn-outline-primary mr-1" data-toggle="modal" data-target="#modifierMode" onClick={openModalEditMode}> <i className="fa fa-edit"></i> </button>
+                            </div>
+                        </div>
+
+
                     </div>
-                        <button className="btn btn-outline-primary" data-toggle="modal"  data-target="#ajoutMode" onClick={handleOpenModalAddMode}><i className="fa fa-plus"></i></button>
-                        <button className="btn btn-outline-primary" data-toggle="modal" data-target="#suppressionMode" onClick={openModalDeleteMode}> <i className="fa fa-minus"></i> </button>
-                        <button className="btn btn-outline-primary" data-toggle="modal" data-target="#modifierMode" onClick={openModalEditMode}> <i className="fa fa-edit"></i> </button>
-                    </div>
-                   
                 </div>
             </div>
         )

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
-import Vitrine from './components/Vitrine';
+import Vitrine from './components/Vitrine/Vitrine';
 import LoginUser from './components/LoginUser/LoginUser';
 import SignInUser from './components/Signin/SignInUser';
 import Homepage from './components/Homepage/Homepage';

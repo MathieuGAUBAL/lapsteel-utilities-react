@@ -10,8 +10,8 @@ class HomePagePart1 extends Component{
                 {homepageNews.map((element, index) => (
                     <div key={index} className="div-news-homepage">
 
-                        <div className="div-titre-news-homepage"><h2 className="titre-news-homepage">{element.subtitle}</h2></div>
-                        <div className="container div-description-news-homepage"><p  className="description-news-homepage">{element.description}</p></div>
+                        <div className="container div-titre-news-homepage"><h2 className="titre-news-homepage text-left">{element.subtitle}</h2></div>
+                        <div className="container div-description-news-homepage"><p  className="description-news-homepage text-left">{element.description}</p></div>
                     </div>
                 ))
                 }

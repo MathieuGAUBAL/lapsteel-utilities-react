@@ -26,7 +26,6 @@ class SectionVideo extends Component{
     getVideos = async() => {
         // obtenir les ressources pour la section video
         let videosArray = await getRessources('videos',0 , 0, REACT_APP_SERVER_ADDRESS_FULL);
-        console.log(videosArray);
         let section_rubrique = [];
         for(let i = 0; i < videosArray.length; i++){
             section_rubrique.push(videosArray[i].rubrique);
@@ -64,9 +63,7 @@ class SectionVideo extends Component{
 
 
     render(){
-        //console.log("MENU : ",this.state.video_select);
-        //console.log("RENDER ARRAY : " ,menuArray);
-        
+
         return(
             <div className="sticky-wrap">
                  {localStorage.getItem('tSoEkCeRnT') ?  "" :  !this.props.isLoggued && <Redirect to="/Login" />}

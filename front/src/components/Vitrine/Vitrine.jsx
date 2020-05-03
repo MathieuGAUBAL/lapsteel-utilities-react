@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import NavBarVitrine from './NavBarVitrine/NavBarVitrine';
-import Footer from './footer/Footer';
+import NavBarVitrine from './../NavBarVitrine/NavBarVitrine';
+import Footer from '../footer/Footer';
 import './Vitrine.css';
+import VitrinePart1 from './VitrinePart1';
 
 class Vitrine extends Component{
 
@@ -10,7 +11,7 @@ class Vitrine extends Component{
         return(
         <div className="sticky-wrap">
             <NavBarVitrine /> 
-            <h1>Vitrine</h1>
+            <VitrinePart1 />
             <div className="sticky-footer">
                 <Footer />
             </div>

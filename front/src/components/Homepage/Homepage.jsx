@@ -26,11 +26,11 @@ class Homepage extends Component{
     handleClickLink = (event) => {
         switch (event.target.id) {
             case '1':
-                console.log("cas 1");
+               
                 this.setState({isRedirectLapsteelator:true});
                 break;
             case '2':
-                console.log("cas 2");
+               
                 this.setState({isRedirectVideo:true});
                 break;
         
@@ -44,7 +44,7 @@ class Homepage extends Component{
     let homepageNewsArray = await getRessources('homepage','homepage-news', 0, REACT_APP_SERVER_ADDRESS_FULL);
     // obtenir les ressources pour la section homepage-news
     let homepageCardArray = await getRessources('homepage','homepage-card',true, REACT_APP_SERVER_ADDRESS_FULL);
-    console.log(homepageCardArray);
+   
     this.setState({
         homepageNews:homepageNewsArray,
         homepageCard:homepageCardArray

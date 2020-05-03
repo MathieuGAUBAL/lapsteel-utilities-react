@@ -18,7 +18,7 @@ const NavBarVitrine = (props) => {
   return (
     <div>
       <Navbar color="dark" light expand="md">
-        <NavbarBrand className="text-light" href="/">LapSteel</NavbarBrand>
+        <NavbarBrand className="text-light" href="/">LapSteelator</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
@@ -29,10 +29,10 @@ const NavBarVitrine = (props) => {
           <NavbarText>
             <Nav className="mr-auto" navbar>
                 <NavItem>
-                <NavLink className="text-light" href="/Login">Login</NavLink>
+                <NavLink className="text-light" href="/Login">Se connecter</NavLink>
                 </NavItem>
                 <NavItem>
-                <NavLink className="text-light" href="/Signin">Sign in</NavLink>
+                <NavLink className="text-light" href="/Signin">Ouvrir un compte</NavLink>
                 </NavItem>
             </Nav>
           </NavbarText>

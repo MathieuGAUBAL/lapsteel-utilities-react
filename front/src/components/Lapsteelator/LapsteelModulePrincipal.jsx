@@ -74,23 +74,23 @@ class LapsteelModulePrincipal extends Component{
         let editIntervalMode = this.state.editIntervalMode.length > 0 ? this.state.editIntervalMode + " " : this.state.editIntervalMode;
         switch (event.target.id) {
           case "0.5T":
-            console.log("0.5T");
+           
             this.setState({editIntervalMode:editIntervalMode + event.target.id})
             break;
     
           case "1T":
-            console.log("1T");
+           
             this.setState({editIntervalMode:editIntervalMode + event.target.id})
             break;
           
           case "1.5T":
-            console.log("1.5T");
+        
             this.setState({editIntervalMode:editIntervalMode + event.target.id})
             break;
     
           case "X":
             let arrayEditIntervalMode = this.state.editIntervalMode.split(" ");
-            let newArrayEditIntervalMode = arrayEditIntervalMode.splice(arrayEditIntervalMode.length -1, 1);
+            arrayEditIntervalMode.splice(arrayEditIntervalMode.length -1, 1);
             this.setState({editIntervalMode:arrayEditIntervalMode.join(" ")})
             break;
         
@@ -101,52 +101,52 @@ class LapsteelModulePrincipal extends Component{
       }
 
     selectTuningModeBtn = (event) => {
-      console.log(event.target.id);
+     
       let inputAccordage = this.state.inputAccordage.length > 0 ? this.state.inputAccordage + " " : this.state.inputAccordage;
       switch (event.target.id) {
         case "C":
-          console.log("C");
+          
           this.setState({inputAccordage:inputAccordage + event.target.id})
           break;
 
         case "D":
-          console.log("D");
+         
           this.setState({inputAccordage:inputAccordage + event.target.id})
           break;
     
         case "E":
-          console.log("E");
+        
           this.setState({inputAccordage:inputAccordage + event.target.id})
           break; 
         
         case "F":
-          console.log("F");
+         
           this.setState({inputAccordage:inputAccordage + event.target.id})
           break; 
 
         case "G":
-          console.log("G");
+         
           this.setState({inputAccordage:inputAccordage + event.target.id})
           break;
           
         case "A":
-          console.log("A");
+         
           this.setState({inputAccordage:inputAccordage + event.target.id})
           break; 
 
         case "B":
-          console.log("B");
+         
           this.setState({inputAccordage:inputAccordage + event.target.id})
           break;
 
         case "#":
-          console.log("#");
+        
           this.setState({inputAccordage:inputAccordage + event.target.id})
           break; 
   
         case "X":
           let arrayInputAccordage = this.state.inputAccordage.split(" ");
-          let newArrayInputAccordage = arrayInputAccordage.splice(arrayInputAccordage.length -1, 1);
+          arrayInputAccordage.splice(arrayInputAccordage.length -1, 1);
           this.setState({inputAccordage:arrayInputAccordage.join(" ")})
           break;
       
@@ -163,7 +163,7 @@ class LapsteelModulePrincipal extends Component{
                 this.setState({inputAccordage:event.target.value});
                 break;
             case 'input-tonique-tonique':
-                console.log(event.target.value);
+             
                 this.setState({inputTonique:event.target.value});
                 break;
             case 'input-interval-mode':
@@ -202,7 +202,7 @@ class LapsteelModulePrincipal extends Component{
                 for(let i = 0; i < this.state.localStorageArray.length; i++){
                     if(this.state.localStorageArray[i].hasOwnProperty(this.state.selectedDeleteMode)){
                       for(let j in this.state.localStorageArray){
-                        if(j != i){
+                        if(j !== i){
                           newObj.push(this.state.localStorageArray[j]);
                         }
                       }
@@ -234,16 +234,12 @@ class LapsteelModulePrincipal extends Component{
       let nomModificationMode = this.state.editNameMode.trim();
       let intervalModificationMode = this.state.editIntervalMode.toUpperCase().trim();
   
-      let modeSelection = document.getElementById('interval-mode-list-modification');
-  
-      
-  
       //boucle qui servira a savoir s'il exite des doublons avec nomModificationMode et le data.localStorageArray
       //si true alors pas de modification du nom
       for(let i = 0; i < this.state.localStorageArray.length; i++){
         if(this.state.localStorageArray[i].hasOwnProperty(nomModificationMode)){
           for(let j in this.state.localStorageArray){
-            if(j == i){
+            if(j === i){
               sameName = true;
             }
           }
@@ -277,10 +273,9 @@ class LapsteelModulePrincipal extends Component{
               array.push(localStorageArray[i]);
             }
           }
-          console.log(array);
+          
           this.setState({localStorageArray:array})
-          //data.localStorageArray = array;
-          //console.log(data.localStorageArray)
+
           window.localStorage.setItem('objetAjoutMode', JSON.stringify([...array]));
           this.setState({editNameMode:"", editIntervalMode:""});
           $('.alert-rename-modeAjout-mode').show();

@@ -13,13 +13,13 @@ class HomePagePart2 extends Component {
                 <div className="card-deck">
                     {homepageCard.map((element, index) => (
                         <div key={index} className="card">
-                            <img className="card-img-top" src={element.url} alt={element.alt}/>
+                           {/*  <img className="card-img-top" src={element.url} alt={element.alt}/> */}
                             <div className="card-body">
                                 <h5 className="card-title">{element.title}</h5>
                                 <p className="card-text">{element.description}</p>
                             </div>
                             <div className="card-footer">
-                                <button id={element.image_id} className="btn btn-primary" onClick={ handleClickLink }>Go somewhere</button>
+                                <button id={element.image_id} className="btn btn-primary" onClick={ handleClickLink }>Accéder à l'application</button>
                             </div>
                         </div>   
                     ))}

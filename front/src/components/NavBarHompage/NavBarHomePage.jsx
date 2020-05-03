@@ -25,7 +25,7 @@ const NavBarHomePage = (props) => {
   return (
     <div className="mb-5">
       <Navbar color="dark" light expand="md">
-        <NavbarBrand className="text-light" href="/">LapSteel</NavbarBrand>
+        <NavbarBrand className="text-light" href="/">LapSteelator</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
@@ -36,13 +36,13 @@ const NavBarHomePage = (props) => {
           <NavbarText>
             <Nav className="mr-auto" navbar>
                 <NavItem>
-                <NavLink className="text-light" href="/Home">home</NavLink>
+                <NavLink className="text-light" href="/Home">accueil</NavLink>
                 </NavItem>
                 <NavItem>
-                <NavLink className="text-light" href="/profile">profile</NavLink>
+                <NavLink className="text-light" href="/profile">mon profil</NavLink>
                 </NavItem>
                 <NavItem>
-                <NavLink className="logout text-light" href="/" onClick={logout}>logout</NavLink>
+                <NavLink className="logout text-light" href="/" onClick={logout}>se déconnecter</NavLink>
                 </NavItem>
             </Nav>
           </NavbarText>
