@@ -25,18 +25,6 @@ const NavBarVitrine = (props) => {
             <NavItem><NavLink></NavLink></NavItem>
             <NavItem><NavLink></NavLink></NavItem>
           </Nav>
-
-          <NavbarText>
-            <Nav className="mr-auto" navbar>
-                <NavItem>
-                <NavLink className="text-light" href="/Login">Se connecter</NavLink>
-                </NavItem>
-                <NavItem>
-                <NavLink className="text-light" href="/Signin">Ouvrir un compte</NavLink>
-                </NavItem>
-            </Nav>
-          </NavbarText>
-
         </Collapse>
       </Navbar>
     </div>

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+
 import {
   Collapse,
   Navbar,
@@ -17,15 +19,13 @@ const NavBarHomePage = (props) => {
 
   const toggle = () => setIsOpen(!isOpen);
 
-  const logout = () => {
-    localStorage.removeItem("tSoEkCeRnT");
-  }
 
 
   return (
     <div className="mb-5">
-      <Navbar color="dark" light expand="md">
-        <NavbarBrand className="text-light" href="/">LapSteelator</NavbarBrand>
+      <Navbar color="white" light expand="md">
+        <NavbarBrand className="text-light"></NavbarBrand>
+        <Link className="text-dark" to="/"><h2>LapSteelator</h2></Link>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
@@ -36,13 +36,7 @@ const NavBarHomePage = (props) => {
           <NavbarText>
             <Nav className="mr-auto" navbar>
                 <NavItem>
-                <NavLink className="text-light" href="/Home">accueil</NavLink>
-                </NavItem>
-                <NavItem>
-                <NavLink className="text-light" href="/profile">mon profil</NavLink>
-                </NavItem>
-                <NavItem>
-                <NavLink className="logout text-light" href="/" onClick={logout}>se déconnecter</NavLink>
+                  <Link className="text-dark" to="/Home">Accueil</Link>
                 </NavItem>
             </Nav>
           </NavbarText>

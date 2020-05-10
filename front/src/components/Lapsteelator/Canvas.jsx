@@ -52,7 +52,7 @@ let fd = new Image();
 let g = new Image();
 let gd = new Image();
 let a = new Image();
-let ad = new Image();
+let adi = new Image();
 let b = new Image();
 let vide = new Image();
 
@@ -66,7 +66,7 @@ fd.src = '/images/image-note-active/Fd.gif';
 g.src = '/images/image-note-active/G.gif';
 gd.src = '/images/image-note-active/Gd.gif';
 a.src = '/images/image-note-active/A.gif';
-ad.src = '/images/image-note-active/Ad.gif';
+adi.src = '/images/image-note-active/Adi.gif';
 b.src = '/images/image-note-active/B.gif';
 vide.src = '/images/image-note-active/vide.gif';
 
@@ -172,7 +172,8 @@ class Canvas extends Component{
         successAddMode:false,
         localAddMode:[],
         saveLocalStorage:[],
-        localStorageArray:[]
+        localStorageArray:[],
+        numModeState:[]
       }
   }
 
@@ -239,13 +240,16 @@ class Canvas extends Component{
     }
     
   constructionGammeMode(modeNum, gammeTonique){
+    //console.log(modeNum);
+    //console.log(gammeTonique)
     let arr = [];
     arr.push(gammeTonique[0]);
     let count = 0;
-    for(let i = 0; i < modeNum.length - 1; i++){
+    for(let i = 0; i <= modeNum.length - 1; i++){
       arr.push(gammeTonique[modeNum[i] + count]);
       count += modeNum[i];
     }
+
     return arr;
   }
 
@@ -281,6 +285,7 @@ class Canvas extends Component{
       data.accordage = this.conversion_accordage(inputIsVerified_accordage); 
       data.tonique = inputIsVerified_tonique;
       data.modeNum = this.modeCompteur(inputMode);
+      this.setState({numModeState:data.modeNum})
       data.gammeTonique = this.construction_gamme_tonique(data.tonique);
       data.gammeMode = this.constructionGammeMode(data.modeNum, data.gammeTonique);
       // alimente l'objet data.accordage
@@ -358,7 +363,7 @@ class Canvas extends Component{
                     if(data.tonique ==='A#'){
                       line.push(ad_tonique);
                     }else{
-                      line.push(ad);
+                      line.push(adi);
                     }
                   }else if(data.notesFinales[i][j] === 'B'){
                     if(data.tonique ==='B'){
@@ -378,6 +383,8 @@ class Canvas extends Component{
       }
    
      this.init();
+
+ 
  
     }else{
       $('.alert-saisie-accordage').show();
@@ -499,8 +506,9 @@ class Canvas extends Component{
       data.verifySameAddMode.push(obj);
       this.setState(state => {const localAddMode = [...state.localAddMode, obj];return {localAddMode}});
 
+      this.setState({ajoutInterval:"",ajoutMode:""});
       $('.alert-modeAjout-mode').show();
-      setTimeout(() => {$('.alert-modeAjout-mode').hide();this.setState({ajoutInterval:"",ajoutMode:"",successAddMode:true})}, 3000);
+      setTimeout(() => {$('.alert-modeAjout-mode').hide();this.setState({successAddMode:true})}, 3000);
 
     }else{
       $('.alert-doublon-modeAjout-mode').show();this.setState({ajoutInterval:"",ajoutMode:""})
@@ -519,19 +527,22 @@ class Canvas extends Component{
     //saisie du champs interval
     let intervalAjoutMode = this.state.ajoutInterval;
     intervalAjoutMode = intervalAjoutMode.toUpperCase();
-    //si le local storage possede au moins un mode
+
 
     if(nomAjoutMode !== "" && intervalAjoutMode !== ""){
+
+      //si le local Storage possede au moins un mode
       if(this.hasDataInLocalStorage().length > 0){
         this.isTheSameAddMode({[`${nomAjoutMode}`]:intervalAjoutMode});
-        this.setState({ajoutInterval:"",ajoutMode:""});
-        
+       
+      // //si le local Storage ne possede rien
       }else if(data.verifySameAddMode.length < 1){
           data.verifySameAddMode.push({[`${nomAjoutMode}`]:intervalAjoutMode});
           this.setState(state => {const localAddMode = [...state.localAddMode, {[`${nomAjoutMode}`]:intervalAjoutMode}];return {localAddMode}});
+          this.setState({ajoutInterval:"",ajoutMode:""});
           $('.alert-modeAjout-mode').show();
-          this.setState({ajoutInterval:"",ajoutMode:""})
-          setTimeout(() => {$('.alert-modeAjout-mode').hide();this.setState({successAddMode:false,ajoutInterval:"",ajoutMode:""})}, 3000);
+          
+          setTimeout(() => {$('.alert-modeAjout-mode').hide();}, 3000);
     
       }else{this.isTheSameAddMode({[`${nomAjoutMode}`]:intervalAjoutMode});}
     }else{
@@ -543,51 +554,6 @@ class Canvas extends Component{
 
   }
 
-
-
-
-   deleteMode = () => {
-    
-     const { selectedModeDelete } = this.state;
-     this.setState(state => {
-       const localAddMode = [...state.localAddMode, selectedModeDelete];
-
-       return {
-         localAddMode
-       }
-     });
-    if(this.hasDataInLocalStorage().length > 0){
-  
-      let newObj = [];
-      for(let i = 0; i < data.localStorageArray.length; i++){
-        if(data.localStorageArray[i].hasOwnProperty(selectedModeDelete)){
-          for(let j in data.localStorageArray){
-            if(j !== i){
-              newObj.push(data.localStorageArray[j]);
-            }
-          }
-        }
-      }
-      
-  
-      data.localStorageArray = newObj;
-      window.localStorage.setItem('objetAjoutMode', JSON.stringify([...data.localStorageArray]));
-  
-      //message : Le mode a été supprimé.
-      $('.alert-suppression-mode').show();
-      setTimeout( () => {
-        $('.alert-suppression-mode').hide();
-      },3000);  
-  
-    }else{
-      //message d'erreur : rien à supprimer.
-      $('.alert-error-suppression-mode').show();
-      setTimeout( () => {
-        $('.alert-error-suppression-mode').hide();
-      },3000); 
-  
-    }
-  }
 
 
   hasDataInLocalStorage = () => {

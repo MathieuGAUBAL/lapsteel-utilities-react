@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import NavBarHomePage from '../NavBarHompage/NavBarHomePage';
-import { Redirect } from 'react-router-dom';
 import Footer from '../footer/Footer';
 import getRessources from '../../utils/getRessources';
-//import DisplayVideo from './DisplayVideo';
+
 
 const REACT_APP_SERVER_ADDRESS_FULL = process.env.REACT_APP_SERVER_ADDRESS_FULL;
 
@@ -66,8 +65,8 @@ class SectionVideo extends Component{
 
         return(
             <div className="sticky-wrap">
-                 {localStorage.getItem('tSoEkCeRnT') ?  "" :  !this.props.isLoggued && <Redirect to="/Login" />}
-                 <NavBarHomePage/>
+               
+                <NavBarHomePage/>
                 <h2>SECTION VIDEO</h2>
                 <div className="container menu-deroulant-video">
                     <select className="form-control form-control-sm custom-select-video" onChange={this.handleClickMenuSelected}>
