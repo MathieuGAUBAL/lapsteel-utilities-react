@@ -5,7 +5,6 @@ import {
   Collapse,
   Navbar,
   NavbarToggler,
-  NavbarBrand,
   Nav,
   NavItem,
   NavLink,
@@ -23,9 +22,12 @@ const NavBarHomePage = (props) => {
 
   return (
     <div className="mb-5">
-      <Navbar color="white" light expand="md">
-        <NavbarBrand className="text-light"></NavbarBrand>
-        <Link className="text-dark" to="/"><h2>LapSteelator</h2></Link>
+      <Navbar className="navbar navbar-expand-lg navbar-dark bg-dark"  expand="md">
+        
+        <Link className="text-light" to="/" style={{ textDecoration: "none" }}>
+          <img src="/images/lapsteelManV4.png" alt="logo lapsteelator" style={{ width: "100px" }}/>
+        </Link>
+
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
@@ -35,9 +37,9 @@ const NavBarHomePage = (props) => {
 
           <NavbarText>
             <Nav className="mr-auto" navbar>
-                <NavItem>
-                  <Link className="text-dark" to="/Home">Accueil</Link>
-                </NavItem>
+              <NavItem>
+                <Link className="text-light" to="/Home" style={{ textDecoration: "none" }}>Accueil</Link>
+              </NavItem>
             </Nav>
           </NavbarText>
 
