@@ -56,7 +56,7 @@ class Homepage extends Component{
 
         return(
             <div className="sticky-wrap">
-                {localStorage.getItem('tSoEkCeRnT') ?  "" :  !this.props.isLoggued && <Redirect to="/Login" />}
+               
                 <NavBarHomePage />
                 <HomePagePart1 homepageNews={this.state.homepageNews}/>
                 <HomePagePart2 homepageCard={this.state.homepageCard} handleClickLink={this.handleClickLink}/>

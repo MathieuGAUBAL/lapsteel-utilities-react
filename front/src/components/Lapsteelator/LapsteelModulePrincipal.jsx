@@ -197,12 +197,16 @@ class LapsteelModulePrincipal extends Component{
 
     deleteMode = () => {
         if(this.state.selectedDeleteMode){
+    
             let newObj = [];
             if(this.state.localStorageArray !== null){
                 for(let i = 0; i < this.state.localStorageArray.length; i++){
+                   
                     if(this.state.localStorageArray[i].hasOwnProperty(this.state.selectedDeleteMode)){
+    
                       for(let j in this.state.localStorageArray){
-                        if(j !== i){
+  
+                        if(this.state.localStorageArray[j] !== this.state.localStorageArray[i] ){
                           newObj.push(this.state.localStorageArray[j]);
                         }
                       }

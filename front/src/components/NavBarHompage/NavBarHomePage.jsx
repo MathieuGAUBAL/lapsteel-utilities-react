@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+
 import {
   Collapse,
   Navbar,
   NavbarToggler,
-  NavbarBrand,
   Nav,
   NavItem,
   NavLink,
@@ -17,15 +18,16 @@ const NavBarHomePage = (props) => {
 
   const toggle = () => setIsOpen(!isOpen);
 
-  const logout = () => {
-    localStorage.removeItem("tSoEkCeRnT");
-  }
 
 
   return (
     <div className="mb-5">
-      <Navbar color="dark" light expand="md">
-        <NavbarBrand className="text-light" href="/">LapSteelator</NavbarBrand>
+      <Navbar className="navbar navbar-expand-lg navbar-dark bg-dark"  expand="md">
+        
+        <Link className="text-light" to="/" style={{ textDecoration: "none" }}>
+          <img src="/images/lapsteelManV4.png" alt="logo lapsteelator" style={{ width: "100px" }}/>
+        </Link>
+
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
@@ -35,15 +37,9 @@ const NavBarHomePage = (props) => {
 
           <NavbarText>
             <Nav className="mr-auto" navbar>
-                <NavItem>
-                <NavLink className="text-light" href="/Home">accueil</NavLink>
-                </NavItem>
-                <NavItem>
-                <NavLink className="text-light" href="/profile">mon profil</NavLink>
-                </NavItem>
-                <NavItem>
-                <NavLink className="logout text-light" href="/" onClick={logout}>se déconnecter</NavLink>
-                </NavItem>
+              <NavItem>
+                <Link className="text-light" to="/Home" style={{ textDecoration: "none" }}>Accueil</Link>
+              </NavItem>
             </Nav>
           </NavbarText>
 
