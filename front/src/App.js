@@ -9,7 +9,7 @@ import Lapsteelator from './components/Lapsteelator/Lapsteelator';
 import HomeAdmin from './components/adminFront/HomeAdmin';
 import LoginAdmin from './components/LoginAdmin/LoginAdmin';
 import VitrineAdmin from './components/adminFront/VitrineAdmin';
-import HomepageAdmin from './components/adminFront/HomepageAdmin';
+import HomepageAdmin from './components/adminFront/homepageAdmin/HomepageAdmin';
 import FooterAdmin from './components/adminFront/FooterAdmin';
 
 const REACT_APP_SERVER_ADDRESS_FULL = process.env.REACT_APP_SERVER_ADDRESS_FULL;

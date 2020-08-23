@@ -4,6 +4,8 @@ import NavBarHomePage from '../NavBarHompage/NavBarHomePage';
 import Footer from '../footer/Footer';
 const REACT_APP_SERVER_ADDRESS_FULL = process.env.REACT_APP_SERVER_ADDRESS_FULL;
 
+console.log(REACT_APP_SERVER_ADDRESS_FULL);
+
 class LoginAdmin extends Component {
     constructor(props) {
         super(props);
@@ -45,7 +47,7 @@ class LoginAdmin extends Component {
         })
             .then(response => response.json())
             .then(response => {
-                window.localStorage.setItem('tAoDkMeInN', JSON.stringify(response.token));
+                localStorage.setItem('tAoDkMeInN', response.token);
                 this.setState({ isLoggued: true });
                 this.props.adminIsActived(true);
                

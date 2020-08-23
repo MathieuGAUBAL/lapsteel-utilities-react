@@ -24,7 +24,7 @@ router.post('/login@admin', (req, res) => {
                         if(err){
                             res.status(501).send('JWT error : ');
                         }else{
-                          
+                            console.log(token);
                             res.status(200).json({ token });
                         }
                     });

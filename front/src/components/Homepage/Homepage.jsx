@@ -12,6 +12,7 @@ class Homepage extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            titleNewsSection:"",
             homepageNews: [],
             homepageCard: [],
             isRedirectVideo: false,
@@ -40,13 +41,36 @@ class Homepage extends Component {
     getHomepageNews = () => {
       
 
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage?section=homepage-news&image_id=0", {
+        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage?section=homepage-news-section&image_id=0", {
             method: "GET",
             json: true
         })
             .then(response => response.json())
             .then(response => {
-                this.setState({ homepageNews: response });
+                let array = [];
+                if (response.length > 0) {
+                    for (let object of response) {
+                        let descriptionParse = JSON.parse(object.description);
+                        object.description = descriptionParse;
+                        array.push(object);
+                    }
+                }
+
+                this.setState({ homepageNews: array })
+            })
+            .catch(error => console.log(error));
+    }
+
+    getHomepageNewsTitle = () => {
+      
+
+        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage?section=title-news-section&image_id=0", {
+            method: "GET",
+            json: true
+        })
+            .then(response => response.json())
+            .then(response => {
+                this.setState({ titleNewsSection: response[0].title });
             })
             .catch(error => console.log(error));
     }
@@ -67,6 +91,7 @@ class Homepage extends Component {
     componentDidMount = () => {
         this.getHomepageNews();
         this.getHomepageCard();
+        this.getHomepageNewsTitle();
     }
 
     componentWillUnmount = () => {
@@ -82,7 +107,7 @@ class Homepage extends Component {
             <div className="sticky-wrap">
 
                 <NavBarHomePage />
-                <HomePagePart1 homepageNews={this.state.homepageNews} />
+                <HomePagePart1 homepageNews={this.state.homepageNews} titleNewsSection={this.state.titleNewsSection}/>
                 <HomePagePart2 homepageCard={this.state.homepageCard} {...this.props} handleClickLink={this.handleClickLink} />
                 {this.state.isRedirectLapsteelator ? <Redirect to='/lapsteelator' /> : ""}
                 {this.state.isRedirectVideo ? <Redirect to='/videos' /> : ""}

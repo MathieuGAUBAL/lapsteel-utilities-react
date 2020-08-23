@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 import './HomeAdmin.css';
 import VitrineAdmin from './VitrineAdmin';
 import FooterAdmin from './FooterAdmin';
-import HomepageAdmin from './HomepageAdmin';
+import HomepageAdmin from './homepageAdmin/HomepageAdmin';
 
 class HomeAdmin extends Component {
     constructor(props) {
