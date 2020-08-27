@@ -69,7 +69,7 @@ class NewsAdmin extends Component {
                     }
                 }
 
-                this.setState({ dataNews: array })
+                this.setState({ dataNews: array.reverse() })
             })
 
 
@@ -232,7 +232,7 @@ class NewsAdmin extends Component {
                 <hr></hr>
 
 
-                <div id="div-news">
+                <div id="div-news" className="p-5">
                     <button type="button" className="btn btn-primary mb-3" data-toggle="modal" data-target="#modalAddNewsAdmin">
                         Ajouter une news
                     </button>

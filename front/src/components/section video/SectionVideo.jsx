@@ -60,6 +60,12 @@ class SectionVideo extends Component{
         this.getVideosSelected(event.target.value);
     }
 
+    componentWillUnmount = () => {
+        this.setState = (state, callback) => {
+            return;
+        }
+    }
+
 
     render(){
 

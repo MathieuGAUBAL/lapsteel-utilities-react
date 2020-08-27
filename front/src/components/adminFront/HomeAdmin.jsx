@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import './HomeAdmin.css';
 import VitrineAdmin from './VitrineAdmin';
-import FooterAdmin from './FooterAdmin';
+import FooterAdmin from './footerAdmin/FooterAdmin';
 import HomepageAdmin from './homepageAdmin/HomepageAdmin';
 
 class HomeAdmin extends Component {

@@ -42,9 +42,9 @@ class InputMode extends Component{
                             <button type="button" value="lapsteel" className="btn btn-primary" onClick={handleChangeModeFrette}>Lapsteel</button>
 
                             <div className="btn-group-panel">
-                                <button className="btn btn-outline-primary ml-1 mr-1" data-toggle="modal"  data-target="#ajoutMode" onClick={handleOpenModalAddMode}><i className="fa fa-plus"></i></button>
-                                <button className="btn btn-outline-primary mr-1" data-toggle="modal" data-target="#suppressionMode" onClick={openModalDeleteMode}> <i className="fa fa-minus"></i> </button>
-                                <button className="btn btn-outline-primary mr-1" data-toggle="modal" data-target="#modifierMode" onClick={openModalEditMode}> <i className="fa fa-edit"></i> </button>
+                                <button className="btn btn-outline-primary ml-1 mr-1" data-toggle="modal" aria-label="ajout-mode" data-target="#ajoutMode" onClick={handleOpenModalAddMode}><i className="fa fa-plus"></i></button>
+                                <button className="btn btn-outline-primary mr-1" data-toggle="modal" aria-label="delete-mode" data-target="#suppressionMode" onClick={openModalDeleteMode}> <i className="fa fa-minus"></i> </button>
+                                <button className="btn btn-outline-primary mr-1" data-toggle="modal" aria-label="edit-mode" data-target="#modifierMode" onClick={openModalEditMode}> <i className="fa fa-edit"></i> </button>
                             </div>
                         </div>
 

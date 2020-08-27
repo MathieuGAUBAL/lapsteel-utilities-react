@@ -1,4 +1,4 @@
-const request = require('supertest');
+/* const request = require('supertest');
 const app = require('../app');
 const uri = '/api/user';
 const uri_login_user = '/api/login/user';
@@ -181,4 +181,4 @@ describe('CRUD route user', () => {
             }
         })
     });
-});
+}); */

@@ -4,7 +4,6 @@ import NavBarHomePage from '../NavBarHompage/NavBarHomePage';
 import Footer from '../footer/Footer';
 const REACT_APP_SERVER_ADDRESS_FULL = process.env.REACT_APP_SERVER_ADDRESS_FULL;
 
-console.log(REACT_APP_SERVER_ADDRESS_FULL);
 
 class LoginAdmin extends Component {
     constructor(props) {
@@ -38,7 +37,7 @@ class LoginAdmin extends Component {
             "password": this.state.password
         };
 
-        let url = "http://localhost:5000/api/login@admin";
+        let url = REACT_APP_SERVER_ADDRESS_FULL + "/api/login@admin";
         fetch(url, {
             method: "POST",
             headers: new Headers({ 'Accept': 'application/json', 'Content-type': 'application/json' }),

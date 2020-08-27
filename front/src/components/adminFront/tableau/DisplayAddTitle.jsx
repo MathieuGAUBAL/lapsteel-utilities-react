@@ -20,6 +20,7 @@ class DisplayAddTitle extends Component {
                             <th scope="col">#</th>
                             <th scope="col">titre</th>
                             <th scope="col">modifier</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -33,6 +34,7 @@ class DisplayAddTitle extends Component {
                                         <button className="btn btn-warning btn-sm" type="button" data-toggle="modal" data-target="#modalEditTitleNewsAdmin">modifier</button>
                                     }
                                 </td>
+
                             </tr>}
                     </tbody>
                 </table>

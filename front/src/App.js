@@ -10,43 +10,17 @@ import HomeAdmin from './components/adminFront/HomeAdmin';
 import LoginAdmin from './components/LoginAdmin/LoginAdmin';
 import VitrineAdmin from './components/adminFront/VitrineAdmin';
 import HomepageAdmin from './components/adminFront/homepageAdmin/HomepageAdmin';
-import FooterAdmin from './components/adminFront/FooterAdmin';
-
-const REACT_APP_SERVER_ADDRESS_FULL = process.env.REACT_APP_SERVER_ADDRESS_FULL;
+import FooterAdmin from './components/adminFront/footerAdmin/FooterAdmin';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      routeVideoIsActived: false,
       tokenIsLoad: false
     }
 
   }
 
-  getDateHomepageCard = () => {
-    fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage/homepage-card?section=homepage-card", {
-      method: "GET",
-      json: true
-    })
-      .then(response => response.json()
-        .then(response => {
-
-          let routeVideoIsActived;
-          for (let object of response) {
-            if (object.title === "Videos") {
-              if (object.isActived === 0) {
-                routeVideoIsActived = false;
-              } else {
-                routeVideoIsActived = true;
-              }
-
-            }
-          }
-          this.setState({ routeVideoIsActived: routeVideoIsActived });
-        }))
-      .catch(error => console.log(error));
-  }
 
   adminIsActived = (bool) => {
     this.setState({ tokenIsLoad: bool });
@@ -60,16 +34,11 @@ class App extends Component {
   }
 
   componentDidMount = () => {
-    this.getDateHomepageCard();
-
+  
     let adminIsActived = localStorage.getItem('adminActived');
     if (localStorage.getItem('adminActived') !== null) {
       this.setState({ tokenIsLoad: adminIsActived });
     }
-  }
-
-  componentWillUnmount = () => {
-    this.getDateHomepageCard();
   }
 
 
@@ -83,7 +52,7 @@ class App extends Component {
             <Route exact path='/' component={() => <Vitrine />} />
             <Route path='/Home' component={() => <Homepage />} />
             <Route path='/lapsteelator' component={() => <Lapsteelator />} />
-            {this.state.routeVideoIsActived && <Route path='/videos' component={() => <SectionVideo />} />}
+            <Route path='/videos' component={() => <SectionVideo />} />
             <Route path='/login' component={() => <LoginAdmin adminIsActived={this.adminIsActived} />} />
             <Route path='/homeAdmin' component={() => <HomeAdmin signOut={this.signOut} />} />
             {

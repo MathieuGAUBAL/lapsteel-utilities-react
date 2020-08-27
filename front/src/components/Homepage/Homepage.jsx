@@ -24,12 +24,12 @@ class Homepage extends Component {
 
     handleClickLink = (event) => {
         switch (event.target.id) {
-            case '1':
 
+            case '1':
                 this.setState({ isRedirectLapsteelator: true });
                 break;
-            case '2':
 
+            case '2':
                 this.setState({ isRedirectVideo: true });
                 break;
 
@@ -56,7 +56,7 @@ class Homepage extends Component {
                     }
                 }
 
-                this.setState({ homepageNews: array })
+                this.setState({ homepageNews: array.reverse() })
             })
             .catch(error => console.log(error));
     }
@@ -77,7 +77,7 @@ class Homepage extends Component {
 
     getHomepageCard = () => {
       
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage/homepage-card?section=homepage-card", {
+        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage/homepage-card?section=homepage-card-section", {
             method: "GET",
             json: true
         })
