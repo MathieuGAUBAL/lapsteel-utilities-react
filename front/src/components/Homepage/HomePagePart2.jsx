@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+const REACT_APP_SERVER_ADDRESS_FULL = process.env.REACT_APP_SERVER_ADDRESS_FULL;
 
 class HomePagePart2 extends Component {
 
@@ -13,7 +13,7 @@ class HomePagePart2 extends Component {
                 <div className="card-deck">
                     {homepageCard.map((element, index) => (
                         <div key={index} className="card">
-                            <img className="card-img-top" src={element.url} alt={element.alt} style={{width:"20%", marginLeft:"auto", marginRight:"auto"}}/>
+                            <img className="card-img-top" src={REACT_APP_SERVER_ADDRESS_FULL + element.url} alt={element.alt} style={{width:"20%", marginLeft:"auto", marginRight:"auto"}}/>
                             <div className="card-body">
                                 <h5 className="card-title">{element.title}</h5>
                                 <p className="card-text">{element.description}</p>

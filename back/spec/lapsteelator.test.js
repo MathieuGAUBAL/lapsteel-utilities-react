@@ -1,16 +1,37 @@
-/* const request = require('supertest');
+const request = require('supertest');
 const app = require('../app');
 const uri = '/api/lapsteelator';
+const uri_login_admin = '/api/login@admin';
+const admin_email = process.env.ADMIN_EMAIL;
+const admin_password = process.env.ADMIN_PASSWORD;
 
 describe('CRUD route user', () => {
    
     const obj = {
-        id:""
+        id: "",
+        tokenAdmin: "",
+        image_id: null
     }
+
+    //"Récupération du token Admin"
+    beforeAll((done) => {
+        request(app)
+            .post(uri_login_admin)
+            .send({ email: admin_email, password: admin_password })
+            .end((err, res) => {
+                if (err) {
+                    return done(err);
+                } else {
+                    obj.tokenAdmin = res.body.token;
+                    done();
+                }
+            })
+    });
 
     test('devrait retourner status code : 200 (POST) et la propriete url correcte', (done) => {
         request(app)
             .post(uri)
+            .set({ 'authorization': 'Bearer ' + obj.tokenAdmin })
             .send({liste_mode:"mode2:1t 1t 1t,mode3:1.5t 1.5t 1.5t"})
             .end((err, res) => {
                 if(err){
@@ -56,6 +77,7 @@ describe('CRUD route user', () => {
 
         request(app)
             .put(uri + `/${obj.id}`)
+            .set({ 'authorization': 'Bearer ' + obj.tokenAdmin })
             .send({liste_mode:"mode3:1t 1t 1t,mode4:1.5t 1.5t 1.5t"})
             .set('Accept', 'application/json')
             .end((err,res) => {
@@ -74,6 +96,7 @@ describe('CRUD route user', () => {
 
         request(app)
             .delete(uri + `/${obj.id}`)
+            .set({ 'authorization': 'Bearer ' + obj.tokenAdmin })
             .end((err, res) => {
                 if(err){
                     return done (err);
@@ -83,4 +106,4 @@ describe('CRUD route user', () => {
             }
         })
     });
-}); */
+});

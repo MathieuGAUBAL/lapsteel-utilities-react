@@ -3,6 +3,7 @@ const router = express.Router();
 const pool = require('../config.js');
 const bodyParser = require('body-parser');
 const url = "/videos"
+const auth = require('./verifyTokenAdmin');
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({
@@ -12,22 +13,6 @@ router.use(bodyParser.urlencoded({
 router.get(url, (req, res) => {
     pool.getConnection(function (err, connection){
         connection.query(`SELECT * FROM video`, (err, results, fields) => {
-            connection.release();
-            if(err){
-                res.status(200).send(err.message);
-            }else{
-                res.status(200).send(results);
-            }
-            
-        });
-    });
-
-});
-
-router.get(url+'/:selected', (req, res) => {
-    const selected = req.params.selected;
-    pool.getConnection(function (err, connection){
-        connection.query(`SELECT * FROM video WHERE rubrique=?`,[selected], (err, results, fields) => {
             connection.release();
             if(err){
                 res.status(200).send(err.message);
@@ -61,7 +46,25 @@ router.get(url + '/:id', (req, res) => {
 
 });
 
-router.post(url, (req, res) => {
+router.get(url+'/:selected', (req, res) => {
+    const selected = req.params.selected;
+    pool.getConnection(function (err, connection){
+        connection.query(`SELECT * FROM video WHERE rubrique=?`,[selected], (err, results, fields) => {
+            connection.release();
+            if(err){
+                res.status(200).send(err.message);
+            }else{
+                res.status(200).send(results);
+            }
+            
+        });
+    });
+
+});
+
+
+
+router.post(url, auth, (req, res) => {
     pool.getConnection(function (err, connection){
 
         const formData = req.body;
@@ -89,7 +92,7 @@ router.post(url, (req, res) => {
 
 });
 
-router.put(url + '/:id', (req, res) => {
+router.put(url + '/:id',auth, (req, res) => {
     const id = req.params.id;
 
     pool.getConnection(function (err, connection){
@@ -112,7 +115,7 @@ router.put(url + '/:id', (req, res) => {
     });
 });
 
-router.delete(url + '/:id', (req, res) => {
+router.delete(url + '/:id',auth, (req, res) => {
     const id = req.params.id;
     pool.getConnection(function (err, connection){
         connection.query(`SELECT * FROM video WHERE id=?`,[id], (err, results, fields) => {

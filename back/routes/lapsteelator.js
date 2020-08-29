@@ -3,6 +3,7 @@ const router = express.Router();
 const pool = require('../config.js');
 const bodyParser = require('body-parser');
 const url = "/lapsteelator"
+const auth = require('./verifyTokenAdmin');
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({
@@ -40,7 +41,7 @@ router.get(url + '/:id', (req, res) => {
 
 });
 
-router.post(url, (req, res) => {
+router.post(url, auth ,(req, res) => {
     pool.getConnection(function (err, connection){
 
         const formData = req.body;
@@ -66,7 +67,7 @@ router.post(url, (req, res) => {
 
 });
 
-router.put(url + '/:id', (req, res) => {
+router.put(url + '/:id',auth , (req, res) => {
     const id = req.params.id;
 
     pool.getConnection(function (err, connection){
@@ -88,7 +89,7 @@ router.put(url + '/:id', (req, res) => {
     });
 });
 
-router.delete(url + '/:id', (req, res) => {
+router.delete(url + '/:id', auth ,(req, res) => {
     const id = req.params.id;
     pool.getConnection(function (err, connection){
         connection.query(`SELECT * FROM lapsteelator WHERE id=?`,[id], (err, results, fields) => {
@@ -112,7 +113,7 @@ router.delete(url + '/:id', (req, res) => {
 });
 
 //BBOOOOMMMM
-router.delete(url, (req, res) => {
+router.delete(url, auth ,(req, res) => {
         pool.getConnection(function (err, connection){
             connection.query('TRUNCATE TABLE lapsteelator',(err, results, fields) => {
                 connection.release();
