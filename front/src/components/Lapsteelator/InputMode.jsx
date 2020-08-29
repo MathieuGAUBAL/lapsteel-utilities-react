@@ -3,10 +3,6 @@ import React, { Component } from 'react';
 class InputMode extends Component{
 
 
-
-
-
-
     render(){
         const { handleOnChangeInput, handleChangeModeFrette, handleOpenModalAddMode, openModalDeleteMode, localStorageArray, openModalEditMode } = this.props;
         let selectOptionsModeList = [];

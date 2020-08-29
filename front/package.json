@@ -12,6 +12,7 @@
     "dotenv": "^8.2.0",
     "jquery": "^3.5.0",
     "moment": "^2.27.0",
+    "path": "^0.12.7",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-google-login": "^5.1.10",

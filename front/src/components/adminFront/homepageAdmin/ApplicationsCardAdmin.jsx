@@ -19,7 +19,15 @@ class ApplicationsCardAdmin extends Component {
             checkboxActivationApp: false,
 
             editTitleTextCard: "",
-            editTextCard: ""
+            editTextCard: "",
+            isTooHeavy: false,
+            message_too_heavy: "Format non pris en charge ou fichier trop lourd.",
+            isActive: true,
+
+            nameImage: "",
+            urlImage: "",
+            altImage: "",
+            image_id: 0
 
         }
     }
@@ -71,51 +79,90 @@ class ApplicationsCardAdmin extends Component {
         this.getData();
     }
 
+
+
     sendCard = (event) => {
+
+
+        let obj_data_image = {
+            "name": this.state.nameImage,
+            "url": this.state.urlImage,
+            "alt": this.state.altImage,
+
+        }
+
+
+        function optionsPost(obj) {
+
+            var requestOptions = {
+                method: 'POST',
+                headers: new Headers({
+                    'Content-Type': 'application/json',
+                    'authorization': 'Bearer ' + localStorage.getItem('tAoDkMeInN')
+                }),
+                body: JSON.stringify(obj),
+                redirect: 'follow'
+            };
+
+            return requestOptions;
+        }
+
+
+        const data = new FormData()
+        data.append('file', this.state.document)
+
+        const optionsImage = {
+            method: "POST",
+            mode: "cors",
+            credentials: "same-origin",
+            redirect: "follow",
+            referrer: "no-referrer",
+            body: data
+        }
 
         let obj_data = {
             "title": this.state.titleTextCard,
             "subtitle": "",
             "description": this.state.textCard,
             "section": event.target.id,
-            "image_id": 1,
             "isActived": this.state.checkboxActivationApp
         }
 
 
-        var requestOptions = {
-            method: 'POST',
-            headers: new Headers({
-                'Content-Type': 'application/json',
-                'authorization': 'Bearer ' + localStorage.getItem('tAoDkMeInN')
-            }),
-            body: JSON.stringify(obj_data),
-            redirect: 'follow'
-        };
-
-        fetch('http://localhost:5000/api/homepage', requestOptions)
+        fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/image', optionsPost(obj_data_image))
             .then(response => response.json())
-            .then(response => this.getData())
-            .catch(err => console.log({ 'ERROR': err.message }))
+            .then(response => {
+                obj_data.image_id = response[0].id;
+                fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/homepage', optionsPost(obj_data))
+                    .then(response => response.json())
+                    .then(response => this.getData())
+                    .catch(err => console.log({ 'ERROR': err.message }))
+            })
+            .catch(err => console.log({ 'ERROR': err.message }));
 
-        this.setState({ titleTextCard: "", textCard:""});
+
+        this.setState({ titleTextCard: "", textCard: "" });
+
+
+        fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/uploadFile', optionsImage)
+            .then(response => response.json())
+            .then(response => console.log(response))
+            .catch(error => console.log(error))
     }
 
 
     editTextCard = () => {
-        const { arrayId, editTextCard, editTitleTextCard } = this.state;
+        const { arrayId, dataCard, editTextCard, editTitleTextCard } = this.state;
 
 
         let obj_data = {
-            "title": editTitleTextCard ,
+            "title": editTitleTextCard,
             "subtitle": "",
             "description": editTextCard,
             "section": "homepage-card-section",
-            "image_id": 1,
+            "image_id": dataCard[arrayId].image_id,
             "isActived": this.state.checkboxActivationApp ? 1 : 0
         }
-
-        console.log(obj_data);
 
 
         var requestOptions = {
@@ -128,7 +175,7 @@ class ApplicationsCardAdmin extends Component {
             redirect: 'follow'
         };
 
-        fetch('http://localhost:5000/api/homepage/' + this.state.dataCard[arrayId].id, requestOptions)
+        fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/homepage/' + this.state.dataCard[arrayId].id, requestOptions)
             .then(response => response.json())
             .then(response => { this.getData() })
             .catch(err => console.log({ 'ERROR': err.message }))
@@ -137,7 +184,7 @@ class ApplicationsCardAdmin extends Component {
     }
 
     getIdToEditText = (index, event) => {
-        console.log(index);
+
         this.setState({
             currentIdToEditTextCard: this.state.dataCard[index].id,
             editTitleTextCard: this.state.dataCard[index].title,
@@ -157,13 +204,54 @@ class ApplicationsCardAdmin extends Component {
             })
         };
 
-        fetch('http://localhost:5000/api/homepage/' + this.state.dataCard[this.state.arrayId].id, requestOptions)
+        fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/homepage/' + this.state.dataCard[this.state.arrayId].id, requestOptions)
             .then(response => response.json())
             .then(response => { this.getData() })
             .catch(err => console.log({ 'ERROR': err.message }))
     }
 
+    handlerUploadFile = event => {
+        const format_type = [
+            "application/pdf",
+            "application/doc",
+            "application/docx",
+            "application/xls",
+            "application/csv",
+            "application/txt",
+            "application/rtf",
+            "application/html",
+            "application/zip",
+            "audio/mp3",
+            "video/wma",
+            "video/mpg",
+            "video/flv",
+            "video/avi",
+            "image/jpg",
+            "image/jpeg",
+            "image/png",
+            "image/gif"
+        ];
 
+
+        let file = event.target.files[0] ? event.target.files[0] : "";
+
+        if (format_type.includes(event.target.files[0].type) && event.target.files[0].size <= 2000000) {
+            this.setState({
+                document: file,
+                urlImage: "/images/" + file.name,
+                nameImage: file.name,
+                altImage: "image " + file.name
+            });
+        } else {
+            this.setState({ isTooHeavy: true });
+            event.target.value = "";
+            this.setState({ isActive: true });
+        }
+    };
+
+    handleCloseModal = () => {
+        this.setState({ isActive: false, isTooHeavy: false });
+    };
 
     render() {
 
@@ -228,7 +316,19 @@ class ApplicationsCardAdmin extends Component {
                                         />
 
                                     </div>
+
+                                    <div className="custom-file">
+                                        <input type="file" className="custom-file-input" onChange={this.handlerUploadFile} />
+                                        <label className="custom-file-label form-control form-control-sm" htmlFor="inputGroupFile01">Upload une image</label>
+                                    </div>
                                 </form>
+                                {this.state.isTooHeavy && (
+                                    <div className={`${this.state.isActive ? "div-active-error" : "div-desactive-error"}`}>
+                                        <span className="text-alert-error">
+                                            {this.state.message_too_heavy}
+                                        </span> {" "}<button type="button" className="btn btn-danger btn-sm" onClick={this.handleCloseModal}>ok</button>
+                                    </div>
+                                )}
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-secondary" data-dismiss="modal">Fermer</button>
@@ -332,6 +432,8 @@ class ApplicationsCardAdmin extends Component {
                         </div>
                     </div>
                 </div>
+
+
 
             </div>
         )

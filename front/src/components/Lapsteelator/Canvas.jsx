@@ -270,6 +270,7 @@ class Canvas extends Component{
 
   lancer = () => {
 
+   
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     const { inputAccordage, inputTonique, inputMode} = this.props;
@@ -646,6 +647,7 @@ class Canvas extends Component{
     data.verifySameAddMode = [];
   }
 
+
   selectAddModeBtn = (event) => {
     let ajoutInterval = this.state.ajoutInterval.length > 0 ? this.state.ajoutInterval + " " : this.state.ajoutInterval;
     switch (event.target.value) {
@@ -676,7 +678,7 @@ class Canvas extends Component{
 
   }
 
-
+  
 
 
 
@@ -847,10 +849,10 @@ class Canvas extends Component{
                     <input name="nom-modification-mode" id="nom-modification-mode" value={this.props.editNameMode} type='text' required='required' className="form-control" onChange={handleChangeEditMode}/>
                     <div><label className="h5 pt-2">interval du mode</label></div>
                     <div className="btn-group mb-2" role="group" aria-label="Basic example">
-                      <button type="button" className="btn btn-outline-primary" value="0.5T" onClick={selectEditModeBtn}>0.5T</button>
-                      <button type="button" className="btn btn-outline-primary" value="1T" onClick={selectEditModeBtn}>1T</button>
-                      <button type="button" className="btn btn-outline-primary" value="1.5T" onClick={selectEditModeBtn}>1.5T</button>
-                      <button type="button" className="btn btn-outline-danger" value="X" onClick={selectEditModeBtn}>X</button>
+                      <button type="button" className="btn btn-outline-primary" id="0.5T" onClick={selectEditModeBtn}>0.5T</button>
+                      <button type="button" className="btn btn-outline-primary" id="1T" onClick={selectEditModeBtn}>1T</button>
+                      <button type="button" className="btn btn-outline-primary" id="1.5T" onClick={selectEditModeBtn}>1.5T</button>
+                      <button type="button" className="btn btn-outline-danger" id="X" onClick={selectEditModeBtn}>X</button>
                     </div>
                     <input name="interval-modification-mode" id="interval-modification-mode" value={this.props.editIntervalMode} type='text' required='required' className="form-control" onChange={handleChangeEditMode}/>
                   </div>

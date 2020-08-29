@@ -20,8 +20,8 @@ class HomePagePart2 extends Component {
                             </div>
                             <div className="card-footer">
                                 {element.isActived !== 0
-                                    ? <button id={element.image_id} className="btn btn-primary" onClick={handleClickLink}>Accéder à l'application</button>
-                                    : <button id={element.image_id} className={"btn btn-secondary"}>indisponible</button>
+                                    ? <button id={index + 1} className="btn btn-primary" onClick={handleClickLink}>Accéder à l'application</button>
+                                    : <button id={index + 1} className={"btn btn-secondary"}>indisponible</button>
                                 }
                             </div>
                         </div>

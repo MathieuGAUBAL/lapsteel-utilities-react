@@ -29,7 +29,7 @@ class VersionWebSite extends Component {
     }
 
     getData = () => {
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage?section=version-website&image_id=0", {
+        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage?section=version-website", {
             method: "GET",
             json: true,
         })
@@ -50,7 +50,7 @@ class VersionWebSite extends Component {
             "subtitle": "",
             "description": this.state.version,
             "section": "version-website",
-            "image_id": 0,
+            "image_id": null,
             "isActived": 1
         }
 
@@ -65,7 +65,7 @@ class VersionWebSite extends Component {
             redirect: 'follow'
         };
 
-        fetch('http://localhost:5000/api/homepage', requestOptions)
+        fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/homepage', requestOptions)
             .then(response => response.json())
             .then(response => this.getData())
             .catch(err => console.log({ 'ERROR': err.message }))
@@ -92,7 +92,7 @@ class VersionWebSite extends Component {
             redirect: 'follow'
         };
 
-        fetch('http://localhost:5000/api/homepage/' + this.state.data[0].id, requestOptions)
+        fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/homepage/' + this.state.data[0].id, requestOptions)
             .then(response => response.json())
             .then(response => { this.getData() })
             .catch(err => console.log({ 'ERROR': err.message }))
@@ -109,7 +109,7 @@ class VersionWebSite extends Component {
             })
         };
 
-        fetch('http://localhost:5000/api/homepage/' + this.state.currentIdToEditTextNews, requestOptions)
+        fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/homepage/' + this.state.currentIdToEditTextNews, requestOptions)
             .then(response => response.json())
             .then(response => { this.getData() })
             .catch(err => console.log({ 'ERROR': err.message }))

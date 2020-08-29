@@ -26,7 +26,7 @@ router.get(url + '/all', (req, res) => {
 
 router.get(url, (req, res) => {
     pool.getConnection(function (err, connection) {
-        connection.query(`SELECT * FROM homepage WHERE section=? AND image_id=0`, [req.query.section], (err, results, fields) => {
+        connection.query(`SELECT * FROM homepage WHERE section=?`, [req.query.section], (err, results, fields) => {
             connection.release();
             if (err) {
                 res.status(501).send(err.message);
@@ -41,7 +41,7 @@ router.get(url, (req, res) => {
 
 router.get(url + '/homepage-card', (req, res) => {
     pool.getConnection(function (err, connection) {
-        connection.query(`SELECT i.name, i.url, i.alt, h.image_id, h.id, h.title, h.subtitle, h.description, h.isActived FROM homepage AS h JOIN image AS i ON h.image_id = i.homepage_id WHERE h.section=?`,
+        connection.query(`SELECT i.name, i.url, i.alt, h.image_id, h.id, h.title, h.subtitle, h.description, h.isActived FROM homepage AS h JOIN image AS i ON h.image_id = i.id WHERE h.section=?`,
             [req.query.section], (err, results, fields) => {
                 connection.release();
                 if (err) {
@@ -74,7 +74,7 @@ router.get(url + "/:id", (req, res) => {
 
 router.post(url, authAdmin, (req, res) => {
     pool.getConnection(function (err, connection) {
-        console.log(req.body);
+    
         const formData = req.body;
         connection.query(`INSERT INTO homepage (title, subtitle, description, section, image_id, isActived) VALUES (?,?,?,?,?,?)`,
             [formData.title, formData.subtitle, formData.description, formData.section, formData.image_id, formData.isActived], (err, results, fields) => {

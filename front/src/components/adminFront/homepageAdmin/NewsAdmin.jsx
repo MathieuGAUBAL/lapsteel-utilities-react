@@ -53,7 +53,7 @@ class NewsAdmin extends Component {
     }
 
     getData = () => {
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage?section=homepage-news-section&image_id=0", {
+        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage?section=homepage-news-section", {
             method: "GET",
             json: true,
         })
@@ -75,7 +75,7 @@ class NewsAdmin extends Component {
 
             .catch(error => console.log(error))
 
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage?section=title-news-section&image_id=0", {
+        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage?section=title-news-section", {
             method: "GET",
             json: true,
         })
@@ -101,7 +101,7 @@ class NewsAdmin extends Component {
             "subtitle": this.state.titleNews === "" ? this.state.titleTextNews : "",
             "description": this.state.titleNews === "" ? JSON.stringify(objDescriptionNews) : "",
             "section": event.target.id,
-            "image_id": 0,
+            "image_id": null,
             "isActived": 1
         }
 

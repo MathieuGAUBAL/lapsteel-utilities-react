@@ -4,13 +4,6 @@ import VersionWebSite from './VersionWebSite';
 
 
 class FooterAdmin extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-        }
-    }
-
-
 
     render() {
         return (
