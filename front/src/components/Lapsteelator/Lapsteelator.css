@@ -23,3 +23,8 @@ html, body{
 .display-mode-class{
     color:#646464;
 }
+
+.btn-primary{
+    background-color: #18418B!important;
+    border-color:  #18418B!important;
+}

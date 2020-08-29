@@ -9,7 +9,6 @@ const dotenv = require('dotenv').config();
 router.post('/login@admin', (req, res) => {
     const user = req.body;
 
-
     const sql = 'SELECT * FROM admin WHERE email=?';
     pool.getConnection(function (err, connection){
         connection.query(sql, [req.body.email], (error, results, fields) => {
@@ -25,7 +24,6 @@ router.post('/login@admin', (req, res) => {
                         if(err){
                             res.status(501).send('JWT error : ');
                         }else{
-                          
                             res.status(200).json({ token });
                         }
                     });

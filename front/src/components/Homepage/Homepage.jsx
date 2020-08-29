@@ -2,64 +2,114 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import NavBarHomePage from '../NavBarHompage/NavBarHomePage';
 import HomePagePart1 from './HomePagePart1';
-import getRessources from '../../utils/getRessources';
 import HomePagePart2 from './HomePagePart2';
 import Footer from '../footer/Footer';
 
 
 const REACT_APP_SERVER_ADDRESS_FULL = process.env.REACT_APP_SERVER_ADDRESS_FULL;
 
-class Homepage extends Component{
-    constructor(props){
+class Homepage extends Component {
+    constructor(props) {
         super(props);
         this.state = {
-            homepageNews:[],
-            homepageCard:[],
-            isRedirectVideo:false,
-            isRedirectLapsteelator:false,
-
-
+            titleNewsSection:"",
+            homepageNews: [],
+            homepageCard: [],
+            isRedirectVideo: false,
+            isRedirectLapsteelator: false,
         }
+
     }
 
 
     handleClickLink = (event) => {
+        console.log(event.target.id);
         switch (event.target.id) {
+
             case '1':
-               
-                this.setState({isRedirectLapsteelator:true});
+                this.setState({ isRedirectLapsteelator: true });
                 break;
+
             case '2':
-               
-                this.setState({isRedirectVideo:true});
+                this.setState({ isRedirectVideo: true });
                 break;
-        
+
             default:
                 break;
         }
     }
 
-    componentDidMount = async () => {
-    // obtenir les ressources pour la section homepage-news
-    let homepageNewsArray = await getRessources('homepage','homepage-news', 0, REACT_APP_SERVER_ADDRESS_FULL);
-    // obtenir les ressources pour la section homepage-news
-    let homepageCardArray = await getRessources('homepage','homepage-card',true, REACT_APP_SERVER_ADDRESS_FULL);
-   
-    this.setState({
-        homepageNews:homepageNewsArray,
-        homepageCard:homepageCardArray
-    });
+    getHomepageNews = () => {
+      
 
+        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage?section=homepage-news-section&image_id=0", {
+            method: "GET",
+            json: true
+        })
+            .then(response => response.json())
+            .then(response => {
+                let array = [];
+                if (response.length > 0) {
+                    for (let object of response) {
+                        let descriptionParse = JSON.parse(object.description);
+                        object.description = descriptionParse;
+                        array.push(object);
+                    }
+                }
+
+                this.setState({ homepageNews: array.reverse() })
+            })
+            .catch(error => console.log(error));
     }
 
-    render(){
+    getHomepageNewsTitle = () => {
+      
 
-        return(
+        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage?section=title-news-section&image_id=0", {
+            method: "GET",
+            json: true
+        })
+            .then(response => response.json())
+            .then(response => {
+                this.setState({ titleNewsSection: response[0].title });
+            })
+            .catch(error => console.log(error));
+    }
+
+    getHomepageCard = () => {
+      
+        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage/homepage-card?section=homepage-card-section", {
+            method: "GET",
+            json: true
+        })
+            .then(response => response.json())
+            .then(response => {
+                this.setState({ homepageCard: response });
+            })
+            .catch(error => console.log(error));
+    }
+
+    componentDidMount = () => {
+        this.getHomepageNews();
+        this.getHomepageCard();
+        this.getHomepageNewsTitle();
+    }
+
+    componentWillUnmount = () => {
+        this.setState = (state,callback)=>{
+            return;
+        };
+    }
+
+
+    render() {
+
+        return (
             <div className="sticky-wrap">
-               
+
                 <NavBarHomePage />
-                <HomePagePart1 homepageNews={this.state.homepageNews}/>
-                <HomePagePart2 homepageCard={this.state.homepageCard} handleClickLink={this.handleClickLink}/>
+                <HomePagePart1 homepageNews={this.state.homepageNews} titleNewsSection={this.state.titleNewsSection}/>
+                <HomePagePart2 homepageCard={this.state.homepageCard} {...this.props} handleClickLink={this.handleClickLink} />
                 {this.state.isRedirectLapsteelator ? <Redirect to='/lapsteelator' /> : ""}
                 {this.state.isRedirectVideo ? <Redirect to='/videos' /> : ""}
                 <div className="sticky-footer">

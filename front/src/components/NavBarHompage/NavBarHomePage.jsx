@@ -38,7 +38,7 @@ const NavBarHomePage = (props) => {
           <NavbarText>
             <Nav className="mr-auto" navbar>
               <NavItem>
-                <Link className="text-light" to="/Home" style={{ textDecoration: "none" }}>Accueil</Link>
+                <Link className="text-light" to="/Home" style={{ textDecoration: "none" }}><p style={{ fontSize: "1.5rem" }}>Accueil</p></Link>
               </NavItem>
             </Nav>
           </NavbarText>

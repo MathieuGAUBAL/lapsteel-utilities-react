@@ -11,11 +11,9 @@ class VitrinePart1 extends Component{
                     <div className="container jumbotron col-lg-6 bg-white">
                         <h6 className="btn-welcome">Bienvenue sur Lapsteelator</h6>
                         <hr className="my-4"></hr>
-{/*                         <h4 className="h">Pourquoi Lapsteelator ?</h4> */}
                         <h2 className="vitrine-h2">GENERER VOS PROPRES MODES</h2>
                         <p className="vitrine-p">SIMPLE & RAPIDE.</p>            
-{/*                         <p className="lead">Cette application a été conçu pour vous permettre de gagner du temps sur la visualisation des gammes pour lapsteel guitar. Vous pourrez générer vos gammes selon votre accordage.</p>     
- */}                        <div className="btn-accueil">
+                       <div className="btn-accueil mt-5">
                             <Link className="text-light" to="/Lapsteelator"><button type="button" className="btn btn-primary btn-lg">C'est parti</button></Link>
                         </div>
                     </div>

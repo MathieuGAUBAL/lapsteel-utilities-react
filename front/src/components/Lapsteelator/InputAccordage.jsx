@@ -16,7 +16,7 @@ class InputAccordage extends Component{
                         <div className="input-group-prepend">
                         <div className="input-group-text">Accordage</div>
                         </div>
-                        <input id="input-accordage" value={inputAccordage} type="text" size="10" className="form-control" placeholder="exemple : EADGBE" onChange={handleOnChangeInput} />
+                        <input name="input-accordage" id="input-accordage" value={inputAccordage} type="text" size="10" className="form-control" placeholder="exemple : EADGBE" onChange={handleOnChangeInput} />
                         {/* <!-- div error si l'utilisateur ne rentre pas d'accordage --> */}
                         <div className="alert alert-warning alert-dismissible fade show container alert-saisie-accordage" role="alert">
                         <strong>OOPS!</strong> la saisie semble incorrecte.

@@ -1,0 +1,17 @@
+.titre-news-homepage{
+    font-size: 1.2rem;
+}
+
+.description-news-homepage{
+    font-size: 1rem;
+}
+
+.maj{
+    font-size: 0.7rem;
+}
+
+.div-news-homepage{
+    margin-bottom: 15px;
+    box-shadow: 5px 3px 4px 2px grey;
+}
+
