@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.1
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : sam. 29 août 2020 à 20:12
--- Version du serveur :  10.4.11-MariaDB
--- Version de PHP : 7.4.1
+-- Généré le : Dim 30 août 2020 à 14:41
+-- Version du serveur :  10.4.14-MariaDB
+-- Version de PHP : 7.4.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -62,12 +61,33 @@ CREATE TABLE `homepage` (
 --
 
 INSERT INTO `homepage` (`id`, `title`, `subtitle`, `description`, `section`, `isActived`, `image_id`) VALUES
-(2, 'mes actualités', '', '', 'title-news-section', 1, NULL),
-(39, 'Lapsteelator', '', 'Générateur de gamme', 'homepage-card-section', 1, 39),
-(40, 'Videos', '', 'Retrouvez mes videos', 'homepage-card-section', 0, 40),
-(104, '', 'news 1', '{\"date\":\"29-08-2020\",\"description\":\"description news 1\"}', 'homepage-news-section', 1, NULL),
-(105, '', 'news 2', '{\"date\":\"29-08-2020\",\"description\":\"description 2\"}', 'homepage-news-section', 1, NULL),
-(106, 'version du site', '', 'v1.0', 'version-website', 1, NULL);
+(127, 'News', '', '', 'title-news-section', 1, 0),
+(128, '', 'news 1', '{\"date\":\"30-08-2020\",\"description\":\"description 1\"}', 'homepage-news-section', 1, NULL),
+(129, '', 'news 2', '{\"date\":\"30-08-2020\",\"description\":\"description 2\"}', 'homepage-news-section', 1, NULL),
+(130, 'version du site', '', 'v1.0', 'version-website', 1, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `homepage_card`
+--
+
+CREATE TABLE `homepage_card` (
+  `id` int(11) NOT NULL,
+  `title` varchar(250) NOT NULL,
+  `subtitle` varchar(250) NOT NULL,
+  `description` text NOT NULL,
+  `isActived` tinyint(4) NOT NULL,
+  `image_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `homepage_card`
+--
+
+INSERT INTO `homepage_card` (`id`, `title`, `subtitle`, `description`, `isActived`, `image_id`) VALUES
+(49, 'Lapsteelator', '', 'description', 1, 155),
+(50, 'Vidéos', '', 'description', 0, 156);
 
 -- --------------------------------------------------------
 
@@ -87,9 +107,8 @@ CREATE TABLE `image` (
 --
 
 INSERT INTO `image` (`id`, `name`, `url`, `alt`) VALUES
-(39, 'img-guitar.JPG', '/images/img-guitar.JPG', 'image img-guitar.JPG'),
-(40, 'img-videos.JPG', '/images/img-videos.JPG', 'image img-videos.JPG'),
-(138, 'songoku.png', '/images/songoku.png', 'image songoku.png');
+(155, 'img-guitar.JPG', '/images/img-guitar.JPG', 'image img-guitar.JPG'),
+(156, 'img-videos.JPG', '/images/img-videos.JPG', 'image img-videos.JPG');
 
 -- --------------------------------------------------------
 
@@ -153,6 +172,12 @@ ALTER TABLE `admin`
 -- Index pour la table `homepage`
 --
 ALTER TABLE `homepage`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `homepage_card`
+--
+ALTER TABLE `homepage_card`
   ADD PRIMARY KEY (`id`),
   ADD KEY `image_id` (`image_id`);
 
@@ -188,47 +213,53 @@ ALTER TABLE `vitrine`
 -- AUTO_INCREMENT pour la table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 
 --
 -- AUTO_INCREMENT pour la table `homepage`
 --
 ALTER TABLE `homepage`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=131;
+
+--
+-- AUTO_INCREMENT pour la table `homepage_card`
+--
+ALTER TABLE `homepage_card`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT pour la table `image`
 --
 ALTER TABLE `image`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=139;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=157;
 
 --
 -- AUTO_INCREMENT pour la table `lapsteelator`
 --
 ALTER TABLE `lapsteelator`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT pour la table `video`
 --
 ALTER TABLE `video`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT pour la table `vitrine`
 --
 ALTER TABLE `vitrine`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- Contraintes pour les tables déchargées
 --
 
 --
--- Contraintes pour la table `homepage`
+-- Contraintes pour la table `homepage_card`
 --
-ALTER TABLE `homepage`
-  ADD CONSTRAINT `homepage_ibfk_1` FOREIGN KEY (`image_id`) REFERENCES `image` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `homepage_card`
+  ADD CONSTRAINT `homepage_card_ibfk_1` FOREIGN KEY (`image_id`) REFERENCES `image` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
