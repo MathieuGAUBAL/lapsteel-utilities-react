@@ -39,8 +39,8 @@ class HomeAdmin extends Component {
         return (
             <div>
                 {localStorage.getItem('tAoDkMeInN') ? <Redirect to="/homeAdmin" /> : <Redirect to="/login" />}
-                <div className="div-container d-flex" style={{ backgroundColor: "blue", height: "100vh", width: "100vw" }}>
-                    <div className="sideBar bg-dark" style={{ height: "100vh", width: "200px" }}>
+                <div className="div-container d-flex" style={{ backgroundColor: "blue", height: "100vh", width: "98vw" }}>
+                    <div className="sideBar bg-dark" style={{ height: "120vh", width: "200px" }}>
                         <div className="title-admin text-white mb-5 p-2">Lapsteelator Admin</div>
                         <div className="list-menu text-left p-2 mb-5">
                             <div id="div-vitrine-admin p-2"><p className="link-sideBar-admin" id="vitrine-admin" onClick={this.handlerClickDisplayModule}>Vitrine</p></div>
