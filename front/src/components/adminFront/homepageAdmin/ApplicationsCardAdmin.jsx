@@ -61,7 +61,7 @@ class ApplicationsCardAdmin extends Component {
     }
 
     getData = () => {
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage/homepage-card?section=homepage-card-section", {
+        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage_card", {
             method: "GET",
             json: true,
         })
@@ -133,7 +133,7 @@ class ApplicationsCardAdmin extends Component {
             .then(response => response.json())
             .then(response => {
                 obj_data.image_id = response[0].id;
-                fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/homepage', optionsPost(obj_data))
+                fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/homepage_card', optionsPost(obj_data))
                     .then(response => response.json())
                     .then(response => this.getData())
                     .catch(err => console.log({ 'ERROR': err.message }))
@@ -175,7 +175,7 @@ class ApplicationsCardAdmin extends Component {
             redirect: 'follow'
         };
 
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/homepage/' + this.state.dataCard[arrayId].id, requestOptions)
+        fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/homepage_card/' + this.state.dataCard[arrayId].id, requestOptions)
             .then(response => response.json())
             .then(response => { this.getData() })
             .catch(err => console.log({ 'ERROR': err.message }))
@@ -204,7 +204,7 @@ class ApplicationsCardAdmin extends Component {
             })
         };
 
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/homepage/' + this.state.dataCard[this.state.arrayId].id, requestOptions)
+        fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/image/' + this.state.dataCard[this.state.arrayId].image_id, requestOptions)
             .then(response => response.json())
             .then(response => { this.getData() })
             .catch(err => console.log({ 'ERROR': err.message }))

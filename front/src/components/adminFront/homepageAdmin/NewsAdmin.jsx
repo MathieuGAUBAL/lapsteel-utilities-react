@@ -116,7 +116,7 @@ class NewsAdmin extends Component {
             redirect: 'follow'
         };
 
-        fetch('http://localhost:5000/api/homepage', requestOptions)
+        fetch(REACT_APP_SERVER_ADDRESS_FULL  + '/api/homepage', requestOptions)
             .then(response => response.json())
             .then(response => this.getData())
             .catch(err => console.log({ 'ERROR': err.message }))
@@ -128,25 +128,24 @@ class NewsAdmin extends Component {
             "subtitle": "",
             "description": "",
             "section": "title-news-section",
-            "image_id": 0,
-            "isActived": 1
+            "isActived": 1,
+            "image_id": "null",
         }
 
 
-        var requestOptions = {
+        let requestOptions = {
             method: 'PUT',
             headers: new Headers({
                 'Content-Type': 'application/json',
                 'authorization': 'Bearer ' + localStorage.getItem('tAoDkMeInN')
             }),
-            body: JSON.stringify(obj_data),
-            redirect: 'follow'
+            body: JSON.stringify(obj_data)
         };
-
-        fetch('http://localhost:5000/api/homepage/' + this.state.getTitle[0].id, requestOptions)
+        console.log(REACT_APP_SERVER_ADDRESS_FULL  + '/api/homepage/' + this.state.getTitle[0].id);
+        fetch(REACT_APP_SERVER_ADDRESS_FULL  + '/api/homepage/' + this.state.getTitle[0].id, requestOptions)
             .then(response => response.json())
             .then(response => { this.getData() })
-            .catch(err => console.log({ 'ERROR': err.message }))
+            .catch(err => console.log({ 'ERROR': err }))
     }
 
     editTextNews = () => {
@@ -177,7 +176,10 @@ class NewsAdmin extends Component {
             redirect: 'follow'
         };
 
-        fetch('http://localhost:5000/api/homepage/' + currentIdToEditTextNews, requestOptions)
+        let url = REACT_APP_SERVER_ADDRESS_FULL  + '/api/homepage/' + currentIdToEditTextNews;
+        console.log(url);
+
+        fetch(url, requestOptions)
             .then(response => response.json())
             .then(response => { this.getData() })
             .catch(err => console.log({ 'ERROR': err.message }))
@@ -202,7 +204,7 @@ class NewsAdmin extends Component {
             })
         };
 
-        fetch('http://localhost:5000/api/homepage/' + this.state.currentIdToEditTextNews, requestOptions)
+        fetch(REACT_APP_SERVER_ADDRESS_FULL  + '/api/homepage/' + this.state.currentIdToEditTextNews, requestOptions)
             .then(response => response.json())
             .then(response => { this.getData() })
             .catch(err => console.log({ 'ERROR': err.message }))

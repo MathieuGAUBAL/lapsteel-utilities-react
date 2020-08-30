@@ -42,7 +42,7 @@ class Homepage extends Component {
     getHomepageNews = () => {
       
 
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage?section=homepage-news-section&image_id=0", {
+        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage?section=homepage-news-section", {
             method: "GET",
             json: true
         })
@@ -65,7 +65,7 @@ class Homepage extends Component {
     getHomepageNewsTitle = () => {
       
 
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage?section=title-news-section&image_id=0", {
+        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage?section=title-news-section", {
             method: "GET",
             json: true
         })
@@ -78,7 +78,7 @@ class Homepage extends Component {
 
     getHomepageCard = () => {
       
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage/homepage-card?section=homepage-card-section", {
+        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage_card", {
             method: "GET",
             json: true
         })
