@@ -142,22 +142,6 @@ router.delete(url + '/:id',auth, (req, res) => {
     });
 });
 
-//BBOOOOMMMM
-router.delete(url, (req, res) => {
-        pool.getConnection(function (err, connection){
-            connection.query('TRUNCATE TABLE video',(err, results, fields) => {
-                connection.release();
-                if(err){
-                    res.status(200).send(err.message);
-                }else{
-                    res.send("BOOOMMMMM");
-                }
-        });
-    });
-});
-
-
-
 
 
 module.exports = router;

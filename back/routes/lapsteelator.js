@@ -112,20 +112,6 @@ router.delete(url + '/:id', auth ,(req, res) => {
     });
 });
 
-//BBOOOOMMMM
-router.delete(url, auth ,(req, res) => {
-        pool.getConnection(function (err, connection){
-            connection.query('TRUNCATE TABLE lapsteelator',(err, results, fields) => {
-                connection.release();
-                if(err){
-                    res.status(200).send(err.message);
-                }else{
-                    res.send("BOOOMMMMM");
-                }
-        });
-    });
-});
-
 
 
 

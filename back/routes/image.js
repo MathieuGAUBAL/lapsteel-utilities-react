@@ -106,20 +106,6 @@ router.delete('/image/:id', auth, (req, res) => {
     });
 });
 
-//BBOOOOMMMM
-router.delete('/image', auth, (req, res) => {
-    pool.getConnection(function (err, connection) {
-        connection.query('TRUNCATE TABLE image', (err, results, fields) => {
-            connection.release();
-            if (err) {
-                res.status(200).send(err.message);
-            } else {
-                res.send("BOOOMMMMM");
-            }
-        });
-    });
-});
-
 
 
 
