@@ -23,7 +23,7 @@ class Homepage extends Component {
 
 
     handleClickLink = (event) => {
-        console.log(event.target.id);
+   
         switch (event.target.id) {
 
             case '1':

@@ -33,7 +33,7 @@ class ApplicationsCardAdmin extends Component {
     }
 
     handlerChangeInput = (event) => {
-        console.log();
+
         switch (event.target.id) {
             case "titleTextCardInput":
                 this.setState({ titleTextCard: event.target.value });
