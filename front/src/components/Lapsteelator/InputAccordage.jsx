@@ -7,7 +7,7 @@ class InputAccordage extends Component{
 
     render(){
         const { inputAccordage, handleOnChangeInput, selectTuningModeBtn} = this.props;
-        //console.log(this.state.inputAccordage);
+        
         return(
             <div>
                   <div className="div-accordage text-center container pt-5">

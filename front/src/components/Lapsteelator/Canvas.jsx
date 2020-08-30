@@ -240,8 +240,7 @@ class Canvas extends Component{
     }
     
   constructionGammeMode(modeNum, gammeTonique){
-    //console.log(modeNum);
-    //console.log(gammeTonique)
+
     let arr = [];
     arr.push(gammeTonique[0]);
     let count = 0;

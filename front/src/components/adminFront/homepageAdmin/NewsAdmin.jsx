@@ -141,7 +141,7 @@ class NewsAdmin extends Component {
             }),
             body: JSON.stringify(obj_data)
         };
-        console.log(REACT_APP_SERVER_ADDRESS_FULL  + '/api/homepage/' + this.state.getTitle[0].id);
+        
         fetch(REACT_APP_SERVER_ADDRESS_FULL  + '/api/homepage/' + this.state.getTitle[0].id, requestOptions)
             .then(response => response.json())
             .then(response => { this.getData() })
@@ -164,7 +164,6 @@ class NewsAdmin extends Component {
             "isActived": 1
         }
 
-        console.log(obj_data);
 
         var requestOptions = {
             method: 'PUT',
@@ -177,7 +176,7 @@ class NewsAdmin extends Component {
         };
 
         let url = REACT_APP_SERVER_ADDRESS_FULL  + '/api/homepage/' + currentIdToEditTextNews;
-        console.log(url);
+       
 
         fetch(url, requestOptions)
             .then(response => response.json())

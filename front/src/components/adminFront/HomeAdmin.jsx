@@ -16,7 +16,7 @@ class HomeAdmin extends Component {
     }
 
     handlerClickDisplayModule = (event) => {
-        console.log(event.target.id);
+        
         switch (event.target.id) {
             case "vitrine-admin":
                 this.setState({ displayVitrine: true,displayHomepage: false, displayFooter: false });
