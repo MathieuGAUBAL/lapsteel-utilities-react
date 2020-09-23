@@ -20,7 +20,8 @@ class NewsAdmin extends Component {
             arrayId: null,
 
             editTitleTextNews: "",
-            editTextNews: ""
+            editTextNews: "",
+            editTitleNews: ""
 
         }
     }
@@ -45,6 +46,10 @@ class NewsAdmin extends Component {
 
             case "editTitleTextNewsInput":
                 this.setState({ editTitleTextNews: event.target.value });
+                break;
+
+            case "editTitleNewsInput":
+                this.setState({ editTitleNews: event.target.value });
                 break;
 
             default:
@@ -116,7 +121,7 @@ class NewsAdmin extends Component {
             redirect: 'follow'
         };
 
-        fetch(REACT_APP_SERVER_ADDRESS_FULL  + '/api/homepage', requestOptions)
+        fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/homepage', requestOptions)
             .then(response => response.json())
             .then(response => this.getData())
             .catch(err => console.log({ 'ERROR': err.message }))
@@ -124,13 +129,14 @@ class NewsAdmin extends Component {
 
     editTitle = () => {
         let obj_data = {
-            "title": this.state.titleNews,
+            "title": this.state.editTitleNews,
             "subtitle": "",
             "description": "",
             "section": "title-news-section",
             "isActived": 1,
-            "image_id": "null",
+            "image_id": null,
         }
+
 
 
         let requestOptions = {
@@ -139,13 +145,15 @@ class NewsAdmin extends Component {
                 'Content-Type': 'application/json',
                 'authorization': 'Bearer ' + localStorage.getItem('tAoDkMeInN')
             }),
-            body: JSON.stringify(obj_data)
+            body:JSON.stringify(obj_data)
         };
-        
-        fetch(REACT_APP_SERVER_ADDRESS_FULL  + '/api/homepage/' + this.state.getTitle[0].id, requestOptions)
+
+
+        fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/homepage/' + this.state.getTitle[0].id, requestOptions)
             .then(response => response.json())
-            .then(response => { this.getData() })
+            .then(response => this.getData())
             .catch(err => console.log({ 'ERROR': err }))
+
     }
 
     editTextNews = () => {
@@ -175,8 +183,8 @@ class NewsAdmin extends Component {
             redirect: 'follow'
         };
 
-        let url = REACT_APP_SERVER_ADDRESS_FULL  + '/api/homepage/' + currentIdToEditTextNews;
-       
+        let url = REACT_APP_SERVER_ADDRESS_FULL + '/api/homepage/' + currentIdToEditTextNews;
+
 
         fetch(url, requestOptions)
             .then(response => response.json())
@@ -203,7 +211,7 @@ class NewsAdmin extends Component {
             })
         };
 
-        fetch(REACT_APP_SERVER_ADDRESS_FULL  + '/api/homepage/' + this.state.currentIdToEditTextNews, requestOptions)
+        fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/homepage/' + this.state.currentIdToEditTextNews, requestOptions)
             .then(response => response.json())
             .then(response => { this.getData() })
             .catch(err => console.log({ 'ERROR': err.message }))
@@ -291,7 +299,7 @@ class NewsAdmin extends Component {
 
                                 <form className="d-flex justify-content-center">
                                     <div className="form-group mr-2">
-                                        <input id="titleNewsInput" placeholder={`${placeholderTitle}`} className="form-control" value={this.state.titleNews} onChange={this.handlerChangeInput} />
+                                        <input id="editTitleNewsInput" placeholder={`${placeholderTitle}`} className="form-control" value={this.state.editTitleNews} onChange={this.handlerChangeInput} />
                                     </div>
                                 </form>
                             </div>

@@ -12,7 +12,7 @@ class Homepage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            titleNewsSection:"",
+            titleNewsSection: "",
             homepageNews: [],
             homepageCard: [],
             isRedirectVideo: false,
@@ -23,7 +23,7 @@ class Homepage extends Component {
 
 
     handleClickLink = (event) => {
-   
+
         switch (event.target.id) {
 
             case '1':
@@ -40,7 +40,7 @@ class Homepage extends Component {
     }
 
     getHomepageNews = () => {
-      
+
 
         fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage?section=homepage-news-section", {
             method: "GET",
@@ -48,8 +48,13 @@ class Homepage extends Component {
         })
             .then(response => response.json())
             .then(response => {
+                const responseArray = [];
+                for (let object of response) {
+                    responseArray.push(object);
+                }
+
                 let array = [];
-                if (response.length > 0) {
+                if (responseArray.length > 0) {
                     for (let object of response) {
                         let descriptionParse = JSON.parse(object.description);
                         object.description = descriptionParse;
@@ -59,11 +64,11 @@ class Homepage extends Component {
 
                 this.setState({ homepageNews: array.reverse() })
             })
-            .catch(error => console.log(error));
+            .catch(error => console.log(error.message));
     }
 
     getHomepageNewsTitle = () => {
-      
+
 
         fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage?section=title-news-section", {
             method: "GET",
@@ -77,7 +82,7 @@ class Homepage extends Component {
     }
 
     getHomepageCard = () => {
-      
+
         fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage_card", {
             method: "GET",
             json: true
@@ -96,7 +101,7 @@ class Homepage extends Component {
     }
 
     componentWillUnmount = () => {
-        this.setState = (state,callback)=>{
+        this.setState = (state, callback) => {
             return;
         };
     }
@@ -108,7 +113,7 @@ class Homepage extends Component {
             <div className="sticky-wrap">
 
                 <NavBarHomePage />
-                <HomePagePart1 homepageNews={this.state.homepageNews} titleNewsSection={this.state.titleNewsSection}/>
+                <HomePagePart1 homepageNews={this.state.homepageNews} titleNewsSection={this.state.titleNewsSection} />
                 <HomePagePart2 homepageCard={this.state.homepageCard} {...this.props} handleClickLink={this.handleClickLink} />
                 {this.state.isRedirectLapsteelator ? <Redirect to='/lapsteelator' /> : ""}
                 {this.state.isRedirectVideo ? <Redirect to='/videos' /> : ""}

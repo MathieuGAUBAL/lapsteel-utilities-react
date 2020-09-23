@@ -128,8 +128,7 @@ b_tonique.src = '/images/image-tonique-selected/B_tonique.gif';
 
 let guitar_bg = new Image();
 //guitar_bg.src = '/images/image-manche/neck_guitar.gif';
-let mode = new Image();
-mode.src = '/mode.png';
+
 
 
 // cordes en y           1  2   3   4   5   6              

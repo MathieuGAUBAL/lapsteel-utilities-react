@@ -6,8 +6,10 @@ const parser = require("body-parser");
 const multer = require("multer");
 const cors = require("cors");
 
+
 app.use(parser.json());
 app.use(cors());
+//app.use(cors({ origin: process.env.REACT_APP_SERVER_ADDRESS_FULL, credentials: true }));
 
 app.use("/images", express.static(__dirname + "/public/images"));
 

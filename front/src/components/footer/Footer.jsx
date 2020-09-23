@@ -3,7 +3,7 @@ const REACT_APP_SERVER_ADDRESS_FULL = process.env.REACT_APP_SERVER_ADDRESS_FULL;
 
 class Footer extends Component {
     constructor(props){
-        super(props);
+        super();
         this.state = {
             version:""
         }
@@ -12,7 +12,11 @@ class Footer extends Component {
     getData = () => {
         fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage?section=version-website&image_id=0", {
             method: "GET",
-            json: true,
+            json: true/* ,
+            'Access-Control-Allow-Origin':REACT_APP_SERVER_ADDRESS_FULL,
+            'Access-Control-Allow-Headers':'*',
+            'Access-Control-Allow-Methods':'GET, POST, PUT, DELETE, OPTIONS',
+            credentials: "include" */
         })
             .then(response => response.json())
             .then(response => this.setState({ version : response[0].description }))
@@ -34,7 +38,7 @@ class Footer extends Component {
             <div className="p-5 bg-dark mt-5 d-flex flex-column text-light justify-align-center">
                 <div className="brandName"><p style={{ fontSize: "1.5rem" }}>Lapsteelator <span className="version" style={{ fontSize: "1rem" }}>{this.state.version}</span></p></div>
                 <div className="copyright"><p>copyright 2020</p></div>
-                <div className="social-network">
+                 <div className="social-network">
                     <a href="https://www.youtube.com/user/Matc0c0/videos" title="ma chaine youtube Matc0c0" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color:"white" }}> <i className="fa fa-youtube-square fa-3x"></i></a>
                 </div>
                 <div className="dev pt-5 text-lg-right"><p>Développé par Matc0c0</p></div>
