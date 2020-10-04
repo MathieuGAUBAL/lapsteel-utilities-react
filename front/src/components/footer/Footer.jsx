@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-const REACT_APP_SERVER_ADDRESS_FULL = process.env.REACT_APP_SERVER_ADDRESS_FULL;
+
 
 class Footer extends Component {
     constructor(props){
@@ -10,7 +10,7 @@ class Footer extends Component {
     }
 
     getData = () => {
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage?section=version-website&image_id=0", {
+        fetch(process.env.REACT_APP_FOOTER, {
             method: "GET",
             json: true/* ,
             'Access-Control-Allow-Origin':REACT_APP_SERVER_ADDRESS_FULL,
@@ -19,7 +19,7 @@ class Footer extends Component {
             credentials: "include" */
         })
             .then(response => response.json())
-            .then(response => this.setState({ version : response[0].description }))
+            .then(response => this.setState({ version : response[0].version })  )
             .catch(error => console.log(error));
     }
 

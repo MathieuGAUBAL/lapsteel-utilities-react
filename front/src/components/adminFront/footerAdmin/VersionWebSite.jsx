@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-const REACT_APP_SERVER_ADDRESS_FULL = process.env.REACT_APP_SERVER_ADDRESS_FULL;
 
 class VersionWebSite extends Component {
     constructor(props) {
@@ -29,7 +28,7 @@ class VersionWebSite extends Component {
     }
 
     getData = () => {
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage?section=version-website", {
+        fetch(process.env.REACT_APP_FOOTER, {
             method: "GET",
             json: true,
         })
@@ -65,7 +64,7 @@ class VersionWebSite extends Component {
             redirect: 'follow'
         };
 
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/homepage', requestOptions)
+        fetch(process.env.REACT_APP_FOOTER, requestOptions)
             .then(response => response.json())
             .then(response => this.getData())
             .catch(err => console.log({ 'ERROR': err.message }))
@@ -74,11 +73,7 @@ class VersionWebSite extends Component {
     editVersion = () => {
         let obj_data = {
             "title": "version du site",
-            "subtitle": "",
-            "description": this.state.editVersion,
-            "section": "version-website",
-            "image_id": 0,
-            "isActived": 1
+            "version": this.state.editVersion
         }
 
 
@@ -92,7 +87,7 @@ class VersionWebSite extends Component {
             redirect: 'follow'
         };
 
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/homepage/' + this.state.data[0].id, requestOptions)
+        fetch(process.env.REACT_APP_FOOTER + '/' + this.state.data[0].id, requestOptions)
             .then(response => response.json())
             .then(response => { this.getData() })
             .catch(err => console.log({ 'ERROR': err.message }))
@@ -109,7 +104,7 @@ class VersionWebSite extends Component {
             })
         };
 
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/homepage/' + this.state.currentIdToEditTextNews, requestOptions)
+        fetch(process.env.REACT_APP_FOOTER + '/' + this.state.currentIdToEditTextNews, requestOptions)
             .then(response => response.json())
             .then(response => { this.getData() })
             .catch(err => console.log({ 'ERROR': err.message }))
@@ -142,7 +137,7 @@ class VersionWebSite extends Component {
                             <tr>
                                 <th scope="row">1</th>
                                 <td>{this.state.data[0].title}</td>
-                                <td>{this.state.data[0].description}</td>
+                                <td>{this.state.data[0].version}</td>
                                 <td>
                                     {
                                         <button className="btn btn-warning btn-sm" type="button" data-toggle="modal" data-target="#modalEditVersion">modifier</button>

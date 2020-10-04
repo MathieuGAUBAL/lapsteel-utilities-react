@@ -12,6 +12,7 @@ import VitrineAdmin from './components/adminFront/VitrineAdmin';
 import HomepageAdmin from './components/adminFront/homepageAdmin/HomepageAdmin';
 import FooterAdmin from './components/adminFront/footerAdmin/FooterAdmin';
 
+
 class App extends Component {
   constructor(props) {
     super(props);

@@ -6,8 +6,6 @@ import HomePagePart2 from './HomePagePart2';
 import Footer from '../footer/Footer';
 
 
-const REACT_APP_SERVER_ADDRESS_FULL = process.env.REACT_APP_SERVER_ADDRESS_FULL;
-
 class Homepage extends Component {
     constructor(props) {
         super(props);
@@ -42,12 +40,13 @@ class Homepage extends Component {
     getHomepageNews = () => {
 
 
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage?section=homepage-news-section", {
+        fetch(process.env.REACT_APP_NEWS + '?section=news-card', {
             method: "GET",
             json: true
         })
             .then(response => response.json())
             .then(response => {
+                console.log(response);
                 const responseArray = [];
                 for (let object of response) {
                     responseArray.push(object);
@@ -69,8 +68,7 @@ class Homepage extends Component {
 
     getHomepageNewsTitle = () => {
 
-
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage?section=title-news-section", {
+        fetch(process.env.REACT_APP_NEWS + '?section=news-title', {
             method: "GET",
             json: true
         })
@@ -81,9 +79,9 @@ class Homepage extends Component {
             .catch(error => console.log(error));
     }
 
-    getHomepageCard = () => {
+      getHomepageCard = () => {
 
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage_card", {
+        fetch(process.env.REACT_APP_APPLICATIONS, {
             method: "GET",
             json: true
         })
@@ -97,7 +95,7 @@ class Homepage extends Component {
     componentDidMount = () => {
         this.getHomepageNews();
         this.getHomepageCard();
-        this.getHomepageNewsTitle();
+        this.getHomepageNewsTitle(); 
     }
 
     componentWillUnmount = () => {

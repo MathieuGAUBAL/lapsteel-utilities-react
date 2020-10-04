@@ -5,8 +5,6 @@ import moment from "moment";
 import DisplayAddNews from '../tableau/DisplayAddNews';
 
 
-const REACT_APP_SERVER_ADDRESS_FULL = process.env.REACT_APP_SERVER_ADDRESS_FULL;
-
 class NewsAdmin extends Component {
     constructor(props) {
         super(props);
@@ -58,7 +56,7 @@ class NewsAdmin extends Component {
     }
 
     getData = () => {
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage?section=homepage-news-section", {
+        fetch(process.env.REACT_APP_NEWS +'?section=news-card', {
             method: "GET",
             json: true,
         })
@@ -80,7 +78,7 @@ class NewsAdmin extends Component {
 
             .catch(error => console.log(error))
 
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage?section=title-news-section", {
+        fetch(process.env.REACT_APP_NEWS + '?section=news-title', {
             method: "GET",
             json: true,
         })
@@ -106,12 +104,9 @@ class NewsAdmin extends Component {
             "subtitle": this.state.titleNews === "" ? this.state.titleTextNews : "",
             "description": this.state.titleNews === "" ? JSON.stringify(objDescriptionNews) : "",
             "section": event.target.id,
-            "image_id": null,
-            "isActived": 1
         }
 
-
-        var requestOptions = {
+         var requestOptions = {
             method: 'POST',
             headers: new Headers({
                 'Content-Type': 'application/json',
@@ -121,10 +116,10 @@ class NewsAdmin extends Component {
             redirect: 'follow'
         };
 
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/homepage', requestOptions)
+        fetch(process.env.REACT_APP_NEWS, requestOptions)
             .then(response => response.json())
             .then(response => this.getData())
-            .catch(err => console.log({ 'ERROR': err.message }))
+            .catch(err => console.log({ 'ERROR': err.message })) 
     }
 
     editTitle = () => {
@@ -132,12 +127,8 @@ class NewsAdmin extends Component {
             "title": this.state.editTitleNews,
             "subtitle": "",
             "description": "",
-            "section": "title-news-section",
-            "isActived": 1,
-            "image_id": null,
+            "section": "news-title",
         }
-
-
 
         let requestOptions = {
             method: 'PUT',
@@ -149,7 +140,7 @@ class NewsAdmin extends Component {
         };
 
 
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/homepage/' + this.state.getTitle[0].id, requestOptions)
+        fetch(process.env.REACT_APP_NEWS + '/' + this.state.getTitle[0].id, requestOptions)
             .then(response => response.json())
             .then(response => this.getData())
             .catch(err => console.log({ 'ERROR': err }))
@@ -167,9 +158,7 @@ class NewsAdmin extends Component {
             "title": "",
             "subtitle": editTitleTextNews,
             "description": JSON.stringify(description),
-            "section": "homepage-news-section",
-            "image_id": 0,
-            "isActived": 1
+            "section": "news-card",
         }
 
 
@@ -183,7 +172,7 @@ class NewsAdmin extends Component {
             redirect: 'follow'
         };
 
-        let url = REACT_APP_SERVER_ADDRESS_FULL + '/api/homepage/' + currentIdToEditTextNews;
+        let url = process.env.REACT_APP_NEWS + '/' + currentIdToEditTextNews;
 
 
         fetch(url, requestOptions)
@@ -211,7 +200,7 @@ class NewsAdmin extends Component {
             })
         };
 
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/homepage/' + this.state.currentIdToEditTextNews, requestOptions)
+        fetch(process.env.REACT_APP_NEWS +'/'+ this.state.currentIdToEditTextNews, requestOptions)
             .then(response => response.json())
             .then(response => { this.getData() })
             .catch(err => console.log({ 'ERROR': err.message }))
@@ -277,7 +266,7 @@ class NewsAdmin extends Component {
                                     type="button"
                                     className="btn btn-primary"
                                     data-dismiss="modal"
-                                    id="title-news-section"
+                                    id="news-title"
                                     onClick={this.sendNews.bind(this)}
                                 >Enregistrer</button>
                             </div>
@@ -357,7 +346,7 @@ class NewsAdmin extends Component {
                                     type="button"
                                     className="btn btn-primary"
                                     data-dismiss="modal"
-                                    id="homepage-news-section"
+                                    id="news-card"
                                     onClick={this.sendNews.bind(this)}>
                                     Enregistrer</button>
                             </div>

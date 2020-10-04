@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-const REACT_APP_SERVER_ADDRESS_FULL = process.env.REACT_APP_SERVER_ADDRESS_FULL;
 
 class HomePagePart2 extends Component {
 
@@ -12,14 +11,15 @@ class HomePagePart2 extends Component {
                 <h2 className="mb-5">Applications</h2>
                 <div className="card-deck">
                     {homepageCard.map((element, index) => (
+                        
                         <div key={index} className="card">
-                            <img className="card-img-top" src={REACT_APP_SERVER_ADDRESS_FULL + element.url} alt={element.alt} style={{width:"20%", marginLeft:"auto", marginRight:"auto"}}/>
+                            <img className="card-img-top" src={ process.env.REACT_APP_SERVER_ADDRESS + element.image[0].url} alt={element.image[0].name} style={{width:"20%", marginLeft:"auto", marginRight:"auto"}}/>
                             <div className="card-body">
                                 <h5 className="card-title">{element.title}</h5>
                                 <p className="card-text">{element.description}</p>
                             </div>
                             <div className="card-footer">
-                                {element.isActived !== 0
+                                {element.isActived !== false
                                     ? <button id={index + 1} className="btn btn-primary" onClick={handleClickLink}>Accéder à l'application</button>
                                     : <button id={index + 1} className={"btn btn-secondary"}>indisponible</button>
                                 }

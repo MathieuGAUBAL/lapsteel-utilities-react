@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import NavBarHomePage from '../NavBarHompage/NavBarHomePage';
 import Footer from '../footer/Footer';
-const REACT_APP_SERVER_ADDRESS_FULL = process.env.REACT_APP_SERVER_ADDRESS_FULL;
+const REACT_APP_SERVER_ADDRESS_FULL_LOGIN = process.env.REACT_APP_SERVER_ADDRESS_FULL_LOGIN;
 
 
 class LoginAdmin extends Component {
@@ -33,11 +33,11 @@ class LoginAdmin extends Component {
     handlerSubmit = (event) => {
         event.preventDefault();
         let data = {
-            "email": this.state.email,
+            "identifier": this.state.email,
             "password": this.state.password
         };
 
-        let url = REACT_APP_SERVER_ADDRESS_FULL + "/api/login@admin";
+        let url = REACT_APP_SERVER_ADDRESS_FULL_LOGIN;
         fetch(url, {
             method: "POST",
             headers: new Headers({ 'Accept': 'application/json', 'Content-type': 'application/json' }),
@@ -46,9 +46,14 @@ class LoginAdmin extends Component {
         })
             .then(response => response.json())
             .then(response => {
-                localStorage.setItem('tAoDkMeInN', response.token);
-                this.setState({ isLoggued: true });
-                this.props.adminIsActived(true);
+                if(response.statusCode !== 400){
+                    localStorage.setItem('tAoDkMeInN', response.jwt);
+                    this.setState({ isLoggued: true });
+                    this.props.adminIsActived(true);
+                }else{
+                    alert("mot de passe invalide!");
+                }
+
                
             })
             .catch(error => alert("mot de passe invalide!"));
