@@ -61,7 +61,7 @@ class ApplicationsCardAdmin extends Component {
     }
 
     getData = () => {
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + "/api/homepage_card", {
+        fetch(process.env.REACT_APP_APPLICATIONS, {
             method: "GET",
             json: true,
         })
@@ -80,16 +80,7 @@ class ApplicationsCardAdmin extends Component {
     }
 
 
-
     sendCard = (event) => {
-
-
-        let obj_data_image = {
-            "name": this.state.nameImage,
-            "url": this.state.urlImage,
-            "alt": this.state.altImage,
-
-        }
 
 
         function optionsPost(obj) {
@@ -108,18 +99,6 @@ class ApplicationsCardAdmin extends Component {
         }
 
 
-        const data = new FormData()
-        data.append('file', this.state.document)
-
-        const optionsImage = {
-            method: "POST",
-            mode: "cors",
-            credentials: "same-origin",
-            redirect: "follow",
-            referrer: "no-referrer",
-            body: data
-        }
-
         let obj_data = {
             "title": this.state.titleTextCard,
             "subtitle": "",
@@ -129,25 +108,14 @@ class ApplicationsCardAdmin extends Component {
         }
 
 
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/image', optionsPost(obj_data_image))
+        fetch(process.env.REACT_APP_APPLICATIONS, optionsPost(obj_data))
             .then(response => response.json())
-            .then(response => {
-                obj_data.image_id = response[0].id;
-                fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/homepage_card', optionsPost(obj_data))
-                    .then(response => response.json())
-                    .then(response => this.getData())
-                    .catch(err => console.log({ 'ERROR': err.message }))
-            })
-            .catch(err => console.log({ 'ERROR': err.message }));
-
+            .then(response => this.getData())
+            .catch(err => console.log({ 'ERROR': err.message }))
 
         this.setState({ titleTextCard: "", textCard: "" });
 
 
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/uploadFile', optionsImage)
-            .then(response => response.json())
-            .then(response => console.log(response))
-            .catch(error => console.log(error))
     }
 
 
@@ -194,8 +162,8 @@ class ApplicationsCardAdmin extends Component {
         });
     }
 
-    deleteCard = () => {
-
+    deleteCard = (event) => {
+        console.log(event.target);
         var requestOptions = {
             method: 'DELETE',
             headers: new Headers({
@@ -204,7 +172,7 @@ class ApplicationsCardAdmin extends Component {
             })
         };
 
-        fetch(REACT_APP_SERVER_ADDRESS_FULL + '/api/image/' + this.state.dataCard[this.state.arrayId].image_id, requestOptions)
+        fetch(process.env.REACT_APP_APPLICATIONS + '/' + this.state.dataCard[this.state.arrayId].id, requestOptions)
             .then(response => response.json())
             .then(response => { this.getData() })
             .catch(err => console.log({ 'ERROR': err.message }))

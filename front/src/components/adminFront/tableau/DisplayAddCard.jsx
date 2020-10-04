@@ -31,7 +31,7 @@ class DisplayAddCard extends Component {
                                 <td>{element.title}</td>
                                 <td>{element.isActived ? "oui" : "non"}</td>
                                 <td>
-                                    <button className="btn btn-warning btn-sm" type="button" data-toggle="modal" data-target="#modalEditTextCardAdmin" onClick={getIdToEditText.bind(this, index)}>modifier</button>
+                                    <button className="btn btn-warning btn-sm" type="button" data-toggle="modal">indisponible</button>
                                 </td>
                                 <td>
                                     <button className="btn btn-danger btn-sm" type="button" data-toggle="modal" data-target="#modalDeleteTextCardAdmin" onClick={getIdToEditText.bind(this, index)}>supprimer</button>
