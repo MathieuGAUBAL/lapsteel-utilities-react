@@ -163,7 +163,6 @@ class ApplicationsCardAdmin extends Component {
     }
 
     deleteCard = (event) => {
-        console.log(event.target);
         var requestOptions = {
             method: 'DELETE',
             headers: new Headers({

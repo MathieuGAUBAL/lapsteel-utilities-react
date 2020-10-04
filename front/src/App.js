@@ -9,6 +9,7 @@ import Lapsteelator from './components/Lapsteelator/Lapsteelator';
 import HomeAdmin from './components/adminFront/HomeAdmin';
 import LoginAdmin from './components/LoginAdmin/LoginAdmin';
 import VitrineAdmin from './components/adminFront/VitrineAdmin';
+import MentionsLegales from './components/footer/MentionsLegales';
 import HomepageAdmin from './components/adminFront/homepageAdmin/HomepageAdmin';
 import FooterAdmin from './components/adminFront/footerAdmin/FooterAdmin';
 
@@ -54,6 +55,7 @@ class App extends Component {
             <Route path='/Home' component={() => <Homepage />} />
             <Route path='/lapsteelator' component={() => <Lapsteelator />} />
             <Route path='/videos' component={() => <SectionVideo />} />
+            <Route path='/mentions-legales' component={() => <MentionsLegales />} />
             <Route path='/login' component={() => <LoginAdmin adminIsActived={this.adminIsActived} />} />
             <Route path='/homeAdmin' component={() => <HomeAdmin signOut={this.signOut} />} />
             {

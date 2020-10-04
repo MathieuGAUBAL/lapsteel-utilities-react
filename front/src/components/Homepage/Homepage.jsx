@@ -46,7 +46,6 @@ class Homepage extends Component {
         })
             .then(response => response.json())
             .then(response => {
-                console.log(response);
                 const responseArray = [];
                 for (let object of response) {
                     responseArray.push(object);

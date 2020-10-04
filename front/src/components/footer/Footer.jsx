@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 
 class Footer extends Component {
@@ -42,7 +43,7 @@ class Footer extends Component {
                     <a href="https://www.youtube.com/user/Matc0c0/videos" title="ma chaine youtube Matc0c0" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color:"white" }}> <i className="fa fa-youtube-square fa-3x"></i></a>
                 </div>
                 <div className="dev pt-5 text-lg-right"><p>Développé par Matc0c0</p></div>
-                
+                <div className="dev text-lg-right"><Link style={{ textDecoration:"none" }} className="text-white" to="/mentions-legales">Mentions légales</Link></div>
             </div>
         )
     }
