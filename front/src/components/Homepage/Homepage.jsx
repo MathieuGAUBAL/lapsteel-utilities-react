@@ -32,6 +32,10 @@ class Homepage extends Component {
                 this.setState({ isRedirectVideo: true });
                 break;
 
+            case '3':
+                this.setState({ isRedirectVideo: true });
+                break;
+
             default:
                 break;
         }
@@ -78,7 +82,7 @@ class Homepage extends Component {
             .catch(error => console.log(error));
     }
 
-      getHomepageCard = () => {
+    getHomepageCard = () => {
 
         fetch(process.env.REACT_APP_APPLICATIONS, {
             method: "GET",
@@ -94,7 +98,7 @@ class Homepage extends Component {
     componentDidMount = () => {
         this.getHomepageNews();
         this.getHomepageCard();
-        this.getHomepageNewsTitle(); 
+        this.getHomepageNewsTitle();
     }
 
     componentWillUnmount = () => {
@@ -114,6 +118,7 @@ class Homepage extends Component {
                 <HomePagePart2 homepageCard={this.state.homepageCard} {...this.props} handleClickLink={this.handleClickLink} />
                 {this.state.isRedirectLapsteelator ? <Redirect to='/lapsteelator' /> : ""}
                 {this.state.isRedirectVideo ? <Redirect to='/videos' /> : ""}
+                {this.state.isRedirectVideo ? <Redirect to='/tutoriel' /> : ""}
                 <div className="sticky-footer">
                     <Footer />
                 </div>
