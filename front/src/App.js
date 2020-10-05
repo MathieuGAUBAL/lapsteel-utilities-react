@@ -12,6 +12,7 @@ import VitrineAdmin from './components/adminFront/VitrineAdmin';
 import MentionsLegales from './components/footer/MentionsLegales';
 import HomepageAdmin from './components/adminFront/homepageAdmin/HomepageAdmin';
 import FooterAdmin from './components/adminFront/footerAdmin/FooterAdmin';
+import Tutoriel from './components/Tutoriel/Tutoriel';
 
 
 class App extends Component {
@@ -56,6 +57,7 @@ class App extends Component {
             <Route path='/lapsteelator' component={() => <Lapsteelator />} />
             <Route path='/videos' component={() => <SectionVideo />} />
             <Route path='/mentions-legales' component={() => <MentionsLegales />} />
+            <Route path='/tutoriel' component={() => <Tutoriel />} />
             <Route path='/login' component={() => <LoginAdmin adminIsActived={this.adminIsActived} />} />
             <Route path='/homeAdmin' component={() => <HomeAdmin signOut={this.signOut} />} />
             {
