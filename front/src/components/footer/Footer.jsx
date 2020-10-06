@@ -50,7 +50,9 @@ class Footer extends Component {
                         <input className="btn-paypal-img" type="image" src="https://api.lapsteelator.com/uploads/hand_holding_heart_solid_bb8a36a4e2.gif" border="0" name="submit" title="Offrez-moi un café!" alt="bouton paypal - donation" />
                         <img alt="" border="0" src="https://www.paypal.com/fr_FR/i/scr/pixel.gif" width="1" height="1" />
                     </form>
-
+                </div>
+                <div className="div-brave pt-3">
+                    <img className="img-logo-brave" src={"https://api.lapsteelator.com/uploads/brave_logo_1_74752ea0e9.png"} alt="logo du navigateur BRAVE navigateur" title="Pour me soutenir, vous pouvez m'envoyer des tips depuis le navigateur BRAVE!"/>
                 </div>
                 <div className="dev pt-5 text-lg-right"><p>Développé par Matc0c0</p></div>
                 <div className="dev text-lg-right"><Link style={{ textDecoration: "none" }} className="text-white" to="/mentions-legales">Mentions légales</Link></div>
