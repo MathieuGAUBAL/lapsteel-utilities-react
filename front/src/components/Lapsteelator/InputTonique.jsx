@@ -14,6 +14,7 @@ class InputTonique extends Component{
                     <label className="input-group-text" htmlFor="input-tonique-tonique">Tonique</label>
                     </div>
                     <select id="input-tonique-tonique" name="nom" size="1" className="form-control" onChange={handleOnChangeInput}>
+                        <option value="default">-- Choisir la tonique --</option>
                         <option>C</option>
                         <option>C#</option>
                         <option>D</option>

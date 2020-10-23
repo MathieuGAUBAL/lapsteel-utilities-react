@@ -97,63 +97,20 @@ class LapsteelModulePrincipal extends Component {
       default:
         break;
     }
-
   }
 
-  selectTuningModeBtn = (event) => {
 
-    let inputAccordage = this.state.inputAccordage.length > 0 ? this.state.inputAccordage + " " : this.state.inputAccordage;
-    switch (event.target.id) {
-      case "C":
+  selectTuningModeNote = (note) => {
 
-        this.setState({ inputAccordage: inputAccordage + event.target.id })
-        break;
+     this.setState({
+      inputAccordage: (this.state.inputAccordage + " " + note).trim()
+    }) 
+  }
 
-      case "D":
-
-        this.setState({ inputAccordage: inputAccordage + event.target.id })
-        break;
-
-      case "E":
-
-        this.setState({ inputAccordage: inputAccordage + event.target.id })
-        break;
-
-      case "F":
-
-        this.setState({ inputAccordage: inputAccordage + event.target.id })
-        break;
-
-      case "G":
-
-        this.setState({ inputAccordage: inputAccordage + event.target.id })
-        break;
-
-      case "A":
-
-        this.setState({ inputAccordage: inputAccordage + event.target.id })
-        break;
-
-      case "B":
-
-        this.setState({ inputAccordage: inputAccordage + event.target.id })
-        break;
-
-      case "#":
-
-        this.setState({ inputAccordage: inputAccordage + event.target.id })
-        break;
-
-      case "X":
-        let arrayInputAccordage = this.state.inputAccordage.split(" ");
-        arrayInputAccordage.splice(arrayInputAccordage.length - 1, 1);
-        this.setState({ inputAccordage: arrayInputAccordage.join(" ") })
-        break;
-
-      default:
-        break;
-    }
-
+  deleteTuningModeNote = (array) => {
+    this.setState({
+      inputAccordage:array.join(" ")
+    })
   }
 
 
@@ -164,7 +121,7 @@ class LapsteelModulePrincipal extends Component {
         break;
       case 'input-tonique-tonique':
 
-        this.setState({ inputTonique: event.target.value });
+        this.setState({ inputTonique: event.target.value+"2"});
         break;
       case 'input-interval-mode':
         this.setState({ inputMode: event.target.value });
@@ -334,7 +291,7 @@ class LapsteelModulePrincipal extends Component {
   render() {
     return (
       <div>
-        <InputAccordage handleOnChangeInput={this.handleOnChangeInput} inputAccordage={this.state.inputAccordage} selectTuningModeBtn={this.selectTuningModeBtn} />
+        <InputAccordage handleOnChangeInput={this.handleOnChangeInput} inputAccordage={this.state.inputAccordage} getArrayNotes={this.getArrayNotes}  selectTuningModeNote={this.selectTuningModeNote} deleteTuningModeNote={this.deleteTuningModeNote}/>
         <InputTonique handleOnChangeInput={this.handleOnChangeInput} getPutValue={this.getInputValue} />
         <InputMode handleChangeModeFrette={this.handleChangeModeFrette} handleOnChangeInput={this.handleOnChangeInput} {...this.state} />
         <Canvas
@@ -349,7 +306,6 @@ class LapsteelModulePrincipal extends Component {
           editMode={this.editMode}
           isCloseModalDeleteMode={this.isCloseModalDeleteMode}
           selectEditModeBtn={this.selectEditModeBtn}
-
         />
       </div>
     )

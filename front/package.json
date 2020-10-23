@@ -13,6 +13,7 @@
     "jquery": "^3.5.1",
     "markdown-it-attrs": "^3.0.3",
     "moment": "^2.27.0",
+    "octavian": "^2.2.0",
     "path": "^0.12.7",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
